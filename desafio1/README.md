@@ -101,7 +101,18 @@ A continuación se muestra una sesión del juego:
 
 	Los detalles están descritos en cada archivo README para cada implementación.
 
-## Licencia
+# Resultados
+
+## Lineas de código
+
+	Calculadas usando la herramienta cloc
+
+	| Clojure | 49 |
+	| Erlang  | 61 |
+	| F#      | 52 |
+	| Go      | 85 |
+	| Haskell | 41 |
+# Licencia
 
 	(c) 2016 Eduardo Díaz.
 

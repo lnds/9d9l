@@ -14,7 +14,7 @@ let validar tam accion =
 let comparar num sec = 
     let rec tyf ns xs ys =
         match (ns, xs, ys) with
-        | ([], [], _) -> (0,0)
+        | ([], _, _) -> (0,0)
         | (n::ns, x::xs, ys) -> 
             let (t,f) = tyf ns xs ys
             if n = x then (t,f+1) else (if List.exists (fun x -> x = n) ys then (t+1,f) else (t,f))
