@@ -3,6 +3,7 @@
 *.jar
 *.class
 .idea/
+.build/
 out/
 target/
 Cargo.lock
