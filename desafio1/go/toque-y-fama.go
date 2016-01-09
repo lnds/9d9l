@@ -73,6 +73,7 @@ func main() {
 	for intentos,salir := 0, false; !salir; intentos++ {
 		accion := leer_entrada(tam)
 		if accion == "salir" {
+			fmt.Println("\ngracias por jugar, adios.")
 			salir = true
 		} else {
 			num := validar(tam, accion)

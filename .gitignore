@@ -2,8 +2,10 @@
 *.exe
 *.jar
 *.class
+*.beam
 .idea/
 .build/
 out/
 target/
+dist/
 Cargo.lock

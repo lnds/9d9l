@@ -23,7 +23,8 @@ let comparar num sec =
 let rec jugar tam sec i =
     printfn "Ingresa una secuencia de %A dígitos distintos (o escribe salir):" tam
     let accion = Console.ReadLine()
-    if accion = "salir" then ()
+    if accion = "salir" then 
+        printfn "\ngracias por jugar, adios." 
     else 
         let num = validar tam accion
         if List.isEmpty num then 

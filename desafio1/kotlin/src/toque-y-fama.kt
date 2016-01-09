@@ -66,8 +66,10 @@ fun main(args: Array<String>) {
         intentos++
         println ("Ingresa una secuencia de ${tam} dígitos distintos (o escribe salir):")
         val accion = readLine()
-        if (accion == "salir") break
-        else {
+        if (accion == "salir") {
+            println("\ngracias por jugar, adios.")
+            break
+        } else {
             val num = validar(tam, accion)
             if (num == null)
                 println("error!\n")

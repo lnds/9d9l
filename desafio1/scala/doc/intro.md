@@ -12,7 +12,7 @@ En este ejemplo tomé una solución distinta para calcular los toques y famas:
 		(tf.filter(_ == 'T').length, tf.filter(_ == 'F').length)
 	}
 
-Construyo una lista de Ts y Fs y luego cuantos elementos hay de cada uno.
+Construyo una lista de Ts y Fs, luego cuantos elementos hay de cada letra. Esto no es la forma más eficiente de resolver esto, pero permite destacar algunas características de Scala. Todo el resto del código es bastante "tradicional", salvo por el uso de Option (en otros lenguajes he usado nil o null para indicar un error).
 
 
 ## ¿Donde aprender Scala?

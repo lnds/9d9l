@@ -105,16 +105,17 @@ A continuación se muestra una sesión del juego:
 
 ## Lineas de código
 
-	Calculadas usando la herramienta cloc
+	Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
 
 	| Clojure | 49 |
 	| Erlang  | 61 |
-	| F#      | 52 |
-	| Go      | 85 |
+	| F#      | 53 |
+	| Go      | 86 |
 	| Haskell | 41 |
-	| Kotlin  | 77 |
+	| Kotlin  | 79 |
 	| Rust    | 82 |
 	| Scala   | 55 |
+	| Swift   | 66 |
 
 # Licencia
 
