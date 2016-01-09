@@ -4,3 +4,5 @@
 *.class
 .idea/
 out/
+target/
+Cargo.lock

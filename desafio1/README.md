@@ -112,6 +112,9 @@ A continuación se muestra una sesión del juego:
 	| F#      | 52 |
 	| Go      | 85 |
 	| Haskell | 41 |
+	| Kotlin  | 77 |
+	| Rust    | 82 |
+
 # Licencia
 
 	(c) 2016 Eduardo Díaz.

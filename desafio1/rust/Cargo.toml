@@ -1,0 +1,8 @@
+[package]
+name = "toque-y-fama"
+version = "0.1.0"
+authors = ["Eduardo  Díaz Cortés <ediaz@dcc8090.cl>"]
+
+[dependencies]
+rand="0.3.12"
+itertools="0.4.5"
