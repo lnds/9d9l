@@ -114,6 +114,7 @@ A continuación se muestra una sesión del juego:
 	| Haskell | 41 |
 	| Kotlin  | 77 |
 	| Rust    | 82 |
+	| Scala   | 55 |
 
 # Licencia
 
