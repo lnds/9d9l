@@ -26,6 +26,7 @@ Gana aquel que primero llegue a las 5 Famas (es decir, acierte a la cifra).
 ## El desafío
 
 En este desafío debemos construir una versión más simple de este juego. 
+
 En este caso el programa elegirá una cifra al azar y es el usuario el que debe tratar de adivinarla.
 
 La interacción se debe hacer a través de la consola.
@@ -37,6 +38,8 @@ El programa debe generar una secuencia de 5 dígitos, los que no deben repetirse
 El usuario debe ingresar una cifra de 5 dígitos no deben repetirse. 
 
 Si el usuario ingresa la palabra salir el juego termina.
+
+Si el usuario ingresa EOF (^D o Control-D en Linux y Mac) el juego termina (es equivalente a escribir salir).
 
 Si el usuario ingresa un cifra errónea (con digitos repetidos) o cualquier cosa que no sea un número o la palabra 
 salir debe responde con el mensaje "error!".
