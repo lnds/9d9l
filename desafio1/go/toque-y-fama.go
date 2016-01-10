@@ -34,9 +34,9 @@ func leer_entrada(tam int) string {
 func validar(tam int, accion string) []int {
 	num := make([]int, 0, tam)
 	for i, c := range accion {
-		if (!unicode.IsDigit(c)) {
+		if !unicode.IsDigit(c) {
 			return nil
-		} else if (i >= tam) {
+		} else if i >= tam {
 			return nil
 		} else {
 			digit := int (c - '0')
