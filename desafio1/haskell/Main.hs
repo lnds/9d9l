@@ -17,32 +17,37 @@ mostrar_reglas n = do
   \resultado: 2 Toques 2 Famas\n\n"
 
 toques_y_famas [] _ _ = (0,0)
-toques_y_famas (n:ns) (x:xs) ys = if n == x then (t,1+f) else (if n `elem` ys then (t+1, f) else (t,f))
+toques_y_famas (n:ns) (x:xs) ys 
+  | n == x = (t,1+f) 
+  | n `elem` ys = (t+1, f)
+  | otherwise = (t,f)
   where (t,f) = (toques_y_famas ns xs ys)
 
-remover_dups xs = if (length xs) == (length num) then num else []
-  where num = filter (<10) (nub (map digitToInt xs))
+remover_dups xs = let num = filter (<10) $ nub $ map digitToInt xs
+                  in if length xs == length num then num else []
 
-validar n xs = if (length num) == n then num else []
+validar n xs   
+  | length num /= n = []
+  | otherwise = num
    where num = if not (all isDigit xs) then [] else remover_dups xs
 
+mostrar_resultado [] _ _ =  do putStrLn $ "error!\n"
+mostrar_resultado ns t f =  do putStrLn $ "tu ingresaste " ++ (show ns)
+                               putStrLn $ "resultado: " ++ (show t) ++ " Toques, " ++ (show f) ++ " Famas\n"
+
 jugar n xs i a ns t f 
-      | f > 0 && f == n = do putStrLn $ "Ganaste! Acertaste al intento " ++ (show i) ++ "! La secuencia era " ++ (show xs)
+      | f == n = do putStrLn $ "Ganaste! Acertaste al intento " ++ (show i) ++ "! La secuencia era " ++ (show xs)
       | a == "salir" = do putStrLn "\ngracias por jugar, adios."
       | otherwise = do
-            when (i >0) $ if (i > 0 && null ns) 
-                then do putStrLn $ "error!\n"
-                else do 
-                        putStrLn $ "tu ingresaste " ++ (show ns)
-                        putStrLn $ "resultado: " ++ (show t) ++ " Toques, " ++ (show f) ++ " Famas\n"
+            when (i > 0) $ mostrar_resultado ns t f             
             putStrLn $ "Ingresa una secuencia de " ++ (show n) ++ " dígitos distintos (o escribe salir):"
             acc <- getLine
-            let num = (validar n acc)
-              in if null num then jugar n xs (i+1) acc num 0 0 
-                 else let (t,f) = (toques_y_famas num xs xs) 
-                       in jugar n xs (i+1) acc num t f
+            let num = validar n acc in
+                if null num then jugar n xs (i+1) acc num 0 0 
+                else let (t,f) = (toques_y_famas num xs xs) in jugar n xs (i+1) acc num t f
 
 main = let tam = 5 in do 
      sec <-  shuffleM [0..9]
+     putStrLn $ show $ take tam sec
      (mostrar_reglas tam)
      jugar tam (take tam sec) 0 "" [] 0 0

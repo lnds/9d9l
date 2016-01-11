@@ -111,7 +111,7 @@ A continuación se muestra una sesión del juego:
 	| Erlang  | 61 |
 	| F#      | 53 |
 	| Go      | 86 |
-	| Haskell | 41 |
+	| Haskell | 45 |
 	| Kotlin  | 79 |
 	| Rust    | 82 |
 	| Scala   | 55 |
