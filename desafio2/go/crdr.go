@@ -6,6 +6,7 @@ import "golang.org/x/net/html"
 const (
 	LINE_SIZE = 140
 	MAX_LINES = 3
+	MAX_NEWS = 10
 )
 
 type ReadOperation struct {
@@ -43,8 +44,8 @@ func main() {
 		}
 	}
 	sort.Sort(ByDate(news))
-	if len(news) > 10 {
-		news = news[0:9]
+	if len(news) > MAX_NEWS {
+		news = news[0:MAX_NEWS]
 	}
 	for _, ri := range news {
 		if ri.item == nil {
