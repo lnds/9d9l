@@ -8,6 +8,12 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.2.1] 
+
+### Added
+
+- desafío 2 en go (2016-02-08)
+
 ## [0.1.2] - 2016-01-11
 
 ### Changed

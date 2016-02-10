@@ -56,7 +56,11 @@ func main() {
 			fmt.Println("Fuente: "+ri.url)
 			fmt.Printf("Fecha: %d-%02d-%02d %02d:%02d:%02d\n", 
 				ri.pub.Year(), ri.pub.Month(), ri.pub.Day(), ri.pub.Hour(), ri.pub.Minute(), ri.pub.Second())
-			fmt.Println(parseHtmlFragment(ri.item.Content))
+			if ri.item.Description != "" {
+				fmt.Println(parseHtmlFragment(ri.item.Description))
+			} else {
+				fmt.Println(parseHtmlFragment(ri.item.Content))
+			}
 			fmt.Println()
 		}
 	}
