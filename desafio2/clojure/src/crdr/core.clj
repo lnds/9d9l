@@ -12,14 +12,25 @@
 	(println))
 
 (defn print-sorted-news [news]
-	(println "NEWS" (count news))
-	(let [sorted-news (take 10 (sort-by #(> 0 (compare  (:pub %) (:pub %))) news))]
+	(let [sorted-news (take 10 (sort-by :pub #(< 0 (compare %1 %2)) news))]
 		(doseq [n sorted-news]
 			(pr-news n))))
+
+(defmacro mytime
+  [expr]
+  `(let [start# (. System (nanoTime))
+         ret# ~expr
+         msecs# (long (/ (- (. System (nanoTime)) start#) 1000000))
+         hours# (quot msecs# 3600000)
+         mins#  (quot (rem msecs# 3600000) 60000)
+         secs#  (/ (rem (rem msecs# 3600000) 60000) 1000.0) ]  
+     (prn (str "Tiempo ocupado en descargar las noticias: "  (format "%d:%02d:%02.3f" hours# mins# secs#)))
+     ret#))
 
 (defn -main
   "read an parse feeds"
   [& urls]
-  	(print-sorted-news (flatten (pmap parse-news urls)))
-  	(shutdown-agents))
+  (mytime
+  	(do (print-sorted-news (flatten (pmap parse-news urls)))
+  		(shutdown-agents)))) ;; shutdown-agents prevents a 1 minutes wait after pmap
   
