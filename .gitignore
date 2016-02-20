@@ -9,3 +9,4 @@ out/
 target/
 dist/
 Cargo.lock
+.lein-repl-history
