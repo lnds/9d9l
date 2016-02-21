@@ -56,14 +56,17 @@ Al final debe informar el tiempo usado en decargar todas las noticias.
 
   Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
 
-    | Go | 231 |   
+    | Go      | 236 |
+    | Clojure | 103 |  
+
 
 ## Tiempo de Desarrollo
 
    Tiempos aproximados para desarrollar cada solución, considera codificación, pruebas e investigación.
    Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://TimingApp.com/)
 
-    | Go | 3:45 |  
+    | Go      | 3:45 |
+    | Clojure | 4:50 |
 
 # Licencia
 
