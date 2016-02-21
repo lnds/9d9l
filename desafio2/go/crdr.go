@@ -61,8 +61,8 @@ func main() {
 			} else {
 				fmt.Println(parseHtmlFragment(ri.item.Content))
 			}
-			fmt.Println()
 		}
+		fmt.Println()
 	}
 	duration := time.Since(start)
 	fmt.Printf("Tiempo ocupado en descargar las noticias: %02.0f:%02.0f:%02.3f\n", duration.Hours(), duration.Minutes(), duration.Seconds())
@@ -123,7 +123,7 @@ func (a ByDate) Len() int { return len(a) }
 func (a ByDate) Swap(i, j int) { a[i], a[j] = a[j], a[i]}
 func (a ByDate) Less(i, j int) bool {
 	if a[i].item == nil || a[j].item == nil {
-		return true
+		return false
 	} else {
 		return a[i].pub.After(a[j].pub)
 	} 
@@ -132,20 +132,20 @@ func (a ByDate) Less(i, j int) bool {
 func fetch(url string, ch chan <- ReadOperation) {
 	resp, err := http.Get(url)
 	if err != nil {
-		ch <- ReadOperation { "error fetching url ", url, nil}
+		ch <- ReadOperation { "error descargando url ", url, nil}
 		return
 	}
 
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		ch <- ReadOperation { "error reading xml ", url, nil }
+		ch <- ReadOperation { "error leyendo xml ", url, nil }
 	} else {
 		rss, success := ParseFeedContent(body)
 		if success {
 			ch <- ReadOperation { "", url, &rss }
 		} else {
-			ch <- ReadOperation { "error parsing xml ", url, nil}
+			ch <- ReadOperation { "error interpretando xml ", url, nil}
 		}
 	}
 }

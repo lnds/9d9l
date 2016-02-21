@@ -3,12 +3,21 @@
 
 (use 'crdr.news)
 
-(defn pr-news [n]
+(def line-size 140)
+
+(defn print-error [n]
+	(println "Fuente: " (:source n))
+	(println "Error:  " (:error n)))
+
+(defn print-ok [n]
 	(println "Título: " (:title n))
 	(println "Fuente: " (:source n))
 	(println "Fecha: " (:pub n))
 	(doseq [line (take 3 (:body n))]
-		(println (subs line 0 (min (count line) 140))))
+		(println (subs line 0 (min (count line) line-size)))))
+
+(defn pr-news [n]
+	(if (:error n) (print-error n) (print-ok n))
 	(println))
 
 (defn print-sorted-news [news]
@@ -24,13 +33,12 @@
          hours# (quot msecs# 3600000)
          mins#  (quot (rem msecs# 3600000) 60000)
          secs#  (/ (rem (rem msecs# 3600000) 60000) 1000.0) ]  
-     (prn (str "Tiempo ocupado en descargar las noticias: "  (format "%d:%02d:%02.3f" hours# mins# secs#)))
+     (println (str "Tiempo ocupado en descargar las noticias: "  (format "%d:%02d:%02.3f" hours# mins# secs#)))
      ret#))
 
 (defn -main
   "read an parse feeds"
   [& urls]
-  (mytime
-  	(do (print-sorted-news (flatten (pmap parse-news urls)))
-  		(shutdown-agents)))) ;; shutdown-agents prevents a 1 minutes wait after pmap
+  	(do (mytime (print-sorted-news (flatten (remove nil? (pmap parse-news urls)))))
+  		(shutdown-agents))) ;; shutdown-agents prevents a 1 minutes wait after pmap
   

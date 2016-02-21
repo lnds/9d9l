@@ -70,8 +70,15 @@
 	(let [items (filter #(= :item (:tag %)) (:content (first content)))]
 		(map #(item-data url %)  items)))
 
+(defn parse-xml [source]
+	(try (xml/parse source)
+		(catch org.xml.sax.SAXParseException e {:tag :error :content "error interpretando xml"})
+		(catch Exception e {:tag :error :content "error decargando url"})))
+
 (defn parse-news [source] 
-	(let [x (xml/parse source)]
+	(let [x (parse-xml source)]
 		(condp = (:tag x)
 			:feed (parse-atom source (:content x))
-			:rss  (parse-rss  source (:content x)))))
+			:rss  (parse-rss  source (:content x))
+			:error {:source source, :error (:content x)}
+			nil)))
