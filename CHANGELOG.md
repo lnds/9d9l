@@ -8,6 +8,12 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.2.3]
+
+### Added
+
+- desafío 2 en clojure (2016-02-21)
+
 ## [0.2.1] 
 
 ### Added

@@ -4,6 +4,7 @@
 (use 'crdr.news)
 
 (def line-size 140)
+(def max-news  10)
 
 (defn print-error [n]
 	(println "Fuente: " (:source n))
@@ -21,7 +22,7 @@
 	(println))
 
 (defn print-sorted-news [news]
-	(let [sorted-news (take 10 (sort-by :pub #(< 0 (compare %1 %2)) news))]
+	(let [sorted-news (take max-news (sort-by :pub #(< 0 (compare %1 %2)) news))]
 		(doseq [n sorted-news]
 			(pr-news n))))
 
@@ -39,6 +40,6 @@
 (defn -main
   "read an parse feeds"
   [& urls]
-  	(do (mytime (print-sorted-news (flatten (remove nil? (pmap parse-news urls)))))
+  	(do (mytime (print-sorted-news (flatten (pmap parse-news urls))))
   		(shutdown-agents))) ;; shutdown-agents prevents a 1 minutes wait after pmap
   
