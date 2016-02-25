@@ -8,17 +8,26 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
-## [0.1.1] - 2016-01-11
+## [0.2.3]
+
+### Added
+
+- desafío 2 en clojure (2016-02-21)
+
+## [0.2.1] 
+
+### Added
+
+- desafío 2 en go (2016-02-08)
+
+## [0.1.2] - 2016-01-11
 
 ### Changed
 
 - La versión es haskell del desafío 1.
 
-## [0.1.0] - 2016-01-09
+## [0.1.1] - 2015-03-16
 
-### Added
 
-- desafio1, una implementación del viejo juego de Toque y Fama en 9 lenguajes.
-
-[0.1.6]: https://github.com/lnds/9d9l/compare/0.1.0...0.1.1
-[0.1.0]: https://github.com/lnds/9d9l/releases/tag/0.1.0
+[0.1.2]: https://github.com/lnds/Ogu/compare/0.1.2...0.1.1
+[0.1.1]: https://github.com/lnds/Ogu/releases/tag/0.1.1
