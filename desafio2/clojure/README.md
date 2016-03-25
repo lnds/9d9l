@@ -1,14 +1,32 @@
-# crdr
+# weather
 
-A Clojure library designed to ... well, that part is up to you.
+Esta es la implementación de la consulta del tiempo usando Clojure.
+Corresponde al desafío 2.
 
-## Usage
+## Configuración
 
-FIXME
+Todo está configurado en el archivo project.clj
 
-## License
+## Ejecución
 
-Copyright © 2016 FIXME
+Para probarlo puedes hacer:
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+	$ lein run [-p] ciudad1 ciudad2 ciudad3
+
+## Compilación
+
+ 	$ lein uberjar
+
+Esto dejará un archivo .jar con el nombre  weather-VERSION-standalone.jar en el directorio target/uberjar.
+
+Donde VERSION es la versión definida en project.clj.
+
+## Uso
+
+	$ java -jar target/uberjar/weather-VERSION-standalone.jar [-p] ciudad1 ciudad2 ciudad3 ...
+	
+## Licencia
+
+Copyright © 2016 Eduardo Díaz
+
+Distribuido bajo licencia MIT (ver archivo LICENSE para los detalles).

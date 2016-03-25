@@ -1,6 +1,6 @@
-(ns crdr.core-test
+(ns weather.core-test
   (:require [clojure.test :refer :all]
-            [crdr.core :refer :all]))
+            [weather.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
