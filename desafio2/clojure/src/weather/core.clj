@@ -1,20 +1,25 @@
 (ns weather.core (:gen-class))
 
+(use 'weather.api)
+
 (def no-cities-provided-message "debe ingresar una lista de ciudades")
-(def report-format "%-30.30s %02.2f %s")
+(def time-report-message "tiempo en generar el reporte: ")
+(def report-format "%-30.30s %2.1f   %s")
 
 (defn print-weather [reports]
   (doseq [report reports]
-    (println (format report-format (:city report) (:max-temp report) (:conditions report))))
+    (if (:error report)
+      (println (:city report) "Error:" (:error report))
+      (println (format report-format (:city report) (:max-temp report) (:conditions report)))))
   (shutdown-agents))
 
-(defn weather-api [city]
-  {:city city, :max-temp 25.0 :conditions "Despejado"})
+(defn sort-reports [reports]
+  (sort-by :max-temp #(< 0 (compare %1 %2)) reports))
 
 (defn weather-report [cities]
-  (let [p (first cities)]
+  (let [p (first cities) r (rest cities)]
     (if (= "-p" p) 
-      (pmap weather-api (rest cities))
+      (pmap weather-api r)
       (map weather-api cities))))
 
 ; show elapsed time of a function call
@@ -26,7 +31,7 @@
          hours# (quot msecs# 3600000)
          mins#  (quot (rem msecs# 3600000) 60000)
          secs#  (/ (rem (rem msecs# 3600000) 60000) 1000.0) ]  
-     (println (str "Tiempo ocupado en descargar las noticias: "  (format "%d:%02d:%02.3f" hours# mins# secs#)))
+     (println (str time-report-message (format "%d:%02d:%02.3f" hours# mins# secs#)))
      ret#))
 
 (defn -main
@@ -34,4 +39,4 @@
   [& cities]
     (if (empty? cities)
       (println no-cities-provided-message)
-      (mytime (print-weather (weather-report cities)))) ) 
+      (mytime (print-weather (sort-reports (weather-report cities)))))) 
