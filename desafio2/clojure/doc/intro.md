@@ -1,39 +1,61 @@
-# crdr en Clojure
+# Weather en Clojure
 
 La paralelización de esta tarea en Clojure es ridiculamente trivial.
-Primero escribí esta implementación:
+
+Esta es la version secuencial:
+
+      (map weather-api cities)
+
+Esta es la versión paralela:
+
+      (pmap weather-api cities)
 
 
-	(print-sorted-news 
-		(flatten (map parse-news urls))))
+El resto es imprimirlas ordenadamente, que es lo que hacemo con la ayuda de sort-reports
 
-la función parse-news recibe una url y retorna una lista de estructuras con lo requerido (título, origen, fecha, texto). Entonces al hacer
 
-	(map parse-news urls)
 
-Obtehenemos una lista de listas, cada lista con las news de cada url.
+	(defn sort-reports [reports]
+		sort-by :max-temp #(< 0 (compare %1 %2)) reports))
 
-Al hacer 
 
-	(flatten (map parse-news urls))
+# Llamada a la API
 
-Dejamos todas las news en una lista.
+Para usar la API de OpenWeatherMap se requiere una key, que se obtiene en su sitio.
+El programa asume que hay una variable de entorno que contiene la key (WEATHER_API_KEY).
 
-El resto es imprimirlas ordenadamente, que es lo que hace print-sorted-news, que se encarga de ordenar las noticias de forma descedente de acuerdo a la fecha de publicación:
+Si se llama a la API muchas veces esta responde con el codigo 429 (too many requests), por esto que la llamada a la API tiene reintentos con pausas de 150 milisegundos. Esto es muy importante cuando se ejecuta la versión concurrente del programa (con el parámetro -p).
 
-	(defn print-sorted-news [news]
-		(let [sorted-news (take max-news (sort-by :pub #(< 0 (compare %1 %2)) news))]
-			(doseq [n sorted-news]
-				(pr-news n))))
+# Parsing de XML
 
-Si reemplazamos map, por pmap hacemos que la descarga de cada url se realice en paralelo:
+Usamos la api estandar de clojure (core/xml).
 
-	(pmap parse-news urls)
+La siguiente función simplifica la tarea de analizar el map que clojure crea para el xml:
 
-Y con eso paralelizamos la descarga de las urls!
 
-# Parsing de XML y HTML.
+	(defn extract-tag [tag x]
+		(first (filter #(= tag (:tag %)) (:content x))))
 
-Lo complicado fue hacer el parsing de XML. No está del todo correcto, así que lo revisaré más adelante.
+# Ejemplo
 
-Lo otro es que fue necesario usar un paquete externo para hacer parsing de HTML, hice esto porque no quería gastar mucho tiempo en ese aspecto. En este caso usé clj-tagsoup. 
+	$ lein run Boston Antofagasta Santiago Madrid Barcelona Concepcion Quito "Buenos Aires"
+	Concepcion                     22,0   cielo claro
+	Santiago                       21,0   cielo claro
+	Antofagasta                    20,0   cielo claro
+	Buenos Aires                   20,0   nubes
+	Boston                         19,0   niebla
+	Madrid                         17,0   nubes rotas
+	Barcelona                      15,0   algo de nubes
+	Quito                          14,8   cielo claro
+	tiempo en generar el reporte: 0:00:4,102
+
+	$ lein run -p Boston Antofagasta Santiago Madrid Barcelona Concepcion Quito "Buenos Aires"
+	Concepcion                     22,0   cielo claro
+	Santiago                       21,0   cielo claro
+	Antofagasta                    20,0   cielo claro
+	Buenos Aires                   20,0   nubes
+	Boston                         19,0   niebla
+	Madrid                         17,0   nubes rotas
+	Barcelona                      15,0   algo de nubes
+	Quito                          14,8   cielo claro
+	tiempo en generar el reporte: 0:00:2,650
