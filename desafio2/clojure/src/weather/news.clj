@@ -1,4 +1,4 @@
-(ns crdr.news (:gen-class))
+(ns weather.news (:gen-class))
 
 
 (require '[clojure.xml :as xml]
