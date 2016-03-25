@@ -3,7 +3,7 @@
 (use 'weather.api)
 
 (def no-cities-provided-message "debe ingresar una lista de ciudades")
-(def time-report-message "tiempo en generar el reporte: ")
+(def time-report-message "tiempo ocupado para generar el reporte: ")
 (def report-format "%-30.30s %2.1f   %s")
 
 (defn print-weather [reports]
