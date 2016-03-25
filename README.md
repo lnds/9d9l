@@ -19,7 +19,7 @@ Los lenguajes elegidos son:
 ## Los desafíos
 
 	1. Toque y Fama: un viejo juego via consola.
-	2. Concurrent News Reader: un news reader de RSS y ATOM que usa concurrencia para descargar las noticias.
+	2. Weather: lee información sobre el clima de distintas ciudades en forma secuencial o concurrente.
 	3. Vectores: operar sobre archivos con muchos datos.
 	4. TBD
 	5. TBD
