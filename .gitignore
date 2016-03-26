@@ -10,3 +10,4 @@ target/
 dist/
 Cargo.lock
 .lein-repl-history
+env.sh

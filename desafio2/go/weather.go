@@ -11,11 +11,11 @@ type WeatherReport struct {
 }
 
 const time_report_message = "tiempo ocupado para generar el reporte: "
-const report_format = "%-30.30s %2.1f   %s"
+const report_format = "%-30.30s %02.1f   %s"
 const no_cities_provided_message = "debe ingresar una lista de ciudades"
 
 func make_url(city string, api_key string) string {
-	return ("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&mode=xml&units=metric&appid=" + api_key + "&lang=sp")
+	return "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&mode=xml&units=metric&appid=" + api_key + "&lang=sp"
 }
 
 func main() {
@@ -70,38 +70,28 @@ func (a ByTemp) Swap(i, j int) { a[i], a[j] = a[j], a[i]}
 func (a ByTemp) Less(i, j int) bool { return a[i].temp > a[j].temp }
 
 const max_tries = 10
+const thread_sleep = 100
 
 
 func fetch(city string, api_key string, ch chan <- WeatherReport) {
 	url := make_url(city, api_key)
-	resp, err := http.Get(url)
-	tries := 0
-	for {
+	for i := 0; i < max_tries ; i++ {
+		resp, err := http.Get(url)
 		if err == nil {
-			break
-		} else {
-			tries = tries + 1
-			if tries >= max_tries {
-				ch <- WeatherReport { "error descargando url ", city, 0.0, ""}
-				return
+			defer resp.Body.Close()
+			body, err := ioutil.ReadAll(resp.Body)
+			if err == nil {
+				weather, success := ParseCurrentWeather(body)
+				if success {
+					ch <- WeatherReport { "",  weather.City.Name, weather.Temperature.Max, weather.Weather.Value}
+					return
+				} 
 			}
-			time.Sleep(150)
-			resp, err = http.Get(url)
-		}
-	}
-
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		ch <- WeatherReport { "error leyendo xml ", city, 0.0, "" }
-	} else {
-		weather, success := ParseCurrentWeather(body)
-		if success {
-			ch <- WeatherReport { "",  weather.City.Name, weather.Temperature.Max, weather.Weather.Value}
 		} else {
-			ch <- WeatherReport { "error interpretando xml ", city, 0.0, ""}
+			time.Sleep(thread_sleep)
 		}
 	}
+	ch <- WeatherReport { "error leyendo xml ", city, 0.0, "" }
 }
 
 func seq_fetch(city string, api_key string) WeatherReport {

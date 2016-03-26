@@ -1,6 +1,6 @@
 package main
 
-import ("encoding/xml";"fmt")
+import "encoding/xml"
 
 // based on http://siongui.github.io/2015/03/03/go-parse-web-feed-rss-atom/
 // with bugs fixed :)
@@ -30,8 +30,6 @@ func ParseCurrentWeather(content []byte) (Current, bool) {
 	v := Current{}
 	err := xml.Unmarshal(content, &v)
 	if err != nil {
-		fmt.Println("ERROR!")
-		fmt.Println(err)
 		return v, false
 	}
 
