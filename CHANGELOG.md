@@ -8,6 +8,18 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.2.5]
+
+### Change
+
+- Implementa weather en go y scala.
+
+## [0.2.4]
+
+### Changed
+
+- Reformula el desafío, en vez de leer noticias lee el clima. Esto se hace para simplificar la comparación (ver el blog).
+
 ## [0.2.3]
 
 ### Added

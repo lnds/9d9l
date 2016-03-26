@@ -3,15 +3,17 @@
 (use 'weather.api)
 
 (def no-cities-provided-message "debe ingresar una lista de ciudades")
-(def time-report-message "tiempo en generar el reporte: ")
+(def time-report-message "tiempo ocupado para generar el reporte: ")
 (def report-format "%-30.30s %2.1f   %s")
 
 (defn print-weather [reports]
-  (doseq [report reports]
-    (if (:error report)
-      (println (:city report) "Error:" (:error report))
-      (println (format report-format (:city report) (:max-temp report) (:conditions report)))))
-  (shutdown-agents))
+  (if (empty? reports)
+    (println no-cities-provided-message)
+    (doseq [report reports]
+      (if (:error report)
+        (println (:city report) "Error:" (:error report))
+        (println (format report-format (:city report) (:max-temp report) (:conditions report))))))
+    (shutdown-agents))
 
 (defn sort-reports [reports]
   (sort-by :max-temp #(< 0 (compare %1 %2)) reports))

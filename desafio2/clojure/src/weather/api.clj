@@ -2,8 +2,7 @@
 
 
 (require '[clojure.xml :as xml]
-		 '[clojure.string :as str]
-         '[pl.danieljanus.tagsoup :as ts])
+		 '[clojure.string :as str])
 
 (def api-key (System/getenv "WEATHER_API_KEY"))
 

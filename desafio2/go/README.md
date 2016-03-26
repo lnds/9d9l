@@ -1,16 +1,7 @@
-# crdr
+# weather
 
-Esta es la implementación de la descarga concurrente de noticias (rss o atom) usando Go.
-Corresponde al desafío 2.
+Esta es la implementación del desafío 2 usando Go.
 
-## Configuración
-
-Antes de usarlo se debe hacer:
-
-
-	$ go get golang.org/x/net/html
-
-Para poder instalar ese paquete. Este paquete es usado para "parsear" el html obtenido en el contenido de la noticia.
 
 ## Ejecución
 
@@ -18,20 +9,20 @@ Configurar adecuadamente el ambiente Go (leer How to Write Go Code https://golan
 
 Para probarlo puedes hacer:
 
-	$ go run rss.go crdr.go url1 url2 url3....
+	$ go run main.go api.go [-p] ciudad1 ciudad2...
 
 ## Compilación
 
- 	$ go build -o crdr
+ 	$ go build -o weather
 
-Esto dejará un archivo ejecutable con el nombre crdr en el directorio actual.
+Esto dejará un archivo ejecutable con el nombre weather en el directorio actual.
 
 
 ## Uso
 
 Generado el binario  puedes ejecutarlo directamente haciendo:
 
-    $ ./crdr url1 url2 urls...
+    $ ./weather [-p]  ciudad1 ciudad2 ciudad3...
 
 
 ## Documentación

@@ -1,24 +1,19 @@
 # Change Log
-All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [Unreleased][unreleased]
+
+## [0.2.5][2016-03-25]
 ### Changed
-- Add a new arity to `make-widget-async` to provide a different widget shape.
+- documentación
+- remueve dependencias que no aplican para la nueva formulación del problema
 
-## [0.1.1] - 2016-02-09
+## [0.2.4][2016-03-25]
 ### Changed
-- Documentation on how to make the widgets.
+- Problema reformulado para leer clima en vez de news.
 
-### Removed
-- `make-widget-sync` - we're all async, all the time.
-
-### Fixed
-- Fixed widget maker to keep working when daylight savings switches over.
-
-## 0.1.0 - 2016-02-09
+## [0.2.3] - 2016-02-25
 ### Added
-- Files from the new template.
-- Widget maker public API - `make-widget-sync`.
+- Implementacion para leer news. Deprecado por la reformulacion del problema
 
-[unreleased]: https://github.com/your-name/crdr/compare/0.1.1...HEAD
-[0.1.1]: https://github.com/your-name/crdr/compare/0.1.0...0.1.1
+
+[unreleased]:
+[0.2.4]: https://github.com/lnds/9d9l/releases/tag/0.2.4

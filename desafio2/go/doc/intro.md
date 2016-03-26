@@ -1,41 +1,83 @@
-# crdr en Go
+# Weather en Go
 
-Programar la ejecución concurrente de la descarga de urls fue lo más fácil en este proyecto.
+El nucleo de la operación concurrente está en las siguientes lineas:
 
-El uso de channels simplifica mucho la sincronización.
-
-El nucleo de la operación concurrente está en las lineas 28 a 31 de crdr.go
-
-	ch := make(chan ReadOperation)
-	for _, url := range os.Args[1:] {
-		go fetch(url, ch)
+	ch := make(chan WeatherReport)
+	for _, city := range os.Args[2:] {
+		go fetch(city, api_key, ch)
 	}
 
-La función fetch corre concurrentemente por cada url.
+(Vamos en los argumentos del 2 en adelante, porque el 1 es el parámetro -p).
+
+La función fetch descarga de manera concurrente el reporte del tiempo para cada ciudad.
+
 Al terminar fetch escribe el resultado en el canal ch.
 
 Fetch en esencia hace lo siguiente:
 
-	func fetch(url string, ch chan <- ReadOperation) {
+	func fetch(city string, api_key string, ch chan <- WeatherReport) {
+		url := make_url(city, api_key)
 		resp, err := http.Get(url)
 		...
-			rss, success := ParseFeedContent(body)
-			if success {
-				ch <- ReadOperation { "", url, &rss }
-			} else {
-				ch <- ReadOperation { "error parsing xml ", url, nil}
-			}
+		weather, success := ParseCurrentWeather(body)
+		if success {
+			return WeatherReport { "",  weather.City.Name, weather.Temperature.Max, weather.Weather.Value}
+		} else {
+			return WeatherReport { "error interpretando xml ", city, 0.0, ""}
+		}	
 
-# Parsing de los feeds RSS y Atom
 
-Para parsear los feeds usé un ejemplo encontrado en internet, pero que contenía algunos bugs, el resultado está en el archivo rss.go.
+# Parsing del XML
 
-# Parsing de HTML
+La api para hacer unmarshalling de XML es bastante util para este caso.
 
-Para hacer parsing del HTML usamos un paquete experimental disponible en golang.org
+Este es un xml tipico de respuesta de la api:
 
-	import "golang.org/x/net/html"
+	<current>
+		<city id="4930956" name="Boston">
+			<coord lon="-71.06" lat="42.36"/>
+			<country>US</country>
+			<sun rise="2016-03-25T10:36:48" set="2016-03-25T23:03:30"/>
+			</city>
+		<temperature value="7.61" min="1" max="19" unit="metric"/>
+		<humidity value="86" unit="%"/>
+		<pressure value="1008" unit="hPa"/>
+		<wind>
+			<speed value="1.5" name="Calm"/>
+			<gusts/>
+			<direction value="20" code="NNE" name="North-northeast"/>
+		</wind>
+		<clouds value="90" name="overcast clouds"/>
+		<visibility/>
+		<precipitation mode="no"/>
+		<weather number="500" value="lluvia ligera" icon="10d"/>
+		<lastupdate value="2016-03-25T16:06:00"/>
+	</current>
 
-Para usar esto se debe instalar del siguiente modo:
+Cómo sólo nos interesan los elementos <city>, <temperature> y <weather> solo definimos estos del siguiente modo:
 
-	$ go get golang.org/x/net/html
+	type City struct {
+		Name string `xml:"name,attr"`
+		Country string `xml:"country"`
+	}
+
+	type Weather struct {
+		Value string `xml:"value,attr"`
+	}
+
+	type Temperature struct {
+		Max float32 `xml:"max,attr"`
+	}
+
+	type Current struct {
+		XMLName xml.Name `xml:"current"`
+		City City `xml:"city"`
+		Temperature Temperature `xml:"temperature"`
+		Weather Weather `xml:"weather"`
+	}
+
+# Invocando la API
+
+El código de fetch() y cur_fetch() podrían refactorizarse de algún modo.
+Notar que fetch() tiene un loop para reintentar la descarga cuando esta falla, esto es porque OpenWeatherMap retorna un código 423 cuando se invoca muchas veces simultáneas la API. En este loop esperamos unos milisegundos y reintentamos.
+
