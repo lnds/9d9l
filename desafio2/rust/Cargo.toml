@@ -1,0 +1,9 @@
+[package]
+name = "weather"
+version = "0.1.0"
+authors = ["Eduardo  Díaz Cortés <ediaz@dcc8090.cl>"]
+
+[dependencies]
+getopts = "0.2"
+hyper = "0.7"
+treexml = "0.3.0"
