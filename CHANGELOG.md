@@ -8,9 +8,15 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.2.6]
+
+### Added
+- Implementa solución en Rust
+- Implementa solución en Swift
+
 ## [0.2.5]
 
-### Change
+### Added
 
 - Implementa weather en go y scala.
 
