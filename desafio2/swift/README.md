@@ -1,15 +1,17 @@
-# toque-y-fama
+# weather
 
-Este es el juego de toque y fama escrito en Swift.
+Este es el desafío 2 escrito en Swift.
 
 ## Ejecución
 
 Debes instalar la última versión desde el sitio swift.org de acuerdo a lo que sale en esta página: https://swift.org/getting-started/.
 
+Este programa fue probado con Swift 2.2 (XCode 7+) en Mac OSX
+
 Para probarlo puedes hacer:
 
 	$ swift build 
-	$ .build/debug/toque-y-fama
+	$ .build/debug/weather [-p] ciudad1 ciudad2 ciudad3 ..
 
 ## Compilación
 
@@ -21,7 +23,7 @@ Esto dejará un archivo binario en .build/release
 
 Generado el archivo binario puedes ejecutarlo directamente haciendo:
 
-	$ ./build/release/toque-y-fama
+	$ ./build/release/weather [-p] ciudad1 ciudad2 ciudad3 ..
 
 
 ## Documentación
