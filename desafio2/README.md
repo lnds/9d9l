@@ -38,9 +38,11 @@ El output debe ser generado en utf-8 y emitirse por la salida estándar.
 
   Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
 
-  | Go | 110 |
+  | Go | 119 |
   | Clojure | 81 |
   | Scala | 99 |
+  | Rust | 116 |
+  | Swift | 91 |
 
 
 ## Tiempo de Desarrollo
@@ -48,9 +50,11 @@ El output debe ser generado en utf-8 y emitirse por la salida estándar.
    Tiempos aproximados para desarrollar cada solución, considera codificación, pruebas e investigación.
    Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://TimingApp.com/)
 
-   | Go | 3:44 |
-   | Clojure | 2:48 |
-   | Scala | 0:51 | 
+   | Go | 4:14 |
+   | Clojure | 3:18 |
+   | Scala | 1:21 | 
+   | Rust | 2:17 |
+   | Swift | 2:57 |
 
 # Licencia
 
