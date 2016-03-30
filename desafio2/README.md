@@ -2,7 +2,7 @@
 
 El desafío consiste en una aplicación que obtenga el clima de distintas ciudades, usando la api de OpenWeatherMap.org de forma concurrente.
 
-Se debe crear un programa que reciba a través de la línea de comandos una lista de ciudades, el programa debe descargar, concurrentemente de open weather map el informe de clima de las ciudades.
+Se debe crear un programa que reciba a través de la línea de comandos una lista de ciudades, el programa debe descargar, en paralelos desde OpenWeatherMap.org el informe de clima de las ciudades.
 El resultado se debe ordenar de la mayor a menor temperatura.
 El resultado debe contener, la ciudad, la temperatura máxima y  las condiciones de clima.
 Al final debe informar el tiempo ocupado para descargar la información.
@@ -28,7 +28,7 @@ El output debe ser generado en utf-8 y emitirse por la salida estándar.
 
 ## Las implementaciones
 	
-	Este desfío ha sido implementado en los lenguajes definidos en el proyecto "9 desafíos en 9 lenguajes": Clojure,Erlang, F#, Go, Haskell, Kotlin, Rust, Scala y Swift.
+	Este desafío ha sido implementado en los lenguajes definidos en el proyecto "9 desafíos en 9 lenguajes": Clojure,Erlang, F#, Go, Haskell, Kotlin, Rust, Scala y Swift.
 
 	Los detalles están descritos en cada archivo README para cada implementación.
 
