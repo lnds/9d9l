@@ -10,6 +10,10 @@ En Mac OSX hay que aplicar esto:
 
 (ver https://github.com/servo/servo/issues/7303).
 
+Recuerda configurar la variable WEATHER_API_KEY
+
+	$ export WEATHER_API_KEY=api-key-entregada-por-open-weather-map-org
+
 
 ## Ejecución
 

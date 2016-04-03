@@ -13,7 +13,7 @@ use std::cmp::Ordering;
 
 enum ApiResult {
     Error{city: String, error: String},
-    WeatherReport{city: String, temp: f32, conditions: String}
+    WeatherReport{city: String, temp: f32, max:f32, min:f32, conditions: String}
 }
 
 fn api_call(city:&String, api_key:&String) -> ApiResult {
@@ -37,9 +37,13 @@ fn api_call(city:&String, api_key:&String) -> ApiResult {
                         let temp = root.find_child(|tag| tag.name == "temperature").unwrap().clone();
                         let weather = root.find_child(|tag| tag.name == "weather").unwrap().clone();
 
+                        let min_temp: f32= temp.attributes["min"].parse().unwrap();
                         let max_temp: f32= temp.attributes["max"].parse().unwrap();
+                        let cur_temp: f32= temp.attributes["value"].parse().unwrap();
 
-                        return ApiResult::WeatherReport{city: city.clone(), temp: max_temp, conditions: weather.attributes["value"].clone()}
+                        return ApiResult::WeatherReport{city: city.clone(), 
+                            temp: cur_temp, max: max_temp, min:min_temp, 
+                            conditions: weather.attributes["value"].clone() }
                     }
                 }
             }
@@ -79,10 +83,10 @@ fn seq_fetch(cities:&Vec<String>, api_key:String) -> Vec<ApiResult> {
 fn comp_api_result(a:&ApiResult, b:&ApiResult) -> Ordering {
     match a {
         &ApiResult::Error{city:_, error:_} => Ordering::Less,
-        &ApiResult::WeatherReport{city:_, temp:ta, conditions:_} => 
+        &ApiResult::WeatherReport{city:_, temp:ta, max:_, min:_, conditions:_} => 
             match b {
                 &ApiResult::Error{city:_, error:_} => Ordering::Less,
-                &ApiResult::WeatherReport{city:_, temp:tb, conditions:_} => 
+                &ApiResult::WeatherReport{city:_, temp:tb, max:_, min:_, conditions:_} => 
                     if ta > tb { Ordering::Less } else { Ordering::Greater }
             }
     }
@@ -114,7 +118,7 @@ fn main() {
     for report in result {
         match report {
             ApiResult::Error{city:c, error:e} => { println!("{:?} Error: {:?}", e, c) }
-            ApiResult::WeatherReport{city, temp, conditions} =>  { println!("{:<30} {:05.2}   {:?}", city, temp, conditions) }
+            ApiResult::WeatherReport{city, temp, max, min, conditions} =>  { println!("{:<30} max:{:5.1}  min:{:5.1}   actual: {:5.1} {}", city, temp, max, min, conditions) }
         }
     }
     let dur = t0.elapsed();
