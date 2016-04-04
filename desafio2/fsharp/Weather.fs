@@ -67,7 +67,7 @@ let weather_comp (a:ApiResulType) (b:ApiResulType) =
 let print_reports reports =
     for rep in reports do
         match rep with
-        | Weather {city=c; max=max; min=min; temperature=t; conditions=cond } -> printfn "%-30s max:%6.2f, min:%6.2f   actual: %6.2f %s" c max min t cond
+        | Weather {city=c; max=max; min=min; temperature=t; conditions=cond } -> printfn "%-30s max:%5.1f  min:%5.1f   actual: %5.1f %s" c max min t cond
         | Error {city=c; error=err} -> printf "%s %s" c err
 
 let par_fetch cities = cities |> List.map api_call_async  |> Async.Parallel |> Async.RunSynchronously  |> List.ofArray
