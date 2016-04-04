@@ -7,11 +7,13 @@ type WeatherReport struct {
 	error string
 	city  string
 	temp  float32
+	max   float32
+	min   float32
 	conditions string
 }
 
 const time_report_message = "tiempo ocupado para generar el reporte: "
-const report_format = "%-30.30s %02.1f   %s"
+const report_format = "%-30.30s max:%5.1f  min:%5.1f   actual: %5.1f %s"
 const no_cities_provided_message = "debe ingresar una lista de ciudades"
 
 func make_url(city string, api_key string) string {
@@ -40,19 +42,19 @@ func main() {
 		}
 		for range os.Args[2:] {
 			rep := <- ch
-			reports = append(reports, WeatherReport{rep.error, rep.city, rep.temp, rep.conditions})
+			reports = append(reports, WeatherReport{rep.error, rep.city, rep.temp, rep.max, rep.min, rep.conditions})
 		}
 	} else {
 		for _, city := range os.Args[1:] {
 			rep := seq_fetch(city, api_key)
-			reports = append(reports, WeatherReport{rep.error, rep.city, rep.temp, rep.conditions})
+			reports = append(reports, WeatherReport{rep.error, rep.city, rep.temp, rep.max, rep.min, rep.conditions})
 		}
 	}
 
 	sort.Sort(ByTemp(reports))
 	for _, r := range reports {
 		if r.error == "" {
-			fmt.Printf(report_format, r.city, r.temp, r.conditions)
+			fmt.Printf(report_format, r.city, r.max, r.min, r.temp, r.conditions)
 		} else {
 			fmt.Printf("%s Error: %s\n", r.city, r.error)
 		}
@@ -67,7 +69,7 @@ type ByTemp []WeatherReport
 
 func (a ByTemp) Len() int { return len(a) }
 func (a ByTemp) Swap(i, j int) { a[i], a[j] = a[j], a[i]}
-func (a ByTemp) Less(i, j int) bool { return a[i].temp > a[j].temp }
+func (a ByTemp) Less(i, j int) bool { return a[i].max > a[j].max }
 
 const max_tries = 10
 const thread_sleep = 100
@@ -83,7 +85,10 @@ func fetch(city string, api_key string, ch chan <- WeatherReport) {
 			if err == nil {
 				weather, success := ParseCurrentWeather(body)
 				if success {
-					ch <- WeatherReport { "",  weather.City.Name, weather.Temperature.Max, weather.Weather.Value}
+					ch <- WeatherReport { "",  weather.City.Name, 
+						weather.Temperature.Value, 
+						weather.Temperature.Max, weather.Temperature.Min, 
+						weather.Weather.Value}
 					return
 				} 
 			}
@@ -91,26 +96,27 @@ func fetch(city string, api_key string, ch chan <- WeatherReport) {
 			time.Sleep(thread_sleep)
 		}
 	}
-	ch <- WeatherReport { "error leyendo xml ", city, 0.0, "" }
+	ch <- WeatherReport { "error leyendo xml ", city, 0.0, 0.0, 0.0, "" }
 }
 
 func seq_fetch(city string, api_key string) WeatherReport {
 	url := make_url(city, api_key)
 	resp, err := http.Get(url)
 	if err != nil {
-		return WeatherReport { "error descargando url ", city, 0.0, ""}
+		return WeatherReport { "error descargando url ", city, 0.0, 0.0, 0.0, ""}
 	}
 
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return WeatherReport { "error leyendo xml ", city, 0.0, "" }
+		return WeatherReport { "error leyendo xml ", city, 0.0, 0.0, 0.0, "" }
 	} 
 
 	weather, success := ParseCurrentWeather(body)
 	if success {
-		return WeatherReport { "",  weather.City.Name, weather.Temperature.Max, weather.Weather.Value}
+		return WeatherReport { "",  weather.City.Name, weather.Temperature.Value, 
+							  weather.Temperature.Max, weather.Temperature.Min,  weather.Weather.Value}
 	} else {
-		return WeatherReport { "error interpretando xml ", city, 0.0, ""}
+		return WeatherReport { "error interpretando xml ", city, 0.0, 0.0, 0.0, ""}
 	}
 }

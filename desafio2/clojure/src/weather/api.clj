@@ -31,6 +31,15 @@
 	(let [t (extract-tag :temperature x)]
 		(double (read-string (:max (:attrs t))))))
 
+(defn min-temp [x]
+	(let [t (extract-tag :temperature x)]
+		(double (read-string (:min (:attrs t))))))
+
+
+(defn temp [x]
+	(let [t (extract-tag :temperature x)]
+		(double (read-string (:value (:attrs t))))))
+
 (defn city [x]
 	(let [c (extract-tag :city x)]
 		(:name (:attrs c))))
@@ -45,4 +54,4 @@
  (let [x (api-call c 0 max-tries)]
  	(if (= (:tag x) :error)
  		{:city c :max-temp 0.0 :conditions "" :error (:content x)}
-  		{:city (city x), :max-temp (max-temp x) :conditions (conditions x) :error nil})))
+  		{:city (city x), :max (max-temp x), :min (min-temp x), :temp (temp x), :conditions (conditions x) :error nil})))

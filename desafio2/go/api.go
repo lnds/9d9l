@@ -15,6 +15,8 @@ type Weather struct {
 }
 
 type Temperature struct {
+	Value float32 `xml:"value,attr"`
+	Min float32 `xml:"min,attr"`
 	Max float32 `xml:"max,attr"`
 }
 

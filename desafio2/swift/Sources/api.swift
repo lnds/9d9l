@@ -2,7 +2,7 @@ import Foundation
 
 enum ApiResult {
 	case Error(String, String) // city, error
-	case Weather(String,Double,String)  // city, temp, conditions	
+	case Weather(String,Double,Double,Double,String)  // city, temp,  max, min,conditions	
 }
 
 func httpGet(city:String, url:String) -> ApiResult {
@@ -13,9 +13,11 @@ func httpGet(city:String, url:String) -> ApiResult {
 				let xmlDoc = try NSXMLDocument(contentsOfURL: myURL, options:0)
 				if let root = xmlDoc.rootElement() {
 					let cityName = root.elementsForName("city")[0].attributeForName("name")!.stringValue!
-					let temp = (root.elementsForName("temperature")[0].attributeForName("max")!.stringValue! as NSString).doubleValue
+					let temp = (root.elementsForName("temperature")[0].attributeForName("value")!.stringValue! as NSString).doubleValue
+					let max  = (root.elementsForName("temperature")[0].attributeForName("max")!.stringValue! as NSString).doubleValue
+					let min  = (root.elementsForName("temperature")[0].attributeForName("min")!.stringValue! as NSString).doubleValue
 					let weatherConds = root.elementsForName("weather")[0].attributeForName("value")!.stringValue!
-					return ApiResult.Weather(cityName, temp, weatherConds)
+					return ApiResult.Weather(cityName, temp, max, min, weatherConds)
 				} 
 			} catch { /* DO NOTHING, and is good */ }
 			usleep(100000)

@@ -7,6 +7,10 @@ Corresponde al desafío 2.
 
 Todo está configurado en el archivo project.clj
 
+Recuerda configurar la variable WEATHER_API_KEY
+
+	$ export WEATHER_API_KEY=api-key-entregada-por-open-weather-map-org
+
 ## Ejecución
 
 Para probarlo puedes hacer:

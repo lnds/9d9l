@@ -25,6 +25,10 @@ La salida debe ser:
 
 El output debe ser generado en utf-8 y emitirse por la salida estándar.
 
+### Nota Importante
+
+La API de OpenWeatherMap.org requiere una llave (key), esta se puede obtener de forma gratuita registrándose en el sitio. 
+Los programas asumen que el valor de la API se configura en la variable de entorno WEATHER_API_KEY.
 
 ## Las implementaciones
 	

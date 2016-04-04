@@ -2,6 +2,11 @@
 
 Esta es la implementación del desafío 2 usando Go.
 
+## Configuración
+
+Recuerda configurar la variable WEATHER_API_KEY
+
+	$ export WEATHER_API_KEY=api-key-entregada-por-open-weather-map-org
 
 ## Ejecución
 
@@ -9,7 +14,7 @@ Configurar adecuadamente el ambiente Go (leer How to Write Go Code https://golan
 
 Para probarlo puedes hacer:
 
-	$ go run main.go api.go [-p] ciudad1 ciudad2...
+	$ go run weather.go api.go [-p] ciudad1 ciudad2...
 
 ## Compilación
 

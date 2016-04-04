@@ -5,7 +5,7 @@ import scala.xml._
 object Main {
 
   val time_report_message = "tiempo ocupado para generar el reporte: "
-  val report_format = "%-30.30s %02.1f   %s"
+  val report_format = "%-30.30s max:%5.1f  min:%5.1f   actual: %5.1f %s"
   val no_cities_provided_message = "debe ingresar una lista de ciudades"
 
   val api_key = sys.env("WEATHER_API_KEY")
@@ -32,7 +32,7 @@ object Main {
 
   sealed trait WeatherResult
   case class Error(error: String, city: String) extends WeatherResult
-  case class WeatherReport(city: String, temp: Double, conditions: String) extends WeatherResult
+  case class WeatherReport(city: String, temp: Double, min: Double, max: Double, conditions: String) extends WeatherResult
 
   def parseDouble(str: String) : Double = 
     try {
@@ -48,9 +48,11 @@ object Main {
       Error("error parsing xml response", city)
     else {
       val city = xml \\ "city" \ "@name"
-      val temp = xml \\ "temperature" \ "@max"
+      val temp = xml \\ "temperature" \ "@value"
+      val min  = xml \\ "temperature" \ "@min"
+      val max  = xml \\ "temperature" \ "@max"
       val weather = xml \\ "weather" \ "@value"
-      WeatherReport(city.text, parseDouble(temp.text), weather.text)
+      WeatherReport(city.text, parseDouble(temp.text), parseDouble(min.text), parseDouble(max.text), weather.text)
     }
   }
 
@@ -71,10 +73,10 @@ object Main {
   def compareWeatherReports(rep1: WeatherResult, rep2: WeatherResult) : Boolean =
     rep1 match {
       case Error(_,_) => false
-      case WeatherReport(_, temp1, _) =>
+      case WeatherReport(_, temp1, _, _, _) =>
         rep2 match {
           case Error(_,_) => false
-          case WeatherReport(_, temp2, _) => temp2 < temp1
+          case WeatherReport(_, temp2, _, _, _) => temp2 < temp1
         }
     } 
 
@@ -82,8 +84,8 @@ object Main {
     reports.sortWith(compareWeatherReports).foreach { 
       case Error(err, city) =>
         println(s"${city} Error: ${err}")
-      case WeatherReport(city, temp, conditions) =>
-        println(report_format.format(city, temp, conditions))
+      case WeatherReport(city, temp, min, max, conditions) =>
+        println(report_format.format(city, max, min, temp, conditions))
     }
 
 
