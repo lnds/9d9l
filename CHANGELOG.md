@@ -8,6 +8,14 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.2.7]
+
+### Added
+- Implementa solución en F#
+
+## Changed
+- Agrega la información de temperatura máxima, mínima y actual en todos los reportes
+
 ## [0.2.6]
 
 ### Added

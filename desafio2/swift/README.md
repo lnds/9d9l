@@ -2,6 +2,12 @@
 
 Este es el desafío 2 escrito en Swift.
 
+## Configuración
+
+Recuerda configurar la variable WEATHER_API_KEY
+
+	$ export WEATHER_API_KEY=api-key-entregada-por-open-weather-map-org
+
 ## Ejecución
 
 Debes instalar la última versión desde el sitio swift.org de acuerdo a lo que sale en esta página: https://swift.org/getting-started/.

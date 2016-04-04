@@ -4,7 +4,7 @@
 
 (def no-cities-provided-message "debe ingresar una lista de ciudades")
 (def time-report-message "tiempo ocupado para generar el reporte: ")
-(def report-format "%-30.30s %2.1f   %s")
+(def report-format "%-30.30s max:%5.1f  min:%5.1f   actual: %5.1f %s")
 
 (defn print-weather [reports]
   (if (empty? reports)
@@ -12,11 +12,11 @@
     (doseq [report reports]
       (if (:error report)
         (println (:city report) "Error:" (:error report))
-        (println (format report-format (:city report) (:max-temp report) (:conditions report))))))
+        (println (format report-format (:city report) (:max report) (:min report) (:temp report) (:conditions report))))))
     (shutdown-agents))
 
 (defn sort-reports [reports]
-  (sort-by :max-temp #(< 0 (compare %1 %2)) reports))
+  (sort-by :temp #(< 0 (compare %1 %2)) reports))
 
 (defn weather-report [cities]
   (let [p (first cities) r (rest cities)]

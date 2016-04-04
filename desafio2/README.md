@@ -15,16 +15,20 @@ Por ejemplo:
 
 La salida debe ser:
 
-    Santiago 27 Despejado
-    Berlin   19 Nublado
-    Madrid   18 Lluvia
-    Boston   17 Parcialmente nublado
+    Santiago max: 27.1  min: 20.0  actual: 20.9 Despejado
+    Berlin   max: 19.0  min: 10.0  actual: 12.5 Nublado
+    Madrid   max: 18.0  min:  7.0  actual:  8.9 Lluvia
+    Boston   max: 17.0  min:  5.0  actual: 10.1 Parcialmente nublado
 
     Tiempo ocupado en descargar información : hh:mm:ss.ms
 
 
 El output debe ser generado en utf-8 y emitirse por la salida estándar.
 
+### Nota Importante
+
+La API de OpenWeatherMap.org requiere una llave (key), esta se puede obtener de forma gratuita registrándose en el sitio. 
+Los programas asumen que el valor de la API se configura en la variable de entorno WEATHER_API_KEY.
 
 ## Las implementaciones
 	
@@ -36,13 +40,14 @@ El output debe ser generado en utf-8 y emitirse por la salida estándar.
 
 ## Lineas de código
 
-  Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
+    Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
 
-  | Go | 119 |
-  | Clojure | 81 |
-  | Scala | 99 |
-  | Rust | 116 |
-  | Swift | 91 |
+    | Go      | 127 |
+    | Clojure |  87 |
+    | Scala   | 101 |
+    | Rust    | 120 |
+    | Swift   |  93 |
+    | F#      |  77 |
 
 
 ## Tiempo de Desarrollo
@@ -50,11 +55,12 @@ El output debe ser generado en utf-8 y emitirse por la salida estándar.
    Tiempos aproximados para desarrollar cada solución, considera codificación, pruebas e investigación.
    Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://TimingApp.com/)
 
-   | Go | 4:14 |
+   | Go      | 4:14 |
    | Clojure | 3:18 |
-   | Scala | 1:21 | 
-   | Rust | 2:17 |
-   | Swift | 2:57 |
+   | Scala   | 1:21 | 
+   | Rust    | 2:17 |
+   | Swift   | 2:57 |
+   | F#      | 1:39 |
 
 # Licencia
 
