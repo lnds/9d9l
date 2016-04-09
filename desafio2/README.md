@@ -52,15 +52,15 @@ Los programas asumen que el valor de la API se configura en la variable de entor
 
 ## Tiempo de Desarrollo
 
-   Tiempos aproximados para desarrollar cada solución, considera codificación, pruebas e investigación.
-   Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://TimingApp.com/)
+    Tiempos aproximados para desarrollar cada solución, considera codificación, pruebas e investigación.
+    Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://TimingApp.com/)
 
-   | Go      | 4:14 |
-   | Clojure | 3:18 |
-   | Scala   | 1:21 | 
-   | Rust    | 2:17 |
-   | Swift   | 2:57 |
-   | F#      | 1:39 |
+    | Go      | 4:14 |
+    | Clojure | 3:18 |
+    | Scala   | 1:21 | 
+    | Rust    | 2:17 |
+    | Swift   | 2:57 |
+    | F#      | 1:39 |
 
 # Licencia
 
