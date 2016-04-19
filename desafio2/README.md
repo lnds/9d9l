@@ -48,6 +48,7 @@ Los programas asumen que el valor de la API se configura en la variable de entor
     | Rust    | 120 |
     | Swift   |  93 |
     | F#      |  77 |
+    | Erlang  |  90 |
 
 
 ## Tiempo de Desarrollo
@@ -61,6 +62,7 @@ Los programas asumen que el valor de la API se configura en la variable de entor
     | Rust    | 2:17 |
     | Swift   | 2:57 |
     | F#      | 1:39 |
+    | Erlang  | 4:41 |
 
 # Licencia
 

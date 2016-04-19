@@ -1,5 +1,5 @@
 -module (weather).
--export ([main/1, buscar_reportes_con_map_async/1]).
+-export ([main/1, buscar_reportes_con_map_async/1, async_api_call/1]).
 
 -define(UA, "Mozilla/5.0 (Erlang http:request)").
 -define(API_KEY, os:getenv("WEATHER_API_KEY")).
@@ -12,7 +12,6 @@ main([P|Args]) when P =:= 'p'  ->
 		REPS = lists:sort(fun (A,B) -> comparar(A,B) end, buscar_reportes_con_map_async(Args)), 
 		imprimir_reportes(REPS)
 	end);
-
 main(Args) -> 
 	application:start(inets),
 	cronometrar(fun () ->
@@ -20,9 +19,7 @@ main(Args) ->
 		imprimir_reportes(REPS)
 	end).
 
-comparar(A,B) ->
-	{K1,_,T1,_,_,_} = A,
-	{K2,_,T2,_,_,_} = B,
+comparar({K1,_,T1,_,_,_},{K2,_,T2,_,_,_}) ->
 	if (K1 =:= ok) and (K2 =:= ok) -> T1 > T2;
 	   true -> if K1 =:= ok -> true; K1 =:= error -> false end
 	end.
@@ -30,20 +27,18 @@ comparar(A,B) ->
 imprimir_reportes([]) -> ok;
 imprimir_reportes([H|T]) -> imprimir_reporte(H), imprimir_reportes(T).
 
-imprimir_reporte(R) ->
-	{T,Ciudad,Temp,Max,Min,Cond} = R, 
-	if T =:= ok -> io:format("~-30.30s max:~5.1f  min: ~5.1f   actual: ~5.1f ~s\n", [Ciudad, Max, Min, Temp, Cond]);
-	   T =:= error -> io:format("~s error: ~s\n", [Ciudad,Cond])
-	end.
+imprimir_reporte({ok,Ciudad,Temp,Max,Min,Cond}) ->
+	io:format("~-30.30s max:~5.1f  min: ~5.1f   actual: ~5.1f ~s\n", [Ciudad, Max, Min, Temp, Cond]);
+imprimir_reporte({error,Ciudad,_,_,_,Error}) -> io:format("~s error: ~s\n", [Ciudad,Error]).
 
 extraer_valor([], _) -> error;
-extraer_valor([H|T], Attr) ->
-	{xmlAttribute,A,_,_,_,_,_,_,Value,_} = H,
+extraer_valor([{xmlAttribute,A,_,_,_,_,_,_,Value,_}|T], Attr) ->
 	if A =:= Attr -> Value;
 	   A =/= Attr -> extraer_valor(T, Attr)
 	end. 
 
-extraer_reporte(Xml) ->
+extraer_reporte([], Ciudad, Error) -> {error,Ciudad, 0.0, 0.0, 0.0,Error};
+extraer_reporte(Xml, _, _) ->
 	{Root,_} = xmerl_scan:string(Xml),
 	Ciudad = extraer_valor(xmerl_xpath:string("//city/@*", Root), name),
 	TempAttrs = xmerl_xpath:string("//temperature/@*", Root),
@@ -58,45 +53,53 @@ buscar_reportes_con_map(Ciudades) ->
 	lists:map(
 		fun(Ciudad) ->
 			Url = crear_url_api(Ciudad),
-			Xml = llamar_api(Url),
-			extraer_reporte(Xml)	
-		end,
-		Ciudades).
+			{Xml,Error} = llamar_api(Url),
+			extraer_reporte(Xml, Ciudad, Error)	
+		end, Ciudades).
 
 buscar_reportes_con_map_async(Ciudades) -> 
 	ReqIds = lists:map(
 		fun(Ciudad) ->
 			Url = crear_url_api(Ciudad),
 			{Ciudad,llamar_api_async(Url)}
-		end,
-		Ciudades),
+		end, Ciudades),
 	recolectar(ReqIds).
 
 recolectar([Llam|Llams]) -> 
 	{Ciudad,ReqId} = Llam,
+	ReqId ! {self(), get_result},
     receive
-        {http, {ReqId, {{_, Code, _}, _, Body}}} -> 
-        	[if Code < 400-> extraer_reporte(binary_to_list(Body)); 
-        		Code > 399 -> {error,Ciudad,0.0,0.0,0.0,"error llamando api"}
-        	 end 
-        	| recolectar(Llams)]
+        {xml, Xml, Error} -> 
+        	[extraer_reporte(Xml, Ciudad, Error) | recolectar(Llams)]
     end;
 recolectar([]) -> [].
 
 crear_url_api(Ciudad) ->
 	io_lib:format("http://api.openweathermap.org/data/2.5/weather?q=~s&mode=xml&units=metric&lang=sp&appid=~s",[Ciudad,?API_KEY]).
 
-llamar_api(Url) ->
-	timer:sleep(150),
-	{ok, {{_,Code,_}, _, Body}} = httpc:request(Url),
-	if Code < 400-> Body;
-       Code > 399 -> []
+llamar_api(Url) -> llamar_api(Url, 10).
+
+llamar_api(Url, N) ->
+	{Res, Response} = httpc:request(get, {Url,[]}, [{timeout,1000}], []),
+	case Res of
+		ok -> {{_,Code,_}, _, Body} = Response,
+		      if Code < 400-> {Body, ""};
+	             Code > 399 -> {[], "Error consultando API, revise api key"}
+	          end;
+	   error ->
+	   	if N =:= 0 -> {[], "Api no disponible"};
+	   	   N > 0 -> timer:sleep(100), llamar_api(Url, N-1)
+	    end
     end.
 
-llamar_api_async(Url) ->
-	timer:sleep(150),
-	{ok, ReqId} = httpc:request(get, {Url, [{"User-Agent", ?UA}]},[], [{sync, false}]),
-	ReqId.
+llamar_api_async(Url) -> spawn(?MODULE, async_api_call, [Url]).
+
+async_api_call(Url) ->
+	% io:format("llamando asincronamenete url: ~s\n", [Url]), % descomentar para convencerse que es asincrono
+	{Xml,Error} = llamar_api(Url),
+	receive 
+		{From, get_result} -> From ! {xml, Xml, Error}
+	end.
 
 cronometrar(F) -> 
     statistics(wall_clock),
