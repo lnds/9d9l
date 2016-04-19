@@ -11,6 +11,11 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 ## [0.2.7]
 
 ### Added
+- Implementa solución en Erlang
+
+## [0.2.7]
+
+### Added
 - Implementa solución en F#
 
 ## Changed
