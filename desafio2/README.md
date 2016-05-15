@@ -3,7 +3,7 @@
 El desafío consiste en una aplicación que obtenga el clima de distintas ciudades, usando la api de OpenWeatherMap.org de forma concurrente.
 
 Se debe crear un programa que reciba a través de la línea de comandos una lista de ciudades, el programa debe descargar, en paralelos desde OpenWeatherMap.org el informe de clima de las ciudades.
-El resultado se debe ordenar de la mayor a menor temperatura.
+El resultado se debe ordenar de la mayor a menor temperatura actual.
 El resultado debe contener, la ciudad, la temperatura máxima y  las condiciones de clima.
 Al final debe informar el tiempo ocupado para descargar la información.
 Si se pasa el parámetro -p el programa hace la consulta "en paralelo"
@@ -17,8 +17,8 @@ La salida debe ser:
 
     Santiago max: 27.1  min: 20.0  actual: 20.9 Despejado
     Berlin   max: 19.0  min: 10.0  actual: 12.5 Nublado
-    Madrid   max: 18.0  min:  7.0  actual:  8.9 Lluvia
     Boston   max: 17.0  min:  5.0  actual: 10.1 Parcialmente nublado
+    Madrid   max: 18.0  min:  7.0  actual:  8.9 Lluvia
 
     Tiempo ocupado en descargar información : hh:mm:ss.ms
 
