@@ -9,12 +9,8 @@ Debes instalar Cabal (https://www.haskell.org/cabal/)
 
 Instalaremos estos paquetes:
 
-	cabal install hxt
-	cabal install url
-	cabal install http
-	cabal install maybet
-	cabal install parallel-io
-	
+	cabal install http-client
+
 ## Ejecución
 
 Para probarlo puedes hacer:
