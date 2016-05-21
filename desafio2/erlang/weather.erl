@@ -44,8 +44,8 @@ extraer_reporte(Xml, _, _) ->
 	TempAttrs = xmerl_xpath:string("//temperature/@*", Root),
 	%% truco para el caso en que la temperatura es entera
 	{Temp,_} = string:to_float(extraer_valor(TempAttrs, value) ++ ".0"),
-	{Max,_} = string:to_float(extraer_valor(TempAttrs, value) ++ ".0"),
-	{Min,_} = string:to_float(extraer_valor(TempAttrs, value) ++ ".0"),
+	{Max,_} = string:to_float(extraer_valor(TempAttrs, max) ++ ".0"),
+	{Min,_} = string:to_float(extraer_valor(TempAttrs, min) ++ ".0"),
 	Cond = extraer_valor(xmerl_xpath:string("//weather/@*", Root), value),
 	{ok,Ciudad,Temp,Max,Min,Cond}.
 
