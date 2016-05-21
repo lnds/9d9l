@@ -8,7 +8,12 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
-## [0.2.7]
+## [0.2.9]
+
+### Added
+- Implementa solución en Haskell
+
+## [0.2.8]
 
 ### Added
 - Implementa solución en Erlang
