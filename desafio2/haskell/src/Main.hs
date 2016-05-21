@@ -11,10 +11,7 @@ import Data.List
 import Text.XML.Light
 import qualified Control.Monad.Parallel as P
 
-
-
 data WeatherReport = Report String Float Float Float String 
-
 
 api_call api_key city = 
     simpleHTTP (getRequest url) >>= getResponseBody
@@ -56,11 +53,6 @@ process_par api_key args =
        print_reports $ sortBy cmp_rep lreps 
     where preps = P.mapM (make_report . (api_call api_key)) args -- mapM => [IO r] -> IO [r]
 
-
-          --reps = mapM (\x -> x) preps-- mapM => [IO r] -> IO [r]
-
--- process_par api_key args = putStrLn $ "par ak="++(show api_key)++" args = "++(show args)
-
 process_args :: [Char]  -> [String] -> IO ()
 process_args [] _ = putStrLn "debe configurar la variable de ambiente WEATHER_API_KEY"
 process_args _ [] = putStrLn "debe ingresar una lista de ciudades"
@@ -69,15 +61,10 @@ process_args api_key (p:args)
     | p == "-p" = process_par api_key args
     | otherwise = process_seq api_key (p:args)
 
-process =
-  do
-      api_key <- getEnv "WEATHER_API_KEY"
-      args <- getArgs 
-      process_args api_key args
-
-main = 
-  do
+main = do
     t1 <- getTime Monotonic
-    _ <- process
+    api_key <- getEnv "WEATHER_API_KEY"
+    args <- getArgs 
+    process_args api_key args
     t2 <- getTime Monotonic
     printf "tiempo ocupado para generar el reporte: %s\n" (format timeSpecs  t1 t2)
