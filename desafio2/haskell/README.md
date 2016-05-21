@@ -7,9 +7,12 @@ Este es el desafío 2 escrito en Haskell
 
 Debes instalar Cabal (https://www.haskell.org/cabal/)
 
-Instalaremos estos paquetes:
+Luego debes instalar estos paquetes:
 
+	cabal install clock
+	cabal install formatting
 	cabal install http-client
+	cabal install monad-parallel
 
 ## Ejecución
 
