@@ -51,7 +51,7 @@ fun apiCall(city:String) : WeatherResult {
             val rsp = req.readText()
             return parseApiResponse(city, rsp)
         } catch (e:Exception) {
-            Thread.sleep(threadSleep)
+            Thread.sleep(50L)
         }
     }
     return Error("error descargando url", city)
@@ -119,7 +119,10 @@ fun seqFetch(sa:SeqArgs) {
 }
 
 fun parFetch(pa:ParArgs) {
-    println("par ${pa.args}")
+    val cities = pa.args
+    val reports = cities.par().map(::apiCall)
+    printReports(reports.unpar().toList())
+    reports.executorService.shutdown()
 }
 
 
