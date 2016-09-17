@@ -5,7 +5,7 @@ import scala.xml._
 object Main {
 
   val time_report_message = "tiempo ocupado para generar el reporte: "
-  val report_format = "%-30.30s max:%5.1f  min:%5.1f   actual: %5.1f %s"
+ // val report_format = "%-30.30s max:%5.1f  min:%5.1f   actual: %5.1f %s"
   val no_cities_provided_message = "debe ingresar una lista de ciudades"
 
   val api_key = sys.env("WEATHER_API_KEY")
@@ -27,19 +27,13 @@ object Main {
     else
       ParArgs(args.toList.tail)
 
-  def makeUrl(city:String) : String =
-     "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&mode=xml&units=metric&appid=" + api_key + "&lang=sp"
+  def makeUrl(city:String) : String = s"http://api.openweathermap.org/data/2.5/weather?q=$city&mode=xml&units=metric&appid=$api_key&lang=sp"
 
   sealed trait WeatherResult
   case class Error(error: String, city: String) extends WeatherResult
   case class WeatherReport(city: String, temp: Double, min: Double, max: Double, conditions: String) extends WeatherResult
 
-  def parseDouble(str: String) : Double = 
-    try {
-      str.toDouble
-    } catch {
-      case _:Throwable => 0.0
-    }
+  def parseDouble(str: String) : Double = Try(str.toDouble).getOrElse(0.0)
 
   def parseApiResponse(city: String, xmlResponse: String): WeatherResult = {
     val xml = XML.loadString(xmlResponse)
@@ -71,21 +65,18 @@ object Main {
   }
 
   def compareWeatherReports(rep1: WeatherResult, rep2: WeatherResult) : Boolean =
-    rep1 match {
-      case Error(_,_) => false
-      case WeatherReport(_, temp1, _, _, _) =>
-        rep2 match {
-          case Error(_,_) => false
-          case WeatherReport(_, temp2, _, _, _) => temp2 < temp1
-        }
+    (rep1, rep2) match {
+      case (_, Error(_,_)) => false
+      case  (Error(_,_),_) => false
+      case (WeatherReport(_, temp1, _, _, _), WeatherReport(_, temp2, _, _, _))  => temp2 < temp1
     } 
 
   def printReports(reports:List[WeatherResult]) : Unit = 
     reports.sortWith(compareWeatherReports).foreach { 
       case Error(err, city) =>
-        println(s"${city} Error: ${err}")
+        println(s"$city Error: $err")
       case WeatherReport(city, temp, min, max, conditions) =>
-        println(report_format.format(city, max, min, temp, conditions))
+        println(f"$city%-30.30s max:$max%5.1f  min:$min%5.1f   actual: $temp%5.1f $conditions")
     }
 
 
@@ -107,7 +98,7 @@ object Main {
     val mins = (msecs % 3600000) / 60000
     val secs = ((msecs % 3600000) % 60000) / 1000.0
 
-    println(time_report_message+ " " + "%d:%02d:%02.3f".format(hours, mins, secs))
+    println(f"$time_report_message $hours%d:$mins%02d:$secs%02.3f")
   }
 
   def main(args: Array[String]): Unit = 
