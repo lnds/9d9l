@@ -8,6 +8,12 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.3.0] - 2016-09-18
+
+### Added
+
+- Desafío 3
+
 ## [0.2.10] - 2016-05-29
 
 ### Added
