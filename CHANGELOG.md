@@ -12,7 +12,7 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ### Added
 
-- Desafío 3
+- Descripción del desafío 3
 
 ## [0.2.10] - 2016-05-29
 
@@ -76,5 +76,3 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 ## [0.1.1] - 2015-03-16
 
 
-[0.1.2]: https://github.com/lnds/Ogu/compare/0.1.2...0.1.1
-[0.1.1]: https://github.com/lnds/Ogu/releases/tag/0.1.1
