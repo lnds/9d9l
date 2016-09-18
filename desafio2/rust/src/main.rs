@@ -106,10 +106,7 @@ fn main() {
     	println!("debe ingresar una lista de ciudades");
     	return;
     }
-    let api_key = match env::var("WEATHER_API_KEY") {
-        Ok(val) => val,
-        Err(_) => "".to_string()
-    };
+    let api_key = env::var("WEATHER_API_KEY").expect("debe definir WEATHER_API_KEY");
 
     let t0 = std::time::Instant::now();
     let mut result = if par { par_fetch(&cities, api_key) } else { seq_fetch(&cities, api_key) };
