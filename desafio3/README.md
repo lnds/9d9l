@@ -37,35 +37,28 @@ La salida estándar además debe desplegar la cantidad de líneas leidas y el ti
 
 # Resultados
 
+## Tiempos
+
+Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón de vectores, la tercera columna es el tiempo en C dividido por el tiempo en el lenguaje respectivo. El tiempo promedio se sacó sobre una muestra de 5 ejecuciones del programa.
+
+    | C        | 11,36 | 1,00 |
+    | Rust     |  5,58 | 2,04 |
+
 ## Lineas de código
 
-    Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
+Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
 
-    | Go      | 127 |
-    | Clojure |  87 |
-    | Scala   | 101 |
-    | Rust    | 120 |
-    | Swift   |  93 |
-    | F#      |  77 |
-    | Erlang  |  90 |
-    | Haskell |  87 |
-    | Kotlin  | 139 |
-
+    | C        |   85 |
+    | Rust     |   84 |
 
 ## Tiempo de Desarrollo
 
     Tiempos aproximados para desarrollar cada solución, considera codificación, pruebas e investigación.
     Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://TimingApp.com/)
 
-    | Go      | 4:14 |
-    | Clojure | 3:18 |
-    | Scala   | 1:21 | 
-    | Rust    | 2:17 |
-    | Swift   | 2:57 |
-    | F#      | 1:39 |
-    | Erlang  | 4:41 |
-    | Haskell | 5:59 |
-    | Kotlin  | 2:58 |
+    | C       | 0:45 |
+    | Rust    | 6:43 |
+    
 
 # Licencia
 
