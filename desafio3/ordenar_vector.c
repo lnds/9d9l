@@ -5,13 +5,13 @@
 
 /**
  * Ordena vector 
- * Utiliza un sort de inserción para ordenar un archivo de entrada que contiene
+ * Utiliza un sort de inserciÃ³n para ordenar un archivo de entrada que contiene
  * el vector a ordenar.
  *
  *
- * Autor: Eduardo Díaz
+ * Autor: Eduardo DÃ­az
  * Fecha: 6 de junio 2011
- * Modificado para el desafío 3 en agosto de 2016.
+ * Modificado para el desafÃ­o 3 en agosto de 2016.
  * Para compilar basta hacer: dmc ordenar_vector.c
  *
  * Observaciones:
@@ -101,15 +101,15 @@ int ordena_vector(char* vector, int size)
         if (i == n) {
     		if (strncmp(p, vector_trabajo[n], VECTOR_ELEM_SIZE) != 0)
   		 		memmove(vector_trabajo[n++], p, VECTOR_ELEM_SIZE);
-  	}
-    else {			
-    	if (strncmp(p, vector_trabajo[i], VECTOR_ELEM_SIZE) != 0) {
-  			for (j = VECTOR_SIZE-1; j > i; j--)
-  				memmove((char*)vector_trabajo[j], vector_trabajo[j-1], VECTOR_ELEM_SIZE);
-  			memmove(vector_trabajo[i], p, VECTOR_ELEM_SIZE);
-  			n++;	
-  		}
-  	}
+	  	}
+	    else {			
+	    	if (strncmp(p, vector_trabajo[i], VECTOR_ELEM_SIZE) != 0) {
+	  			for (j = VECTOR_SIZE-1; j > i; j--)
+	  				memmove((char*)vector_trabajo[j], vector_trabajo[j-1], VECTOR_ELEM_SIZE);
+	  			memmove(vector_trabajo[i], p, VECTOR_ELEM_SIZE);
+	  			n++;	
+	  		}
+	  	}
   	
 	} // for
 	
