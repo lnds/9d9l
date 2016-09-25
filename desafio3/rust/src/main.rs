@@ -99,5 +99,5 @@ fn main() {
 	let dur  = t0.elapsed();
 	let secs = dur.as_secs();
     let frac = dur.subsec_nanos()/1000000;
-    println!("tiempo ocupado : {}.{}s", secs, frac);
+    println!("tiempo ocupado: {}.{}s", secs, frac);
 }
