@@ -16,6 +16,7 @@ func ordenar_vector(buf []byte, result []byte) {
 	cero := make([]byte, TAM_PERIODO, TAM_PERIODO)
 	for i := 0; i < TAM_PERIODO; i++ { cero[i] = '0' }
 	for p := 0; p < TAM_VECTOR_ENTRADA; p += TAM_PERIODO {
+
 		if bytes.Equal(buf[p:p+TAM_PERIODO], cero) { continue }
 		i := 0
 		q := 1
@@ -24,16 +25,17 @@ func ordenar_vector(buf []byte, result []byte) {
 			q+=TAM_PERIODO 
 		}
 
-		if bytes.Equal(buf[p:p+TAM_PERIODO], result[q:q+TAM_PERIODO]) { continue }
+		if i < n && bytes.Equal(buf[p:p+TAM_PERIODO], result[q:q+TAM_PERIODO]) { continue }
 
 		if i == n {
-			q := n*TAM_PERIODO+1
-			copy(result[q:q+TAM_PERIODO], buf[p:p+TAM_PERIODO])
+			if n < ELEMENTOS_VECTOR {
+				q := n*TAM_PERIODO+1
+				copy(result[q:q+TAM_PERIODO], buf[p:p+TAM_PERIODO])
+			}
 		} else  {
 			for j := ELEMENTOS_VECTOR-1; j > i; j-- { 
 				q := j*TAM_PERIODO+1
-				//r := (j-1)*TAM_PERIODO+1
-				copy(result[q:q+TAM_PERIODO], result[q-TAM_PERIODO:q])//:r+TAM_PERIODO])
+				copy(result[q:q+TAM_PERIODO], result[q-TAM_PERIODO:q])
 			}
 			q := i*TAM_PERIODO+1
 			copy(result[q:q+TAM_PERIODO], buf[p:p+TAM_PERIODO])
@@ -54,16 +56,16 @@ func ordenar_vector(buf []byte, result []byte) {
 }
 
 func procesar_linea(buf []byte) []byte {
-	result := make([]byte, TAM_SALIDA+TAM_PERIODO, TAM_SALIDA+TAM_PERIODO)
+	result := make([]byte, TAM_SALIDA, TAM_SALIDA) //TAM_SALIDA+TAM_PERIODO, TAM_SALIDA+TAM_PERIODO)
 	i := 0
 	for ; i < POS_VECTOR; i++ {
 		result[i] = buf[i]
 	}
-	for ; i < TAM_SALIDA+1; i++ {
+	for ; i < TAM_SALIDA; i++ {
 		result[i] = ' '
 	}
 	ordenar_vector(buf[POS_VECTOR:], result[POS_VECTOR:])
-	return result[0:TAM_SALIDA]
+	return result //[0:TAM_SALIDA]
 }
 
 func main() {

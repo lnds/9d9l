@@ -6,6 +6,7 @@ use std::io::LineWriter;
 use std::io::Write;
 use std::fs::File;
 use std::str;
+use std::ptr;
 
 const POS_VECTOR: usize = 9;
 const ELEMENTOS_VECTOR: usize = 23;
@@ -17,27 +18,34 @@ const LARGO_LINEA: usize = POS_VECTOR + TAM_VECTOR_ENTRADA;
 const TAM_SALIDA: usize = POS_VECTOR + 1 + TAM_VECTOR;
 
 
-fn ordenar_vector(vector:&[u8],  salida:&mut [u8]) {
+fn ordenar_vector(vector:&[u8],  result:&mut [u8]) {
 	let mut n = 0;
-	let mut result =  [['0' as u8;TAM_PERIODO]; ELEMENTOS_VECTOR+1];
 	let cero = ['0' as u8; TAM_PERIODO];
 	for p in vector.chunks(TAM_PERIODO) {
 
 		if p == cero { continue; }
 
 		let mut i = 0;
-		while i < n && p < &result[i] { i += 1; } // busca si p está en el arreglo
+		let mut q = 1;
+		while i < n && p < &result[q..q+TAM_PERIODO] { i += 1; q += TAM_PERIODO; } // busca si p está en el arreglo
 
-		if p == &result[i] { continue; } // si ya existe lo ignora
+		if i < n && p == &result[q..q+TAM_PERIODO] { continue; } // si ya existe lo ignora
 
 		// inserta p en el arreglo
 		if i == n {
-			result[n].clone_from_slice(p);
-		} else {
-			for j in (i+1..n+1).rev() {
-				result[j] = result[j-1];
+			if n < ELEMENTOS_VECTOR {
+				let q = n * TAM_PERIODO+1;
+				result[q..q+TAM_PERIODO].clone_from_slice(p);
 			}
-			result[i].clone_from_slice(p);
+		} else {
+			for j in (i+1..ELEMENTOS_VECTOR).rev() {
+				let q = j*TAM_PERIODO+1;
+				unsafe {
+					ptr::copy_nonoverlapping(&mut result[q-TAM_PERIODO], &mut result[q], TAM_PERIODO)
+				}
+			}
+			let q = i*TAM_PERIODO+1;
+			result[q..q+TAM_PERIODO].clone_from_slice(p);
 		}
 		n += 1;
 		// si excedimos el tamaño del vector salimos
@@ -46,16 +54,14 @@ fn ordenar_vector(vector:&[u8],  salida:&mut [u8]) {
 
 	// retorna el resultado
 	if n == 0 {
-		salida[0] = 'N' as u8;
+		result[0] = 'N' as u8;
 	} else if n > ELEMENTOS_VECTOR {
-		salida[0] = 'S' as u8;
-	} else {
-		salida[0] = 'D' as u8;
-		let mut p = 1;
-		for i in 0..n {
-			salida[p..p+TAM_PERIODO].clone_from_slice(&result[i]);
-			p += TAM_PERIODO;
+		result[0] = 'S' as u8;
+		for j in 1..result.len() {
+			result[j] = ' ' as u8
 		}
+	} else {
+		result[0] = 'D' as u8;
 	}
 }
 
