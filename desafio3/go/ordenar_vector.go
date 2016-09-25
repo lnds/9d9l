@@ -56,7 +56,7 @@ func ordenar_vector(buf []byte, result []byte) {
 }
 
 func procesar_linea(buf []byte) []byte {
-	result := make([]byte, TAM_SALIDA, TAM_SALIDA) //TAM_SALIDA+TAM_PERIODO, TAM_SALIDA+TAM_PERIODO)
+	result := make([]byte, TAM_SALIDA, TAM_SALIDA)
 	i := 0
 	for ; i < POS_VECTOR; i++ {
 		result[i] = buf[i]
@@ -65,7 +65,7 @@ func procesar_linea(buf []byte) []byte {
 		result[i] = ' '
 	}
 	ordenar_vector(buf[POS_VECTOR:], result[POS_VECTOR:])
-	return result //[0:TAM_SALIDA]
+	return result 
 }
 
 func main() {
