@@ -8,6 +8,12 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.3.3] - 2016-09-25
+
+### Added
+
+- Solución en Go
+
 ## [0.3.1] - 2016-09-22
 
 ### Added

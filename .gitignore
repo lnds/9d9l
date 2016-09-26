@@ -17,3 +17,7 @@ desafio2/kotlin/build
 a.out
 data.dat
 salida.out
+*.out
+*.dat
+*.data
+*.xlsx
