@@ -34,6 +34,8 @@ char* procesar_linea(char* linea, int num_linea);
 int main(int argc, char* argv[])
 {
 	char buf[BUFFER_SIZE];
+	char ifbuf[BUFFER_SIZE];
+	char ofbuf[BUFFER_SIZE];
 	int lineas = 0;
 	FILE* archivo_entrada;
 	FILE* archivo_salida;
@@ -47,6 +49,8 @@ int main(int argc, char* argv[])
 	archivo_entrada = argc < 2 ? stdin : fopen(argv[1], "rt");
 	archivo_salida  = argc < 3 ? stdout : fopen(argv[2], "wt");
 		
+	setvbuf(archivo_entrada, ifbuf, _IOFBF, BUFFER_SIZE);
+	setvbuf(archivo_salida,  ofbuf, _IOFBF, BUFFER_SIZE);
 	while (fgets(buf, BUFFER_SIZE, archivo_entrada)) {
 		fputs ( procesar_linea(buf, ++lineas), archivo_salida );
 	}
