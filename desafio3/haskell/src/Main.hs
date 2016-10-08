@@ -7,68 +7,67 @@ import Formatting
 import Formatting.Clock
 import System.Clock
 import System.Environment
-import System.IO
-import Data.Maybe
 import Data.List
-import Data.List.Split
-import Control.Applicative
 import Control.Monad
 import qualified Data.ByteString.Lazy.Char8 as LB  
 import qualified Data.ByteString.Lazy as L
 
+pos_vector = 9
+tam_periodo = 6
+instituciones = 6
+elementos = 23 
+elementos' = 23 :: Int
 
+tam_vector = elementos * tam_periodo + pos_vector + 1
+tam_linea = pos_vector + elementos * tam_periodo * instituciones
 
 justWhen :: (a -> Bool) -> (a -> b) -> (a -> Maybe b)
 justWhen f g a = if f a then Just (g a) else Nothing
 
-nothingWhen :: (a -> Bool) -> (a -> b) -> (a -> Maybe b)
-nothingWhen f = justWhen (not . f)
+sortDesc :: Ord a => [a] -> [a]
+sortDesc = sortBy (flip compare)
 
-chunksOf' :: Int64 -> LB.ByteString -> [LB.ByteString]
-chunksOf' x = unfoldr (nothingWhen L.null (L.splitAt x)) 
+not_null :: LB.ByteString -> Bool
+not_null = not . L.null
 
-all_0 :: LB.ByteString -> Bool
-all_0 xs = LB.all (== '0') xs
+chunksOf :: Int64 -> LB.ByteString -> [LB.ByteString]
+chunksOf x xs = unfoldr (justWhen not_null (L.splitAt x)) xs 
 
-resultado xs 
-    | (length xs) == 0 = ["N"]
-    | (length xs) > tam_vector = ["S"]
-    | otherwise = "D" : (reverse $ take tam_vector xs)
-    where tam_vector = 23
+periodo_valido :: LB.ByteString -> Bool
+periodo_valido xs = LB.any (/= '0') xs
 
-ordenar :: [LB.ByteString] -> [LB.ByteString]
-ordenar xs = resultado $ sort $ nub $ (filter (not . all_0) xs)
+clasificar_resultado :: [LB.ByteString] -> [LB.ByteString]
+clasificar_resultado xs 
+    | null xs = ["N"]
+    | (length xs) > elementos' = ["S"]
+    | otherwise = "D" :  take elementos' xs
 
+ordenar_periodos :: [LB.ByteString] -> [LB.ByteString] 
+ordenar_periodos xs =  sortDesc $ nub $ (filter periodo_valido xs)
+
+ordenar_vector :: LB.ByteString -> LB.ByteString
 ordenar_vector linea = 
-    let encabezado = LB.take pos_vector linea
-        resto = LB.drop pos_vector linea
-        periodos = ordenar $ chunksOf' tam_periodo resto
-        final = LB.concat [encabezado,  LB.concat periodos]
-        pad = LB.replicate (tam_vector - (LB.length final)) ' ' 
+    let (encabezado, resto) = L.splitAt pos_vector linea
+        periodos = clasificar_resultado $ ordenar_periodos $ chunksOf tam_periodo resto
+        final    = LB.concat [encabezado,  LB.concat periodos]
+        pad      = LB.replicate (tam_vector - (LB.length final)) ' ' 
     in LB.concat [final, pad]
-    where pos_vector = 9
-          tam_periodo = 6
-          tam_vector = 23 * 6 + 9 + 1
 
---filtrar_lineas :: (Int, LB.ByteString) -> IO LB.ByteString
---filtrar_lineas ::  LB.ByteString ->   LB.ByteString
-filtrar_lineas  linea = do
-    when ((LB.length linea) /= tam_linea) $ putStrLn  "error: " 
-    return linea
-    where tam_linea = 9 + 23 * 6 * 6
+filtrar_linea :: (Int, LB.ByteString) -> IO LB.ByteString
+filtrar_linea (n,linea) = do
+            when ((LB.length linea) /= tam_linea) $ putStrLn $ "!!! Largo incorrecto en linea:: " ++ (show n)
+            return linea
 
-procesar_vectores :: [String] -> IO()
-procesar_vectores (entrada:salida:[]) = do
-    slineas <- sequence <$> map filtrar_lineas <$> LB.lines <$> LB.readFile entrada
-    lineas <- map ordenar_vector <$> slineas
-    let content = LB.unlines lineas
-    LB.writeFile salida content
-
-procesar_vector _ = do putStrLn  "uso: ordenar_vector archivo_entrada archivo_salida"
-
+procesar_vectores :: String -> String -> IO()
+procesar_vectores entrada salida = do
+        slineas <- sequence <$> map filtrar_linea <$> zip [0..] <$> LB.lines <$> LB.readFile entrada
+        lineas <- map ordenar_vector <$> slineas
+        LB.writeFile salida $ LB.unlines  $ lineas
+        
 main = do
     t1 <- getTime Monotonic
     args <- getArgs
-    procesar_vectores args
+    if length args /= 2 then do putStrLn  "uso: ordenar_vector archivo_entrada archivo_salida"
+    else procesar_vectores (head args) (last args)
     t2 <- getTime Monotonic
     printf "tiempo ocupado: %s\n" (format timeSpecs t1 t2)
