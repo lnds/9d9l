@@ -46,12 +46,13 @@ ordenar_periodos :: [LB.ByteString] -> [LB.ByteString]
 ordenar_periodos xs =  sortDesc $ nub $ (filter periodo_valido xs)
 
 ordenar_vector :: LB.ByteString -> LB.ByteString
-ordenar_vector linea = 
-    let (encabezado, resto) = L.splitAt pos_vector linea
-        periodos = clasificar_resultado $ ordenar_periodos $ chunksOf tam_periodo resto
-        final    = LB.concat [encabezado,  LB.concat periodos]
-        pad      = LB.replicate (tam_vector - (LB.length final)) ' ' 
-    in LB.concat [final, pad]
+ordenar_vector linea  
+    | (LB.length linea) /= tam_linea = linea
+    | otherwise = LB.concat [final, pad] 
+        where (encabezado, resto) = L.splitAt pos_vector linea
+              periodos = clasificar_resultado $ ordenar_periodos $ chunksOf tam_periodo resto
+              final    = LB.concat [encabezado,  LB.concat periodos]
+              pad      = LB.replicate (tam_vector - (LB.length final)) ' ' 
 
 filtrar_linea :: (Int, LB.ByteString) -> IO LB.ByteString
 filtrar_linea (n,linea) = do

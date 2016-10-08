@@ -69,6 +69,7 @@ char* procesar_linea(char* linea, int num_linea)
 	int tam_vector;
 	if (strlen(linea) < (POS_VECTOR+1)+(VECTOR_SIZE)*CANTIDAD_INSTITUCIONES) {
 		fprintf(stderr, "ERROR LARGO DE LINEA en linea %d\n", num_linea);
+		return linea;
 	}
 	tam_vector = ordena_vector(linea+POS_VECTOR, VECTOR_SIZE);	
 	// corta vector

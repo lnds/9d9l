@@ -94,12 +94,15 @@ fn main() {
 
 	for (num_linea, linea) in entrada.lines().enumerate() {
 		let buf = &linea.unwrap().into_bytes();
+		
 		if buf.len() != LARGO_LINEA {
 			println!("Error en el largo de la linea {}", num_linea);
+			writeln!(salida, "{}", str::from_utf8(&buf).unwrap()).unwrap();
 		} else {
 			let vector = procesar_linea(buf);
 			writeln!(salida, "{}", str::from_utf8(&vector).unwrap()).unwrap();
-		}
+		};
+
 	}
 
 	let dur  = t0.elapsed();
