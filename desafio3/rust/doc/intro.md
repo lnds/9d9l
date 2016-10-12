@@ -80,55 +80,52 @@ Esto es crucial y se debe entender bien, es la forma que tenemos en Rust de trab
 ## El ordenamiento
 
 El código del ordenamiento es el siguiente:
-
    
     fn ordenar_vector(vector:&[u8],  result:&mut [u8]) {
-        let mut n = 0;
-        let cero = ['0' as u8; TAM_PERIODO];
-        for p in vector.chunks(TAM_PERIODO) {
+    let mut n = 0;
+    let cero = ['0' as u8; TAM_PERIODO];
+    let mut trabajo = ['0' as u8; TAM_VECTOR_ENTRADA];
 
-            if p == cero { continue; }
+    for p in vector.chunks(TAM_PERIODO) {
 
-            let mut i = 0;
-            let mut q = 1;
-            while i < n && p < &result[q..q+TAM_PERIODO] { i += 1; q += TAM_PERIODO; } // busca si p está en el arreglo
+        if p == cero { continue; }
 
-            if i < n && p == &result[q..q+TAM_PERIODO] { continue; } // si ya existe lo ignora
+        let mut i = 0;
+        let mut q = 0;
+        while i < n && p < &trabajo[q..q+TAM_PERIODO] { i += 1; q += TAM_PERIODO; } // busca si p está en el arreglo
 
-            // inserta p en el arreglo
-            if i == n {
-                if n < ELEMENTOS_VECTOR {
-                    let q = n * TAM_PERIODO+1;
-                    result[q..q+TAM_PERIODO].clone_from_slice(p);
-                }
-            } else {
-                for j in (i+1..ELEMENTOS_VECTOR).rev() {
-                    let q = j*TAM_PERIODO+1;
-                    unsafe {
-                        ptr::copy_nonoverlapping(&mut result[q-TAM_PERIODO], &mut result[q], TAM_PERIODO)
-                    }
-                }
-                let q = i*TAM_PERIODO+1;
-                result[q..q+TAM_PERIODO].clone_from_slice(p);
-            }
-            n += 1;
-            // si excedimos el tamaño del vector salimos
-            if n > ELEMENTOS_VECTOR { break; }
-        }
+        if i < n && p == &trabajo[q..q+TAM_PERIODO] { continue; } // si ya existe lo ignora
 
-        // retorna el resultado
-        if n == 0 {
-            result[0] = 'N' as u8;
-        } else if n > ELEMENTOS_VECTOR {
-            result[0] = 'S' as u8;
-            for j in 1..result.len() {
-                result[j] = ' ' as u8
-            }
+        // inserta p en el arreglo
+        if i == n {
+            let q = n * TAM_PERIODO;
+            &trabajo[q..q+TAM_PERIODO].clone_from_slice(p);
         } else {
-            result[0] = 'D' as u8;
+            for j in (i+1..ELEMENTOS_VECTOR).rev() {
+                let q = j*TAM_PERIODO;
+                unsafe {
+                    ptr::copy_nonoverlapping(&mut trabajo[q-TAM_PERIODO], &mut trabajo[q], TAM_PERIODO)
+                }
+            }
+            let q = i*TAM_PERIODO;
+            trabajo[q..q+TAM_PERIODO].clone_from_slice(p);
         }
+        n += 1;
     }
 
+    // retorna el resultado
+    if n == 0 {
+        result[0] = 'N' as u8;
+    } else if n > ELEMENTOS_VECTOR {
+        result[0] = 'S' as u8;
+    } else {
+        result[0] = 'D' as u8;
+        for i in 0..n {
+            let p = i*TAM_PERIODO;
+            result[p+1..p+1+TAM_PERIODO].clone_from_slice(&trabajo[p..p+TAM_PERIODO])
+        }
+    }
+}
 
 Acá la función chunks() divide el arreglo vector en bloeque de tamaño TAM_PERIODO, los que pueden ser comparados con lo contenido en result.
 Por eso que tenemos comparaciones como:
