@@ -4,9 +4,6 @@
 (use 'clojure.java.io
 	 'ordenar-vector.tools)
 
-;(require '[profile.core :refer :all])
-
-
 (def ^:const pos-vector  9)
 (def ^:const tam-periodo 6)
 (def ^:const instituciones 6)
@@ -65,8 +62,6 @@
 					(let [v (filtrar-linea linea)]
 						(doto wrt (.write v) (.newLine))))))))
 
-;(profile-vars  extraer-periodos filtrar-linea procesar-linea procesar-vectores)
-
 (defn -main
   "Implementa desafio 3, ordenar vectores"
   [& args]
@@ -75,4 +70,3 @@
   	(if (== 2 (count args))
   	  (procesar-vectores (first args) (last args)) 
   	  (println "uso: ordenar-vector archivo_entrada archivo_salida"))))
-;)
