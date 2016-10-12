@@ -97,9 +97,11 @@ func main() {
 		linea := lector.Bytes()
 		if len(linea) != LARGO_LINEA {
 			fmt.Printf("!!! Largo incorrecto en linea: %d\n", nl)
+			writer.WriteString(fmt.Sprintf("%s\n", linea))
+		} else {
+			vector := procesar_linea(linea)
+			writer.WriteString(fmt.Sprintf("%s\n", vector))
 		}
-		vector := procesar_linea(linea)
-		writer.WriteString(fmt.Sprintf("%s\n", vector))
 	}
 	duration := time.Since(start)
 	fmt.Printf("Tiempo ocupado: %02.3f\n", duration.Seconds())
