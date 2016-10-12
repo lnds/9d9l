@@ -65,7 +65,8 @@ La función procesar_linea() es la siguiente:
 	}
 
 
-Creamos un buffer de salida usando la primitiva make()
+Creamos un buffer de salida usando la primitiva make().
+
 Notar que lo inicializamos con espacios en blanco. Luego llamamos a la función ordenar_vector que trabaja con el vector result[] in place.os usado un puntero.
 
 ## El ordenamiento
@@ -73,48 +74,48 @@ Notar que lo inicializamos con espacios en blanco. Luego llamamos a la función 
 El código del ordenamiento es el siguiente:
 
 	func ordenar_vector(buf []byte, result []byte) {
-		n := 0	
-		cero := make([]byte, TAM_PERIODO, TAM_PERIODO)
-		for i := 0; i < TAM_PERIODO; i++ { cero[i] = '0' }
-		for p := 0; p < TAM_VECTOR_ENTRADA; p += TAM_PERIODO {
+	n := 0	
+	cero := make([]byte, TAM_PERIODO, TAM_PERIODO)
+	trabajo := make([]byte, TAM_VECTOR_ENTRADA, TAM_VECTOR_ENTRADA)
+	for i := 0; i < TAM_PERIODO; i++ { cero[i] = '0' }
+	for i := 0; i < TAM_VECTOR_ENTRADA; i ++ { trabajo[i] = '0' }
+	for p := 0; p < TAM_VECTOR_ENTRADA; p += TAM_PERIODO {
 
-			if bytes.Equal(buf[p:p+TAM_PERIODO], cero) { continue }
-			i := 0
-			q := 1
-			for i < n && bytes.Compare(buf[p:p+TAM_PERIODO], result[q:q+TAM_PERIODO]) < 0 {
-				i++
-				q+=TAM_PERIODO 
-			}
-
-			if i < n && bytes.Equal(buf[p:p+TAM_PERIODO], result[q:q+TAM_PERIODO]) { continue }
-
-			if i == n {
-				if n < ELEMENTOS_VECTOR {
-					q := n*TAM_PERIODO+1
-					copy(result[q:q+TAM_PERIODO], buf[p:p+TAM_PERIODO])
-				}
-			} else  {
-				for j := ELEMENTOS_VECTOR-1; j > i; j-- { 
-					q := j*TAM_PERIODO+1
-					copy(result[q:q+TAM_PERIODO], result[q-TAM_PERIODO:q])
-				}
-				q := i*TAM_PERIODO+1
-				copy(result[q:q+TAM_PERIODO], buf[p:p+TAM_PERIODO])
-			}
-			n++
-			if n > ELEMENTOS_VECTOR { break }
+		if bytes.Equal(buf[p:p+TAM_PERIODO], cero) { continue }
+		i := 0
+		q := 0
+		for i < n && bytes.Compare(buf[p:p+TAM_PERIODO], trabajo[q:q+TAM_PERIODO]) < 0 {
+			i++
+			q += TAM_PERIODO 
 		}
-		if n == 0 {
-			result[0] = 'N'
-		} else if n > ELEMENTOS_VECTOR {
-			result[0] = 'S'
-			for i := 1; i < len(result); i++ {
-				result[i] = ' '
+
+		if i < n && bytes.Equal(buf[p:p+TAM_PERIODO], trabajo[q:q+TAM_PERIODO]) { continue }
+
+		if i == n {
+			q := n*TAM_PERIODO
+			copy(trabajo[q:q+TAM_PERIODO], buf[p:p+TAM_PERIODO])
+		} else  {
+			for j := ELEMENTOS_VECTOR-1; j > i; j-- { 
+				q := j*TAM_PERIODO
+				copy(trabajo[q:q+TAM_PERIODO], trabajo[q-TAM_PERIODO:q])
 			}
-		} else {
-			result[0] = 'D'
+			q := i*TAM_PERIODO
+			copy(trabajo[q:q+TAM_PERIODO], buf[p:p+TAM_PERIODO])
+		}
+		n++
+	}
+	if n == 0 {
+		result[0] = 'N'
+	} else if n > ELEMENTOS_VECTOR {
+		result[0] = 'S'
+	} else {
+		result[0] = 'D'
+		for i := 0; i < n; i++ {
+			p := i*TAM_PERIODO
+			copy(result[p+1:p+1+TAM_PERIODO], trabajo[p:p+TAM_PERIODO])
 		}
 	}
+}
 
 Es un loop bastante complejo, puesto que trata de ser lo más eficiente posible, saltando los periodos en cero.
 La primitiva copy() de Go permite copiar bytes dentro del arreglo.
