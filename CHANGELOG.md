@@ -8,11 +8,22 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.3.4] - 2016-10-12
+
+## Added
+
+- Solución en Clojure al desafío 3.
+
+## Changed
+
+- Se corrigen bugs en las versiones en C, Rust y Go.
+- Se corrigen estadisticas debido a lo anterior.
+
 ## [0.3.3] - 2016-10-8
 
 ### Added
 
-- Solución en Haskell desafió 3.
+- Solución en Haskell desafío 3.
 
 ## [0.3.2] - 2016-09-25
 
