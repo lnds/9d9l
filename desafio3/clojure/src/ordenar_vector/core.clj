@@ -6,58 +6,50 @@
 
 ;(require '[profile.core :refer :all])
 
+
 (def ^:const pos-vector  9)
 (def ^:const tam-periodo 6)
 (def ^:const instituciones 6)
 (def ^:const elementos  23) 
-(def ^:const tam-vector (* 6 23))
-(def ^:const tam-linea (+ pos-vector (* elementos  tam-periodo instituciones)))
+(def ^:const tam-linea 837) ; (+ pos-vector (* elementos  tam-periodo instituciones)))
 
-(defn str-of [n c] (apply str (repeat n c)))
+;(defn str-of [n c] (apply str (repeat n c)))
 
-(def ^:const ceros (str-of tam-periodo \0))
+(def ^:const ^String ceros "000000") ; (str-of tam-periodo \0))
 
-(def ^:const relleno (str-of tam-periodo \space))
-(def ^:const relleno-vector (str-of tam-vector \space))
+(def ^:const ^String relleno "      ") ; (str-of tam-periodo \space))
 
-(defn periodo-valido [p] (some #(not= \0 %) p))
+(defn in? [coll ^String elm]  (some (partial = elm) coll))
 
-(defn gt [x y] (pos? (compare x y)))
+(defn agregar-periodo [periodo lista]
+	(if (= ceros periodo) 
+		lista
+		(conj lista periodo)))
 
-(defn agregar [v e]
-	(loop [[y & ys] v acc []]
-		(cond
-			(= ceros e) v
-			(nil? y) (conj acc e)
-			(= e y) v
-			(gt e y) (vec (concat acc [e y] ys))
-			:else (recur ys (conj acc y)))))
+; lista debe ser un set
+(defn extraer-periodos [^String linea lista]
+	(if (= tam-periodo (.length linea))
+		(agregar-periodo linea lista)
+		(recur (.substring linea tam-periodo) (agregar-periodo (.substring linea 0 tam-periodo) lista))))
 
-(defn extraer-periodos [linea]
-	(loop [periodos  linea lista []] 
-		(let [periodo (subs periodos 0 tam-periodo)]
-			(cond
-				(= tam-periodo (count periodos)) (agregar lista periodo)
-				(> (count lista) elementos) lista
-				:else (recur (subs periodos tam-periodo) (agregar lista periodo))))))
 
 (defn ordenar-periodos [linea]
-	(let [p (extraer-periodos linea)
-		  n (count p)]
-		(if (= 0 n) 
-			(cons "N" relleno-vector) 
-			(if (> n elementos)
-			 	(cons "S" relleno-vector)
-			 	(cons "D" (take elementos (concat p (repeat relleno))))))))
+	(let [periodos  (extraer-periodos linea  #{})
+		  n (count periodos)]
+		 (cond 
+			(zero? n) (cons "N" (repeat elementos relleno))
+		 	(> n elementos) (cons "S" (repeat elementos relleno))
+		 	:else (cons "D" (take elementos (concat (sort #(compare %2 %1) periodos) (repeat relleno)))))))
 
-(defn procesar-linea [linea]
-	(let [encabezado (subs linea 0 pos-vector)
-		  resto (ordenar-periodos (subs linea pos-vector))]
-		  (apply str (cons encabezado resto))))
+
+(defn procesar-linea [^String linea]
+	(let [encabezado (.substring linea 0 pos-vector)
+		  resto (ordenar-periodos (.substring linea pos-vector))]
+		  (str encabezado (clojure.string/join resto))))
 
 (defn filtrar-linea [par-linea-n]
-	(let [[n linea] par-linea-n]
-		(if (== tam-linea (count linea))  
+	(let [[n ^String linea] par-linea-n]
+		(if (= tam-linea (.length linea))  
 			(procesar-linea linea)
 		;; else
 			(do (println (str "error en linea " n))
@@ -67,20 +59,20 @@
 	(if (not (.exists (file entrada))) 
 		(println (str "no pudo abrir archivo" entrada))
 	;; else
-		(with-open [rdr (reader (file entrada))]
+		(with-open [rdr (reader (file entrada) :buffer-size 4096)]
 			(with-open [wrt (writer (file salida))]
 				(doseq [linea (map-indexed vector (line-seq rdr))]
 					(let [v (filtrar-linea linea)]
 						(doto wrt (.write v) (.newLine))))))))
 
-;(profile-vars procesar-vectores filtrar-linea procesar-linea ordenar-periodos  extraer-periodos relleno ceros str-of elementos tam-vector)
+;(profile-vars  extraer-periodos filtrar-linea procesar-linea procesar-vectores)
 
 (defn -main
   "Implementa desafio 3, ordenar vectores"
   [& args]
-  (mytime
+  (mytime 
   	;(profile {}
   	(if (== 2 (count args))
-  	  (procesar-vectores (first args) (last args))
+  	  (procesar-vectores (first args) (last args)) 
   	  (println "uso: ordenar-vector archivo_entrada archivo_salida"))))
 ;)

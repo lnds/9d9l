@@ -18,8 +18,8 @@ instituciones = 6
 elementos = 23 
 elementos' = 23 :: Int
 
-tam_vector = elementos * tam_periodo + pos_vector + 1
-tam_linea = pos_vector + elementos * tam_periodo * instituciones
+tam_vector = 148 -- elementos * tam_periodo + pos_vector + 1
+tam_linea = 837 -- pos_vector + elementos * tam_periodo * instituciones
 
 justWhen :: (a -> Bool) -> (a -> b) -> (a -> Maybe b)
 justWhen f g a = if f a then Just (g a) else Nothing
