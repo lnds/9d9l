@@ -39,22 +39,24 @@ La salida estándar además debe desplegar la cantidad de líneas leidas y el ti
 
 ## Tiempos
 
-Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón de vectores, la tercera columna es el tiempo en C dividido por el tiempo en el lenguaje respectivo. El tiempo promedio se sacó sobre una muestra de 5 ejecuciones del programa. La columna Proporción es la división del tiempo en el lenguaje sobre el tiempo original en C (mide cuantas veces es más rápido con respecto a C).
+Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón de vectores, la tercera columna es el tiempo en C dividido por el tiempo en el lenguaje respectivo. El tiempo promedio se sacó sobre una muestra de 5 ejecuciones del programa. La columna Proporción es la división del tiempo en el lenguaje sobre el tiempo original en C (mide cuantas veces es más rápido con respecto a C), mientras mayor este número significa que el programa es más rápido.
 
     | Lenguaje | Tiempo | Proporción |
-    | C        | 11,50  |       1,00 |
-    | Rust     |  5,44  |       2,11 |
-    | Go       |  3,25  |       3,54 |
-    | Haskell  | 10,24  |       1,12 |
+    | C        | 11,56  |       1,00 |
+    | Rust     |  5,58  |       2,07 |
+    | Go       |  3,47  |       3,33 |
+    | Haskell  | 10,15  |       1,14 |
+    | Clojure  | 25,44  |       0,45 |
 
 ## Lineas de código
 
 Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
 
-    | C        |   89 |
-    | Rust     |   92 |
-    | Go       |   92 |
-    | Haskell  |   61 |
+    | C        |   90 |
+    | Rust     |   90 |
+    | Go       |   94 |
+    | Haskell  |   62 |
+    | Clojure  |   73 | (52) * incluye la macro mytime, pero si no la contamos son 52 lineas.
 
 ## Tiempo de Desarrollo
 
@@ -65,6 +67,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Rust    | 6:43 |
     | Go      | 2:25 |
     | Haskell | 3:51 |
+    | Clojure | 6:55 |
 
 # Licencia
 
