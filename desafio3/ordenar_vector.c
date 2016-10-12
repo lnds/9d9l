@@ -63,7 +63,8 @@ int main(int argc, char* argv[])
 
 
 
-int ordena_vector(char* vector, int size);
+int ordena_vector(char* vector);
+
 char* procesar_linea(char* linea, int num_linea)
 {
 	int tam_vector;
@@ -71,7 +72,7 @@ char* procesar_linea(char* linea, int num_linea)
 		fprintf(stderr, "ERROR LARGO DE LINEA en linea %d\n", num_linea);
 		return linea;
 	}
-	tam_vector = ordena_vector(linea+POS_VECTOR, VECTOR_SIZE);	
+	tam_vector = ordena_vector(linea+POS_VECTOR);	
 	// corta vector
 	if (tam_vector == 0) {
 		linea[POS_VECTOR] = 'N';
@@ -88,14 +89,14 @@ char* procesar_linea(char* linea, int num_linea)
 	return linea;
 }
 
-int ordena_vector(char* vector, int size)
+int ordena_vector(char* vector)
 {
-	char vector_trabajo[VECTOR_SIZE][VECTOR_ELEM_SIZE];
+	char vector_trabajo[VECTOR_SIZE*CANTIDAD_INSTITUCIONES][VECTOR_ELEM_SIZE];
 	int i, j;
 	int n = 0;
 	char* p = vector;
 	char* vend = vector+(VECTOR_SIZE*VECTOR_ELEM_SIZE);
-	memset((char*)vector_trabajo, '0', VECTOR_SIZE*VECTOR_ELEM_SIZE);
+	memset((char*)vector_trabajo, '0', VECTOR_SIZE*CANTIDAD_INSTITUCIONES*VECTOR_ELEM_SIZE);
 	
 	// por cada elemento del vector
 	for (p = vector; p < vend && *p != ' '; p+= VECTOR_ELEM_SIZE)
