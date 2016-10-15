@@ -10,17 +10,13 @@
 (def ^:const elementos  23) 
 (def ^:const tam-linea 837) ; (+ pos-vector (* elementos  tam-periodo instituciones)))
 
-;(defn str-of [n c] (apply str (repeat n c)))
-
 (def ^:const ^String ceros "000000") ; (str-of tam-periodo \0))
 
 (def ^:const ^String relleno "      ") ; (str-of tam-periodo \space))
 
-(defn in? [coll ^String elm]  (some (partial = elm) coll))
-
-(defn agregar-periodo [periodo lista]
-	(if (= ceros periodo) 
-		lista
+(defn agregar-periodo [^String periodo lista]
+	(if (= ceros periodo)
+		lista 
 		(conj lista periodo)))
 
 ; lista debe ser un set
