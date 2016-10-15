@@ -1,7 +1,7 @@
 import scala.io._
 import scala.util._
 import scala.collection.immutable.StringOps._
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable._
 import java.io._
 
 object Main {
@@ -31,25 +31,25 @@ object Main {
 
   def ordenarPeriodos(linea: String) : String = {
     val encabezado = linea.slice(0, largoEncabezado)
-    var periodos = new ArrayBuffer[String]()
+    val myOrdering = Ordering.fromLessThan[String](_ > _)
+    var periodos = SortedSet.empty[String](myOrdering)
     var i = largoEncabezado
     while (i < largoLinea) {
       val periodo = linea.slice(i, i+tamPeriodo)
-      if (esPeriodoValido(periodo) && !periodos.contains(periodo))
+      if (esPeriodoValido(periodo))
         periodos += periodo
       i += tamPeriodo
     }
 
-    periodos = periodos.sortWith(_ > _)
     
-    val len = periodos.length
+    val len = periodos.size
     encabezado + (
       if (len == 0) 
           "N" + (" " * tamRelleno)
       else if (len > tamVector)
           "S" + " " * tamRelleno
       else 
-          "D" +  periodos.mkString("") + " "*(tamRelleno-len*tamPeriodo)
+          "D" +  periodos.mkString + " "*(tamRelleno-len*tamPeriodo)
     )
   }
 
