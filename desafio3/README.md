@@ -47,6 +47,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
     | Go       |  3,47  |       3,33 |
     | Haskell  | 10,15  |       1,14 |
     | Clojure  | 25,44  |       0,45 |
+    | Scala    |  9,26  |       1,25 |
 
 ## Lineas de código
 
@@ -56,7 +57,8 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Rust     |   90 |
     | Go       |   94 |
     | Haskell  |   62 |
-    | Clojure  |   73 | (52) * incluye la macro mytime, pero si no la contamos son 52 lineas.
+    | Clojure  |   73 | (52) * incluye la macro mytime, pero si no la contamos son 52 líneas.
+    | Scala    |   83 | (74) * incluye la función showTime, si no la contamos son 74 líneas.
 
 ## Tiempo de Desarrollo
 
@@ -68,6 +70,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Go      | 2:25 |
     | Haskell | 3:51 |
     | Clojure | 6:55 |
+    | Scala   | 0:55 |
 
 # Licencia
 

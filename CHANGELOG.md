@@ -8,6 +8,16 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.3.5] - 2016-10-15
+
+## Added
+
+- Solución en Scala al desafío 3
+
+## Changed
+
+- bug en la macro mytime en Clojure
+
 ## [0.3.4] - 2016-10-12
 
 ## Added
