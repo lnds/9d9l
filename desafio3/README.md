@@ -65,12 +65,12 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     Tiempos aproximados para desarrollar cada solución, medidos en horas:minutos, considera codificación, pruebas e investigación.
     Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://TimingApp.com/)
 
-    | C       | 0:45 |
-    | Rust    | 6:43 |
-    | Go      | 2:25 |
-    | Haskell | 3:51 |
-    | Clojure | 6:55 |
-    | Scala   | 0:55 |
+    | C       | 1:45 |
+    | Rust    | 7:23 |
+    | Go      | 3:25 |
+    | Haskell | 4:51 |
+    | Clojure | 7:55 |
+    | Scala   | 1:25 |
 
 # Licencia
 

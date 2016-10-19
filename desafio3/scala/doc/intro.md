@@ -28,14 +28,14 @@ Vamos metiendo cada periodo en un conjunto ordenado, con esto eliminamos duplica
     val encabezado = linea.slice(0, largoEncabezado)
     val myOrdering = Ordering.fromLessThan[String](_ > _)
     var periodos = SortedSet.empty[String](myOrdering)
-    var i = largoEncabezado
-    while (i < largoLinea) {
-      val periodo = linea.slice(i, i+tamPeriodo)
-      if (esPeriodoValido(periodo))
-        periodos += periodo
-      i += tamPeriodo
+    var pos = posVector
+    while (pos < largoLinea) {
+      if (!linea.regionMatches(pos, ceros, 0, tamPeriodo)) 
+         periodos += linea.slice(pos, pos+tamPeriodo)
+      pos += tamPeriodo
     }
 
+Notar que usamos la función String.regionMatches() para comparar cada segmento con ceros ("000000") para optimizar el código.
     
 Para armar el string de resultado usamos Stings.Ops que nos permite repetir string con el operador *.
 
