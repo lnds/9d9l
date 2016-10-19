@@ -46,7 +46,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
     | Rust     |  5,58  |       2,07 |
     | Go       |  3,47  |       3,33 |
     | Haskell  | 10,15  |       1,14 |
-    | Clojure  | 16,09  |       0,72 |
+    | Clojure  | 15,65  |       0,74 |
     | Scala    |  9,26  |       1,25 |
 
 ## Lineas de código
