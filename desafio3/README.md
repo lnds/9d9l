@@ -47,7 +47,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
     | Go       |  3,47  |       3,33 |
     | Haskell  | 10,15  |       1,14 |
     | Clojure  |  9,53  |       1,21 |
-    | Scala    |  9,26  |       1,25 |
+    | Scala    |  6,56  |       1,76 |
 
 ## Lineas de código
 
@@ -58,7 +58,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Go       |   94 |
     | Haskell  |   62 |
     | Clojure  |   71 | 
-    | Scala    |   83 | 
+    | Scala    |   82 | 
 
 ## Tiempo de Desarrollo
 
