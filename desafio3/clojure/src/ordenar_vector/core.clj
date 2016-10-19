@@ -18,13 +18,13 @@
 (defn agregar-periodo [^String periodo lista]
 	(if (= ceros periodo)
 		lista 
-		(conj lista periodo)))
+		(conj! lista periodo)))
 
 ; lista debe ser un set
 (defn extraer-periodos [^String linea]
 	(let [len (.length linea)]
-		(loop [ini pos-vector fin (+ ini tam-periodo) lista #{}]
-			(if (= ini len) lista
+		(loop [ini pos-vector fin (+ ini tam-periodo) lista (transient #{})]
+			(if (= ini len) (persistent! lista)
 			(recur (+ ini tam-periodo) (+ fin tam-periodo) (agregar-periodo (.substring linea ini fin) lista))))))
 
 
@@ -36,16 +36,10 @@
 		 	(> n elementos) (str "S" relleno-vector)
 		 	:else (str "D" (clojure.string/join (take elementos (concat (sort #(compare %2 %1) periodos) (repeat relleno))))))))
 
-
-(defn procesar-linea [^String linea]
-	(let [encabezado (.substring linea 0 pos-vector)
-		  resto (ordenar-periodos linea)]
-		  (str encabezado resto)))
-
 (defn filtrar-linea [par-linea-n]
 	(let [[n ^String linea] par-linea-n]
-		(if (= tam-linea (.length linea))  
-			(procesar-linea linea)
+		(if (= tam-linea (.length linea)) 
+			(str (.substring linea 0 pos-vector) (ordenar-periodos linea))
 		;; else
 			(do (println (str "error en linea " n))
 				linea))))
