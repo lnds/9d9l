@@ -21,14 +21,14 @@
 		(conj lista periodo)))
 
 ; lista debe ser un set
-(defn extraer-periodos [^String linea lista]
-	(if (= tam-periodo (.length linea))
-		(agregar-periodo linea lista)
-		(recur (.substring linea tam-periodo) (agregar-periodo (.substring linea 0 tam-periodo) lista))))
+(defn extraer-periodos [^String linea pos lista]
+	(if (= (+ pos tam-periodo) (.length linea))
+		(agregar-periodo (.substring linea pos (+ pos tam-periodo)) lista)
+		(recur linea (+ pos tam-periodo) (agregar-periodo (.substring linea pos (+ pos tam-periodo)) lista))))
 
 
 (defn ordenar-periodos [linea]
-	(let [periodos  (extraer-periodos linea  #{})
+	(let [periodos  (extraer-periodos linea 0  #{})
 		  n (count periodos)]
 		 (cond 
 			(zero? n) (str "N" relleno-vector)
