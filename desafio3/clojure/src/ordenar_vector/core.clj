@@ -13,6 +13,7 @@
 (def ^:const ^String ceros "000000") ; (str-of tam-periodo \0))
 
 (def ^:const ^String relleno "      ") ; (str-of tam-periodo \space))
+(def ^:const ^String relleno-vector (clojure.string/join (repeat elementos relleno)))
 
 (defn agregar-periodo [^String periodo lista]
 	(if (= ceros periodo)
@@ -30,15 +31,15 @@
 	(let [periodos  (extraer-periodos linea  #{})
 		  n (count periodos)]
 		 (cond 
-			(zero? n) (cons "N" (repeat elementos relleno))
-		 	(> n elementos) (cons "S" (repeat elementos relleno))
-		 	:else (cons "D" (take elementos (concat (sort #(compare %2 %1) periodos) (repeat relleno)))))))
+			(zero? n) (str "N" relleno-vector)
+		 	(> n elementos) (str "S" relleno-vector)
+		 	:else (str "D" (clojure.string/join (take elementos (concat (sort #(compare %2 %1) periodos) (repeat relleno))))))))
 
 
 (defn procesar-linea [^String linea]
 	(let [encabezado (.substring linea 0 pos-vector)
 		  resto (ordenar-periodos (.substring linea pos-vector))]
-		  (str encabezado (clojure.string/join resto))))
+		  (str encabezado resto)))
 
 (defn filtrar-linea [par-linea-n]
 	(let [[n ^String linea] par-linea-n]
