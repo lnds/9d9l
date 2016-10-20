@@ -10,6 +10,10 @@ Primero debes instalar Ruby en tu máquina (revisa https://www.ruby-lang.org/es/
 
     $ ruby toque_fama.rb
 
+## Documentación
+
+En el directorio doc se encuentra un documento que describe las particularidades de esta implementación.
+
 ## Licencia
 
 Copyright © 2016 Aldrin Martoq
