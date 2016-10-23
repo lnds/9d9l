@@ -1,5 +1,9 @@
 # Toque y Fama
 
+Puedes leer el artículo que explica este desafío en la siguiente dirección: http://www.lnds.net/blog/lnds/2016/1/13/mas-alla-del-hola-mundo
+
+## Explicación
+
 El desafío consiste en implementar el juego Toque y Fama.
 
 En este juego dos jugadores (A y B) eligen cada uno una cifra de 5 números del 0 al 9.
@@ -116,6 +120,8 @@ A continuación se muestra una sesión del juego:
 	| Rust    | 82 |
 	| Scala   | 55 |
 	| Swift   | 66 |
+
+
 
 # Licencia
 
