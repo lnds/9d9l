@@ -29,7 +29,7 @@ Esto dejará un archivo binario en .build/release
 
 Generado el archivo binario puedes ejecutarlo directamente haciendo:
 
-	$ ./build/release/weather [-p] ciudad1 ciudad2 ciudad3 ..
+	$ .build/release/weather [-p] ciudad1 ciudad2 ciudad3 ..
 
 
 ## Documentación

@@ -1,9 +1,14 @@
 import Foundation
 
-let apiKey = NSProcessInfo.processInfo().environment["WEATHER_API_KEY"]!
+let apiKey = ProcessInfo.processInfo.environment["WEATHER_API_KEY"]
+if (apiKey == nil) {
+	print("debe definir variable de ambiente WEATHER_API_KEY")
+	exit(-1)
+}
 
-let args = Process.arguments
-let argc = Process.argc
+
+let args = ProcessInfo.processInfo.arguments
+let argc = ProcessInfo.processInfo.arguments.count
 
 if argc == 1 || (argc == 2 && args[1] == "-p") {
 	print("debe ingresar una lista de ciudades")
@@ -13,30 +18,30 @@ let par = args[1] == "-p"
 let cities =  par ? args[2..<args.count] : args[1..<args.count]
 
 
-let start = NSDate()
+let start = Date()
 
 var reports = [ApiResult?]()
 if par {
 	for i in 1...cities.count {
 		reports.append(nil)
 	}
-	let globalQueue = dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)
-	dispatch_apply(cities.count, globalQueue) {
+	let _ = DispatchQueue.global(qos:.userInitiated)
+	DispatchQueue.concurrentPerform(iterations:cities.count, execute: {
 		i in 
 			let index = Int(i)+2 // cities start from 2
 			let city = cities[index]
-			let rep = callApi(city, apiKey:apiKey)
+			let rep = callApi(city:city, apiKey:apiKey!)
 			reports[Int(i)] = rep
-	}
+	})
 } else {
 	for city in cities {
-		reports.append(callApi(city, apiKey:apiKey))
+		reports.append(callApi(city:city, apiKey:apiKey!))
 	}
 
 }
 
 // sort result
-reports.sortInPlace({
+reports.sort(by:{
 	switch $0! {
 	case .Error(let city, let error):
 		return false
@@ -51,8 +56,8 @@ reports.sortInPlace({
 })
 
 
-let end = NSDate()
-let timeInterval : Double = end.timeIntervalSinceDate(start)
+let end = Date()
+let timeInterval = end.timeIntervalSince(start)
 
 // show reports
 for rep in reports {
@@ -60,10 +65,10 @@ for rep in reports {
 	case .Error(let city, let error):
 		print("\(city) Error: \(error)")
 	case .Weather(let city, let temp, let max, let min, let conditions):
-		print(city.stringByPaddingToLength(30, withString:" ", startingAtIndex: 0),String(format:"max:%5.1f  min:%5.1f   actual: %5.1f", temp, max, min),conditions)
+		print(city.padding(toLength:30, withPad:" ", startingAt: 0),String(format:"max:%5.1f  min:%5.1f   actual: %5.1f", temp, max, min),conditions)
 	}
 }
-let hours = Int(timeInterval / 3600)
-let mins = Int((timeInterval % 3600) / 60)
-let secs = (timeInterval % 3600) %  60
+let hours = (Int(timeInterval) / 3600)
+let mins =  (Int(timeInterval) / 3600) / 60
+let secs = (timeInterval.truncatingRemainder(dividingBy:3600.0)).truncatingRemainder(dividingBy:  60.0)
 print(String(format:"tiempo ocupado para generar el reporte: %02d:%02d:%05.2f", hours, mins, secs))

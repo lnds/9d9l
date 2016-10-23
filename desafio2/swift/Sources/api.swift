@@ -7,16 +7,16 @@ enum ApiResult {
 
 func httpGet(city:String, url:String) -> ApiResult {
 
-	if let myURL = NSURL(string: url) {
+	if let myURL = URL(string: url) {
 		for _ in 1...10 {
 			do {
-				let xmlDoc = try NSXMLDocument(contentsOfURL: myURL, options:0)
+				let xmlDoc = try XMLDocument(contentsOf: myURL, options:0)
 				if let root = xmlDoc.rootElement() {
-					let cityName = root.elementsForName("city")[0].attributeForName("name")!.stringValue!
-					let temp = (root.elementsForName("temperature")[0].attributeForName("value")!.stringValue! as NSString).doubleValue
-					let max  = (root.elementsForName("temperature")[0].attributeForName("max")!.stringValue! as NSString).doubleValue
-					let min  = (root.elementsForName("temperature")[0].attributeForName("min")!.stringValue! as NSString).doubleValue
-					let weatherConds = root.elementsForName("weather")[0].attributeForName("value")!.stringValue!
+					let cityName = root.elements(forName:"city")[0].attribute(forName:"name")!.stringValue!
+					let temp = (root.elements(forName:"temperature")[0].attribute(forName:"value")!.stringValue! as NSString).doubleValue
+					let max  = (root.elements(forName:"temperature")[0].attribute(forName:"max")!.stringValue! as NSString).doubleValue
+					let min  = (root.elements(forName:"temperature")[0].attribute(forName:"min")!.stringValue! as NSString).doubleValue
+					let weatherConds = root.elements(forName:"weather")[0].attribute(forName:"value")!.stringValue!
 					return ApiResult.Weather(cityName, temp, max, min, weatherConds)
 				} 
 			} catch { /* DO NOTHING, and is good */ }
@@ -31,6 +31,6 @@ func makeUrl(city: String, apiKey: String) -> String {
 }
 
 func callApi(city: String, apiKey: String) -> ApiResult {
-	let url = makeUrl(city, apiKey:apiKey)
-	return httpGet(city, url:url)
+	let url = makeUrl(city:city, apiKey:apiKey)
+	return httpGet(city:city, url:url)
 }
