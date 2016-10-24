@@ -17,15 +17,16 @@ const TAM_VECTOR_ENTRADA: usize = TAM_VECTOR * CANT_INSTITUCIONES;
 const LARGO_LINEA: usize = POS_VECTOR + TAM_VECTOR_ENTRADA;
 const TAM_SALIDA: usize = POS_VECTOR + 1 + TAM_VECTOR;
 
+static CERO : [u8;TAM_PERIODO] = ['0' as u8; TAM_PERIODO];
+
 
 fn ordenar_vector(vector:&[u8],  result:&mut [u8]) {
 	let mut n = 0;
-	let cero = ['0' as u8; TAM_PERIODO];
 	let mut trabajo = ['0' as u8; TAM_VECTOR_ENTRADA];
 
 	for p in vector.chunks(TAM_PERIODO) {
 
-		if p == cero { continue; }
+		if p == CERO { continue; }
 
 		let mut i = 0;
 		let mut q = 0;

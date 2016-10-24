@@ -11,9 +11,11 @@ const TAM_VECTOR_ENTRADA = TAM_VECTOR * CANT_INSTITUCIONES
 const LARGO_LINEA = POS_VECTOR + TAM_VECTOR_ENTRADA
 const TAM_SALIDA = POS_VECTOR + 1 + TAM_VECTOR
 
+var cero = make([]byte, TAM_PERIODO, TAM_PERIODO)
+
+
 func ordenar_vector(buf []byte, result []byte) {
 	n := 0	
-	cero := make([]byte, TAM_PERIODO, TAM_PERIODO)
 	trabajo := make([]byte, TAM_VECTOR_ENTRADA, TAM_VECTOR_ENTRADA)
 	for i := 0; i < TAM_PERIODO; i++ { cero[i] = '0' }
 	for i := 0; i < TAM_VECTOR_ENTRADA; i ++ { trabajo[i] = '0' }
