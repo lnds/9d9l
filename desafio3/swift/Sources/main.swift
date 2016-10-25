@@ -6,73 +6,78 @@ let tamPeriodo  = 6
 let nInsts      = 6
 let largoLinea  = posVector + nInsts * tamVector * tamPeriodo + 1
 let tamSalida   = posVector + 1 + tamVector * tamPeriodo + 1
-let tamVecEntradaBytes = nInsts * tamVector * tamPeriodo
+let tamVecEntradaBytes = nInsts * (tamVector * tamPeriodo)
 let tamVecSalidaBytes  = tamVector * tamPeriodo
-let N : UInt8 = 78 // letra N
-let S : UInt8 = 83 // letra S
-let D : UInt8 = 68 // letra D
-let NL : UInt8 = 10 // newline
-let CERO : UInt8 = 48 // caracter '0'
-let SPACE : UInt8 = 32
+let N : Int8 = 78 // letra N
+let S : Int8 = 83 // letra S
+let D : Int8 = 68 // letra D
+let NL : Int8 = 10 // newline
+let CERO : Int8 = 48 // caracter '0'
+let SPACE : Int8 = 32
 
-let ceroData = Data(repeating: CERO, count: tamPeriodo)
 
-func ordenarVector(_ buf: Data) -> (tam:Int, data:Data) {
-	var trabajo = Data(repeating: CERO, count: tamVecEntradaBytes)
-	var p = 0
+var ceroData = ArraySlice<Int8>(repeating: CERO, count: tamPeriodo)
+
+
+func ordenarVector(_ buf: [Int8],  _ trabajo : inout [Int8]) -> Int {
+	var p = posVector
 	var n = 0
-	while p < tamVecEntradaBytes {
-		let periodo = buf.subdata(in:p..<p+tamPeriodo)
+	let tope = largoLinea-1
+	while p < tope {
+		let periodo = buf[p..<p+tamPeriodo]
 		if periodo == ceroData {
 			p += tamPeriodo
 			continue
 		}
 		var i = 0
 		var q = 0
-		while i < n && periodo.lexicographicallyPrecedes(trabajo.subdata(in:q..<q+tamPeriodo)) {
+		while i < n && periodo.lexicographicallyPrecedes(trabajo[q..<q+tamPeriodo]) {
 			i += 1
 			q += tamPeriodo
 		}
 
-		if i < n && periodo == trabajo.subdata(in:q..<q+tamPeriodo) {
+		if i < n && periodo == trabajo[q..<q+tamPeriodo] {
 			p += tamPeriodo
 			continue
 		}
 
 		if i == n {
 			q = n * tamPeriodo
-			trabajo.replaceSubrange(q..<q+tamPeriodo, with: periodo)
+			trabajo[q..<q+tamPeriodo] = periodo
 		} else {
 			var j = tamVector-1
 			while j > i {
 				q = j * tamPeriodo
-				trabajo.replaceSubrange(q..<q+tamPeriodo, with: trabajo.subdata(in:q-tamPeriodo..<q))
+				trabajo[q..<q+tamPeriodo] = trabajo[q-tamPeriodo..<q]
 				j -= 1
 			}
 			q = i * tamPeriodo
-			trabajo.replaceSubrange(q..<q+tamPeriodo, with: periodo)
+			trabajo[q..<q+tamPeriodo] = periodo
 		}
 		n += 1
 		p += tamPeriodo
 	}
-	return (n, trabajo.subdata(in:0..<tamVecSalidaBytes))
+	return n
 }
 
-func procesarLinea(_ buf: Data, _ nl: Int) -> Data {
-	if buf.count != largoLinea {
+
+
+func procesarLinea(_ buf: [Int8], _ nl: Int) -> [Int8] {
+	if strlen(buf) != UInt(largoLinea) {
 		print("!!! Largo incorrecto en linea \(nl) \(largoLinea) != \(buf.count)")
 		return buf
 	} else {
-		var result = Data(repeating: SPACE, count: tamSalida+1)
-		let res = ordenarVector(buf.subdata(in:posVector..<buf.count))
-		result.replaceSubrange(0..<posVector, with: buf.subdata(in:0..<posVector))
-		if res.tam == 0 {
+		var trabajo = [Int8](repeating: CERO, count: tamVecEntradaBytes)
+		var result = [Int8](repeating: SPACE, count: tamSalida+1)
+		let tam = ordenarVector(buf, &trabajo)
+		result.replaceSubrange(0..<posVector, with: buf[0..<posVector])
+		if tam == 0 {
 			result[posVector] = N
-		} else if res.tam > tamVector {
+		} else if tam > tamVector {
 			result[posVector] = S
 		} else {
 			result[posVector] = D
-			result.replaceSubrange(posVector+1..<res.tam*tamPeriodo, with: res.data.subdata(in:0..<res.tam*tamPeriodo))
+			result[posVector+1..<posVector+tam*tamPeriodo] = trabajo[0..<tam*tamPeriodo]
 		}
 		result[tamSalida-1] = NL
 		result[tamSalida] = 0
@@ -103,16 +108,17 @@ if argc != 3 {
 	}
 
 	let BUFFER_SIZE : Int32 = 4096
-	var buf = [Int8](repeating: 0, count: Int(BUFFER_SIZE))
-	var n = 0
+	var buf = Array<Int8>(repeating: 0, count: Int(BUFFER_SIZE))
+	var nl = 0 // numero de linea
 	while (fgets(&buf, BUFFER_SIZE, fentrada) != nil) {
-		let dataIn = Data(bytes: &buf, count: Int(strlen(buf)))
-		let dataOut = procesarLinea(dataIn, n)
-		let bufOut = dataOut.withUnsafeBytes {
-    		[Int8](UnsafeBufferPointer(start: $0, count: tamSalida+1))
-		}
+		let bufOut = procesarLinea(buf, nl)
+		//let dataIn = Data(bytes: &buf, count: Int(strlen(buf)))
+		//let dataOut = procesarLinea(dataIn, n)
+		//let bufOut = dataOut.withUnsafeBytes {
+    	//	[Int8](UnsafeBufferPointer(start: $0, count: tamSalida+1))
+		//}
 		fputs(bufOut, fsalida)
-		n += 1
+		nl += 1
 	}
 	fclose(fentrada)
 	fclose(fsalida)

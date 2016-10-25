@@ -20,27 +20,27 @@ func ordenar_vector(buf []byte, result []byte) {
 	for i := 0; i < TAM_PERIODO; i++ { cero[i] = '0' }
 	for i := 0; i < TAM_VECTOR_ENTRADA; i ++ { trabajo[i] = '0' }
 	for p := 0; p < TAM_VECTOR_ENTRADA; p += TAM_PERIODO {
-
-		if bytes.Equal(buf[p:p+TAM_PERIODO], cero) { continue }
+		periodo := buf[p:p+TAM_PERIODO]
+		if bytes.Equal(periodo, cero) { continue }
 		i := 0
 		q := 0
-		for i < n && bytes.Compare(buf[p:p+TAM_PERIODO], trabajo[q:q+TAM_PERIODO]) < 0 {
+		for i < n && bytes.Compare(periodo, trabajo[q:q+TAM_PERIODO]) < 0 {
 			i++
 			q += TAM_PERIODO 
 		}
 
-		if i < n && bytes.Equal(buf[p:p+TAM_PERIODO], trabajo[q:q+TAM_PERIODO]) { continue }
+		if i < n && bytes.Equal(periodo, trabajo[q:q+TAM_PERIODO]) { continue }
 
 		if i == n {
 			q := n*TAM_PERIODO
-			copy(trabajo[q:q+TAM_PERIODO], buf[p:p+TAM_PERIODO])
+			copy(trabajo[q:q+TAM_PERIODO], periodo)
 		} else  {
 			for j := ELEMENTOS_VECTOR-1; j > i; j-- { 
 				q := j*TAM_PERIODO
 				copy(trabajo[q:q+TAM_PERIODO], trabajo[q-TAM_PERIODO:q])
 			}
 			q := i*TAM_PERIODO
-			copy(trabajo[q:q+TAM_PERIODO], buf[p:p+TAM_PERIODO])
+			copy(trabajo[q:q+TAM_PERIODO], periodo)
 		}
 		n++
 	}
@@ -50,10 +50,7 @@ func ordenar_vector(buf []byte, result []byte) {
 		result[0] = 'S'
 	} else {
 		result[0] = 'D'
-		for i := 0; i < n; i++ {
-			p := i*TAM_PERIODO
-			copy(result[p+1:p+1+TAM_PERIODO], trabajo[p:p+TAM_PERIODO])
-		}
+		copy(result[1:n*TAM_PERIODO+1], trabajo[0:n*TAM_PERIODO])
 	}
 }
 
