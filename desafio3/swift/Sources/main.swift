@@ -24,35 +24,40 @@ func ordenarVector(_ buf: [Int8],  _ trabajo : inout [Int8]) -> Int {
 	var n = 0
 	let tope = largoLinea-1
 	while p < tope {
-		let periodo = buf[p..<p+tamPeriodo]
-		if periodo == ceroData {
+		if buf[p..<p+tamPeriodo] == ceroData {
 			p += tamPeriodo
 			continue
 		}
 		var i = 0
 		var q = 0
-		while i < n && periodo.lexicographicallyPrecedes(trabajo[q..<q+tamPeriodo]) {
+		while i < n && buf[p..<p+tamPeriodo].lexicographicallyPrecedes(trabajo[q..<q+tamPeriodo]) {
 			i += 1
 			q += tamPeriodo
 		}
 
-		if i < n && periodo == trabajo[q..<q+tamPeriodo] {
+		if i < n && buf[p..<p+tamPeriodo] == trabajo[q..<q+tamPeriodo] {
 			p += tamPeriodo
 			continue
 		}
 
 		if i == n {
 			q = n * tamPeriodo
-			trabajo[q..<q+tamPeriodo] = periodo
+			for k in 0..<tamPeriodo {
+				trabajo[q+k] = buf[p+k]
+			}
 		} else {
 			var j = tamVector-1
 			while j > i {
 				q = j * tamPeriodo
-				trabajo[q..<q+tamPeriodo] = trabajo[q-tamPeriodo..<q]
+				for k in 0..<tamPeriodo {
+					trabajo[q+k] = trabajo[q-tamPeriodo+k]
+				}
 				j -= 1
 			}
 			q = i * tamPeriodo
-			trabajo[q..<q+tamPeriodo] = periodo
+			for j in 0..<tamPeriodo {
+				trabajo[q+j] = buf[p+j]
+			}
 		}
 		n += 1
 		p += tamPeriodo
@@ -61,23 +66,32 @@ func ordenarVector(_ buf: [Int8],  _ trabajo : inout [Int8]) -> Int {
 }
 
 
+var trabajo = [Int8](repeating: CERO, count: tamVecEntradaBytes)
+var result = [Int8](repeating: SPACE, count: tamSalida+1)
+		
 
 func procesarLinea(_ buf: [Int8], _ nl: Int) -> [Int8] {
 	if strlen(buf) != UInt(largoLinea) {
 		print("!!! Largo incorrecto en linea \(nl) \(largoLinea) != \(buf.count)")
 		return buf
 	} else {
-		var trabajo = [Int8](repeating: CERO, count: tamVecEntradaBytes)
-		var result = [Int8](repeating: SPACE, count: tamSalida+1)
+		for i in 0..<tamVecEntradaBytes {
+            trabajo[i] = CERO
+        }
+        for i in 0..<tamSalida {
+            result[i] = SPACE
+        }
 		let tam = ordenarVector(buf, &trabajo)
-		result.replaceSubrange(0..<posVector, with: buf[0..<posVector])
+		result[0..<posVector] = buf[0..<posVector]
 		if tam == 0 {
 			result[posVector] = N
 		} else if tam > tamVector {
 			result[posVector] = S
 		} else {
 			result[posVector] = D
-			result[posVector+1..<posVector+tam*tamPeriodo] = trabajo[0..<tam*tamPeriodo]
+			for j in 0..<tam*tamPeriodo {
+				result[j+posVector+1] = trabajo[j]
+			}
 		}
 		result[tamSalida-1] = NL
 		result[tamSalida] = 0
