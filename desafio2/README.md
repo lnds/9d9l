@@ -1,5 +1,16 @@
 # Weather
 
+Puedes leer sobre este desafío en mi blog en:
+
+http://www.lnds.net/blog/lnds/2016/3/31/reporte-del-clima
+
+http://www.lnds.net/blog/lnds/2016/5/31/chubascos-de-ligera-intensidad
+
+http://www.lnds.net/blog/lnds/2016/6/21/como-obtener-el-reporte-del-clima
+
+
+## Explicación
+
 El desafío consiste en una aplicación que obtenga el clima de distintas ciudades, usando la api de OpenWeatherMap.org de forma concurrente.
 
 Se debe crear un programa que reciba a través de la línea de comandos una lista de ciudades, el programa debe descargar, en paralelos desde OpenWeatherMap.org el informe de clima de las ciudades.
