@@ -126,11 +126,6 @@ if argc != 3 {
 	var nl = 0 // numero de linea
 	while (fgets(&buf, BUFFER_SIZE, fentrada) != nil) {
 		let bufOut = procesarLinea(buf, nl)
-		//let dataIn = Data(bytes: &buf, count: Int(strlen(buf)))
-		//let dataOut = procesarLinea(dataIn, n)
-		//let bufOut = dataOut.withUnsafeBytes {
-    	//	[Int8](UnsafeBufferPointer(start: $0, count: tamSalida+1))
-		//}
 		fputs(bufOut, fsalida)
 		nl += 1
 	}

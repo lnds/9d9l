@@ -8,6 +8,20 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.3.6] - 2016-10-28
+
+## Added
+
+- Solución en Swift al desafío 3
+
+## Changed
+
+- Mueve la solución en c a su propio directorio
+- Aplica optimización del compilador a solución en C
+- Compara contra solución optimizada en C
+- Pequeñas optimizaciones a la solución en Go.
+- Pequeñas optimizaciones a la solución en Rust.
+
 ## [0.3.5] - 2016-10-15
 
 ## Added
