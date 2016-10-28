@@ -39,15 +39,17 @@ La salida estándar además debe desplegar la cantidad de líneas leidas y el ti
 
 ## Tiempos
 
-Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón de vectores, la tercera columna es el tiempo en C dividido por el tiempo en el lenguaje respectivo. El tiempo promedio se sacó sobre una muestra de 5 ejecuciones del programa. La columna Proporción es la división del tiempo en el lenguaje sobre el tiempo original en C (mide cuantas veces es más rápido con respecto a C), mientras mayor este número significa que el programa es más rápido.
+Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón de vectores, la tercera columna es el tiempo en C dividido por el tiempo en el lenguaje respectivo. El tiempo promedio se sacó sobre una muestra de 5 ejecuciones del programa. La columna Proporción es la división del tiempo en el lenguaje sobre el tiempo original en C (mide cuantas veces es más rápido con respecto a C), mientras mayor este número significa que el programa es más rápido. La columna Proporción 2 mide la velocidad con respecto al programa en C optimizado (compilado con la opción -O3).
 
-    | Lenguaje | Tiempo | Proporción |
-    | C        | 11,56  |       1,00 |
-    | Rust     |  5,58  |       2,07 |
-    | Go       |  3,47  |       3,33 |
-    | Haskell  | 10,15  |       1,14 |
-    | Clojure  | 25,44  |       0,45 |
-    | Scala    |  9,26  |       1,25 |
+    | Lenguaje | Tiempo | Proporción | Proporción 2
+    | C        | 11,56  |       1,00 | -
+    | C-opt    |  4,53  |       2,55 | 1,00
+    | Rust     |  5,53  |       2,09 | 0,82
+    | Go       |  3,44  |       3,36 | 1,32
+    | Haskell  | 10,15  |       1,14 | 0,45
+    | Clojure  |  9,53  |       1,21 | 0,48
+    | Scala    |  6,71  |       1,72 | 0,67
+    | Swift    |  6,35  |       1,82 | 0,71
 
 ## Lineas de código
 
@@ -57,20 +59,22 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Rust     |   90 |
     | Go       |   94 |
     | Haskell  |   62 |
-    | Clojure  |   73 | (52) * incluye la macro mytime, pero si no la contamos son 52 líneas.
-    | Scala    |   83 | (74) * incluye la función showTime, si no la contamos son 74 líneas.
+    | Clojure  |   71 | 
+    | Scala    |   82 | 
+    | Swift    |  129 |
 
 ## Tiempo de Desarrollo
 
     Tiempos aproximados para desarrollar cada solución, medidos en horas:minutos, considera codificación, pruebas e investigación.
     Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://TimingApp.com/)
 
-    | C       | 0:45 |
-    | Rust    | 6:43 |
-    | Go      | 2:25 |
-    | Haskell | 3:51 |
-    | Clojure | 6:55 |
-    | Scala   | 0:55 |
+    | C       | 1:45 |
+    | Rust    | 7:23 |
+    | Go      | 3:25 |
+    | Haskell | 4:51 |
+    | Clojure | 7:55 |
+    | Scala   | 1:25 |
+    | Swift   | 4:21 |
 
 # Licencia
 

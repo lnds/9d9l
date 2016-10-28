@@ -3,7 +3,7 @@ import FisherYates
 func validar(tam:Int, acc:String!) -> [Int]? {
 	var num = [Int]()
 	let chars = Array(acc.characters)
-	for (i,c) in chars.enumerate() {
+	for (i,c) in chars.enumerated() {
 		if i >= tam {
 			return nil
 		} else if c < "0" || c > "9" {
@@ -23,8 +23,8 @@ func validar(tam:Int, acc:String!) -> [Int]? {
 func comparar(num:[Int], sec:[Int]) -> (toques:Int, famas:Int) {
 	var toques = 0
 	var famas = 0
-	for (i, n) in num.enumerate() {
-		for (j, m) in sec.enumerate() {
+	for (i, n) in num.enumerated() {
+		for (j, m) in sec.enumerated() {
 			if n == m {
 				if i == j { famas += 1 } 
 				else { 	toques += 1 }
@@ -36,7 +36,7 @@ func comparar(num:[Int], sec:[Int]) -> (toques:Int, famas:Int) {
 
 let tam = 5
 
-let sec = Array([0,1,2,3,4,5,6,7,8,9].shuffle()[0..<tam])
+var sec = Array([0,1,2,3,4,5,6,7,8,9].shuffled()[0..<tam])
 
 print (" Bienvenido a Toque y Fama.\n",
 	   "==========================\n\n",
@@ -52,16 +52,16 @@ var intentos = 0
 while true {
 	intentos += 1
 	print("Ingresa una secuencia de \(tam) dígitos distintos (o escribe salir):")
-	let accion = readLine(stripNewline:true)
+	let accion = readLine(strippingNewline:true)
 	if accion == "salir" {
 		break
 	} else {
-		let num = validar(tam, acc:accion!)
+		let num = validar(tam:tam, acc:accion!)
 		if num == nil {
 			print("error!\n")
 		} else { 
 			print("ingresaste: ", num!)
-			let (toques, famas) = comparar(num!, sec:sec)
+			let (toques, famas) = comparar(num: num!, sec:sec)
 			print("resultado: \(toques) Toques, \(famas) Famas\n")
 			if famas == tam {
 				print("Ganaste! Acertaste al intento \(intentos)! La secuencia era \(sec).")

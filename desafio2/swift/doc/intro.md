@@ -4,15 +4,14 @@
 
 Para ejecutar en modo concurrente usamos Grand Central Dispatch
 
-	let globalQueue = dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)
-	dispatch_apply(cities.count, globalQueue) {
+	let _ = DispatchQueue.global(qos:.userInitiated)
+	DispatchQueue.concurrentPerform(iterations:cities.count, execute: {
 		i in 
 			let index = Int(i)+2 // cities start from 2
 			let city = cities[index]
-			// print(city)
-			let rep = callApi(city, apiKey:apiKey)
+			let rep = callApi(city:city, apiKey:apiKey!)
 			reports[Int(i)] = rep
-	}
+	})
 
 Sugiero agregar un print(city) para verificar cómo se va ejecutando en paralelo y de forma asíncrona cada llamada.
 

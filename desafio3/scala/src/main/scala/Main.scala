@@ -13,9 +13,10 @@ object Main {
   val tamPeriodo = 6
   val cantInstituciones = 6
   val tamVector = 23
-  val largoEncabezado = 9
-  val largoLinea = largoEncabezado + cantInstituciones * tamVector * tamPeriodo
+  val posVector = 9
+  val largoLinea = posVector + cantInstituciones * tamVector * tamPeriodo
   val tamRelleno = tamVector * tamPeriodo
+  val ceros = "000000" // tamPeriodo 
 
   sealed trait Args
   case object BadArgs extends Args
@@ -27,18 +28,15 @@ object Main {
     else 
         FileArgs(args(0), args(1))
 
-  def esPeriodoValido(periodo: String) = periodo.exists(_ != '0')
-
   def ordenarPeriodos(linea: String) : String = {
-    val encabezado = linea.slice(0, largoEncabezado)
+    val encabezado = linea.slice(0, posVector)
     val myOrdering = Ordering.fromLessThan[String](_ > _)
     var periodos = SortedSet.empty[String](myOrdering)
-    var i = largoEncabezado
-    while (i < largoLinea) {
-      val periodo = linea.slice(i, i+tamPeriodo)
-      if (esPeriodoValido(periodo))
-        periodos += periodo
-      i += tamPeriodo
+    var pos = posVector
+    while (pos < largoLinea) {
+      if (!linea.regionMatches(pos, ceros, 0, tamPeriodo)) 
+         periodos += linea.slice(pos, pos+tamPeriodo)
+      pos += tamPeriodo
     }
 
     

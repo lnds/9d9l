@@ -19,7 +19,7 @@ Esto dejará un archivo ejecutable con el nombre weather en el directorio target
 
 Generado el binario  puedes ejecutarlo directamente haciendo:
 
-    $ target/release/ordernar_vector archivo_entrada archivo_salida
+    $ target/release/ordenar_vector archivo_entrada archivo_salida
 
 ## Documentación
 

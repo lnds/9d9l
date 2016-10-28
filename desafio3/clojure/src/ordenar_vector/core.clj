@@ -1,5 +1,6 @@
 (ns ordenar-vector.core
-  (:gen-class))
+  (:gen-class)
+  (:require [clojure.string :as s]))
 
 (use 'clojure.java.io
 	 'ordenar-vector.tools)
@@ -10,40 +11,35 @@
 (def ^:const elementos  23) 
 (def ^:const tam-linea 837) ; (+ pos-vector (* elementos  tam-periodo instituciones)))
 
-(def ^:const ^String ceros "000000") ; (str-of tam-periodo \0))
+(def ^:const ^String ceros  "000000") ; (str-of tam-periodo \0))
+(def ^:const ^String relleno  "      ") ; (str-of tam-periodo \space))
+(def ^:const ^String relleno-vector (s/join (repeat elementos relleno)))
 
-(def ^:const ^String relleno "      ") ; (str-of tam-periodo \space))
-
-(defn agregar-periodo [^String periodo lista]
-	(if (= ceros periodo)
+(defn agregar-periodo [^String linea ini fin lista]
+	(if (.regionMatches linea ini ceros 0 tam-periodo)
 		lista 
-		(conj lista periodo)))
+		(conj! lista (subs linea ini fin))))
 
 ; lista debe ser un set
-(defn extraer-periodos [^String linea lista]
-	(if (= tam-periodo (.length linea))
-		(agregar-periodo linea lista)
-		(recur (.substring linea tam-periodo) (agregar-periodo (.substring linea 0 tam-periodo) lista))))
+(defn extraer-periodos [^String linea]
+	(let [len (- (.length linea) tam-periodo)]
+		(loop [ini pos-vector fin (+ ini tam-periodo) lista (transient #{})]
+			(if (= ini len) (persistent! (agregar-periodo linea ini fin lista))
+			(recur (+ ini tam-periodo) (+ fin tam-periodo) (agregar-periodo  linea ini fin lista))))))
 
 
-(defn ordenar-periodos [linea]
-	(let [periodos  (extraer-periodos linea  #{})
+(defn ordenar-periodos [^String linea]
+	(let [periodos  (extraer-periodos linea)
 		  n (count periodos)]
 		 (cond 
-			(zero? n) (cons "N" (repeat elementos relleno))
-		 	(> n elementos) (cons "S" (repeat elementos relleno))
-		 	:else (cons "D" (take elementos (concat (sort #(compare %2 %1) periodos) (repeat relleno)))))))
-
-
-(defn procesar-linea [^String linea]
-	(let [encabezado (.substring linea 0 pos-vector)
-		  resto (ordenar-periodos (.substring linea pos-vector))]
-		  (str encabezado (clojure.string/join resto))))
+			(zero? n) (.concat "N" relleno-vector)
+		 	(> n elementos) (.concat "S" relleno-vector)
+		 	:else (.concat "D" (s/join (take elementos (concat (sort #(compare ^String %2 ^String %1) periodos) (repeat relleno))))))))
 
 (defn filtrar-linea [par-linea-n]
 	(let [[n ^String linea] par-linea-n]
-		(if (= tam-linea (.length linea))  
-			(procesar-linea linea)
+		(if (= tam-linea (.length linea)) 
+			(.concat (subs linea 0 pos-vector) (ordenar-periodos linea))
 		;; else
 			(do (println (str "error en linea " n))
 				linea))))

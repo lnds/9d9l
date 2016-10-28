@@ -21,7 +21,7 @@ Esto dejará un archivo binario en .build/release
 
 Generado el archivo binario puedes ejecutarlo directamente haciendo:
 
-	$ ./build/release/toque-y-fama
+	$ .build/release/toque-y-fama
 
 
 ## Documentación
