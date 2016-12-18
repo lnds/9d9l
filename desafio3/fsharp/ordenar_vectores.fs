@@ -35,7 +35,7 @@ let separar_periodos (linea:string) =
     }
     
 let ordenar_periodos linea = 
-    let periodos = separar_periodos linea |> Seq.toList |> Seq.distinct  |> Seq.sortDescending |> Seq.toArray
+    let periodos = separar_periodos linea |> Set.ofSeq  |> Seq.sortDescending |> Seq.toArray
 
     let len = Seq.length periodos
     if len = 0 then "N".PadRight(TAM_VECTOR+1)
