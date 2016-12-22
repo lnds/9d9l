@@ -35,12 +35,12 @@ let separar_periodos (linea:string) =
     }
     
 let ordenar_periodos linea = 
-    let periodos = separar_periodos linea |> Set.ofSeq  |> Seq.sortDescending |> Seq.toArray
+    let periodos = separar_periodos linea |> Set.ofSeq  
 
     let len = Seq.length periodos
     if len = 0 then "N".PadRight(TAM_VECTOR+1)
     else if len > ELEMENTOS_VECTOR then "S".PadRight(TAM_VECTOR+1)
-    else ("D" + (periodos |> String.Concat)).PadRight(TAM_VECTOR+1)
+    else ("D" + (periodos |> Seq.sortDescending |> String.Concat)).PadRight(TAM_VECTOR+1)
 
 
 let filtrar_linea n (linea : string)=
