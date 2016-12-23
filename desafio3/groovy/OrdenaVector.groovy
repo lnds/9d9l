@@ -1,7 +1,7 @@
 /**
  *
- * vercion 1.0 463148 ms 7,7mn
- *
+ * Version 1.0 463148 ms 7,7mn
+ * Version 2.0 311940 ms 5,2mn
  * @author MigSoft
  */
 class OrdenaVector {
@@ -46,12 +46,9 @@ class OrdenaVector {
     def procesaLinea(linea){
         def inicio = INICIO_CADENA
         def fin = INICIO_CADENA+VECTOR-1
-        def termino=false
         HashSet salida = []
         while(linea.size() > fin) {
             def fecha = linea[inicio..fin]
-            if(!(fecha =~'000000'))
-                 salida<<fecha;
             inicio+=VECTOR
             fin+=VECTOR
             if(salida.size() > MAX_VECTOR)
@@ -64,6 +61,8 @@ class OrdenaVector {
         } else if (salida.size() > MAX_VECTOR) {
             letra="S"
         }
+        
+        salida.remove("000000")
         
         linea[0..INICIO_CADENA-1] + letra + salida.sort().reverse().join("")
     }
