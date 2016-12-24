@@ -1,13 +1,15 @@
 /**
  *
- * Version 1.0 463148 ms 7,7mn
- * Version 2.0 311940 ms 5,2mn
+ * Version 1.0 463148 ms 7,7min
+ * Version 2.0 311940 ms 5,2min
+ * Version 3.0 305809 ms 5.0min
  * @author MigSoft
  */
 class OrdenaVector {
     static final int VECTOR=6
     static final int MAX_VECTOR=23
     static final int INICIO_CADENA=9
+    String rellenoBlanco = "".padRight( VECTOR * MAX_VECTOR +1, ' ' )
     
     static main(arg){
         def inicio = new Date()
@@ -44,26 +46,23 @@ class OrdenaVector {
     }
     
     def procesaLinea(linea){
-        def inicio = INICIO_CADENA
-        def fin = INICIO_CADENA+VECTOR-1
+        int inicio = INICIO_CADENA
+        int fin = INICIO_CADENA+VECTOR-1
         HashSet salida = []
         while(linea.size() > fin) {
             def fecha = linea[inicio..fin]
             inicio+=VECTOR
             fin+=VECTOR
-            if(salida.size() > MAX_VECTOR)
-               fin += linea.size()
+            salida << fecha
         }
-        
-        def letra = "D"
-        if(salida.size()) {
-            letra="N"
-        } else if (salida.size() > MAX_VECTOR) {
-            letra="S"
-        }
-        
         salida.remove("000000")
-        
-        linea[0..INICIO_CADENA-1] + letra + salida.sort().reverse().join("")
+        int elementos = salida.size()
+        if(!elementos) {//sin elementos
+            "${linea[0..INICIO_CADENA-1]}N"
+        } else if (elementos > MAX_VECTOR) {//con mas de 23 elementos
+            "${linea[0..INICIO_CADENA-1]}S$rellenoBlanco"
+        } else {
+            "${linea[0..INICIO_CADENA-1]}D${salida.sort().reverse().join('')}"
+        }
     }
 }
