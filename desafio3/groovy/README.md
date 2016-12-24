@@ -17,7 +17,7 @@ Esto dejará un archivo binario con el nombre OrdenaVector.class en el directori
 
 Generado el binario se debe ejecutar con la siguiente instrucción
 
-   $ groovy OrdenaVector archivo_entrada archivo_salida 
+ 	$ groovy OrdenaVector archivo_entrada archivo_salida 
 
 
 ## Licencia
