@@ -8,6 +8,12 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.3.7] - 2016-12-25
+
+## Added
+
+- Solución en F# al desafío 4
+
 ## [0.3.6] - 2016-10-28
 
 ## Added
