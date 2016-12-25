@@ -36,10 +36,13 @@ let no_es_cero  (linea:string) (pos:int) =
     result
 
 let separar_periodos (linea:string) = seq {
-    for p in POS_VECTOR..TAM_PERIODO..LARGO_LINEA-TAM_PERIODO do
+    let mutable p = POS_VECTOR
+    while p < LARGO_LINEA do
         if no_es_cero linea p then
             yield linea.Substring(p, TAM_PERIODO)
+        p <- p + TAM_PERIODO
 }
+    
     
 let ordenar_periodos (linea:string) = 
     let periodos = separar_periodos linea |> Seq.distinct |> Seq.toList  
