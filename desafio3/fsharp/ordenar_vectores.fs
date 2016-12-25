@@ -14,28 +14,33 @@ let TAM_SALIDA = POS_VECTOR + 1 + TAM_VECTOR
 
 let CERO = "000000"
 
-let leer nomarch =
-    seq {
-        use fr = new StreamReader(new FileStream(nomarch, FileMode.Open, FileAccess.Read, FileShare.Read, 4096))
-        while not fr.EndOfStream do 
-            yield fr.ReadLine()
-    }
+let leer nomarch = seq {
+    use fr = new StreamReader(new FileStream(nomarch, FileMode.Open, FileAccess.Read, FileShare.Read, 4096))
+    while not fr.EndOfStream do 
+        yield fr.ReadLine()
+}
 
 let escribir nomarch (lineas : string seq) =
     use fw = new StreamWriter(nomarch, false, Encoding.ASCII,  4096)
     for linea in lineas
         do fw.WriteLine linea
 
-let separar_periodos (linea:string) =
-    seq {
-        for p in [0..TAM_PERIODO..(TAM_VECTOR_ENTRADA-TAM_PERIODO)] do
-            let periodo = linea.Substring(p, TAM_PERIODO)
-            if periodo <> CERO then
-                yield periodo
-    }
+
+let no_es_cero (linea:string) (pos:int) = 
+    let mutable result = false
+    for p in pos..pos+TAM_PERIODO-1 do
+        if linea.[p] <> '0' then 
+            result <- true
+    result
+
+let separar_periodos (linea:string) = seq {
+    for p in POS_VECTOR..TAM_PERIODO..LARGO_LINEA-TAM_PERIODO do
+        if no_es_cero linea p then
+            yield linea.Substring(p, TAM_PERIODO)
+}
     
-let ordenar_periodos linea = 
-    let periodos = separar_periodos linea |> Set.ofSeq  
+let ordenar_periodos (linea:string) = 
+    let periodos = separar_periodos linea |> Seq.distinct |> Seq.toArray   
 
     let len = Seq.length periodos
     if len = 0 then "N".PadRight(TAM_VECTOR+1)
@@ -48,7 +53,7 @@ let filtrar_linea n (linea : string)=
         printfn "error en linea: %d" n
         linea
     else 
-        linea.Substring(0, POS_VECTOR) + ordenar_periodos (linea.Substring(POS_VECTOR))
+        linea.Substring(0, POS_VECTOR) + ordenar_periodos (linea)
 
 
 let procesar_vectores entrada salida =

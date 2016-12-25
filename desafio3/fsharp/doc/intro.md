@@ -60,6 +60,10 @@ La función separar_periodos es la siguiente
 
 Esta función es el cuello de botella de esta solución. Trate de usar algo parecido a la funcion regionMatches de java, pero no pude lograr más velocidad con eso. 
 
+# Profiling
+
+Para mejorar los tiempos usé mono --profile=log y luego visualicé los reportes con mprof-report output.mlpd.
+
 # Propuesto
 
 ¿Se puede optimizar más este código?
