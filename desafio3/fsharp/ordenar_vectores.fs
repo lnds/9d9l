@@ -16,8 +16,10 @@ let BUF_SIZE = 65536
 
 let leer nomarch = seq {
     use fr = new StreamReader(new FileStream(nomarch, FileMode.Open, FileAccess.Read, FileShare.Read, BUF_SIZE))
+    let mutable nl = 0
     while not fr.EndOfStream do 
-        yield fr.ReadLine()
+        yield (nl, fr.ReadLine())
+        nl <- nl + 1
 }
 
 let escribir nomarch (lineas : string seq) =
@@ -43,17 +45,18 @@ let separar_periodos (linea:string) = seq {
         p <- p + TAM_PERIODO
 }
     
-    
+let PAD_SIZE = TAM_VECTOR+1
+
 let ordenar_periodos (linea:string) = 
     let periodos = separar_periodos linea |> Seq.distinct |> Seq.toList  
 
     let len = Seq.length periodos
-    if len = 0 then "N".PadRight(TAM_VECTOR+1)
-    else if len > ELEMENTOS_VECTOR then "S".PadRight(TAM_VECTOR+1)
-    else ("D" + (periodos |> Seq.sortDescending |> String.Concat)).PadRight(TAM_VECTOR+1)
+    if len = 0 then "N".PadRight(PAD_SIZE)
+    else if len > ELEMENTOS_VECTOR then "S".PadRight(PAD_SIZE)
+    else ("D" + (periodos |> Seq.sortDescending |> String.Concat)).PadRight(PAD_SIZE)
 
 
-let filtrar_linea n (linea : string)=
+let filtrar_linea (n:int, linea : string)=
     if String.length linea <> LARGO_LINEA then 
         printfn "error en linea: %d" n
         linea
@@ -62,7 +65,7 @@ let filtrar_linea n (linea : string)=
 
 
 let procesar_vectores entrada salida =
-   leer entrada |> Seq.mapi filtrar_linea |> escribir salida
+   leer entrada |> Seq.map filtrar_linea |> escribir salida
 
 [<EntryPoint>]
 let main(argv: string[]) = 
