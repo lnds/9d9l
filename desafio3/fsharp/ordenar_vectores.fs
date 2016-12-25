@@ -12,25 +12,27 @@ let TAM_VECTOR_ENTRADA = TAM_VECTOR * CANT_INSTITUCIONES
 let LARGO_LINEA = POS_VECTOR + TAM_VECTOR_ENTRADA
 let TAM_SALIDA = POS_VECTOR + 1 + TAM_VECTOR
 
-let CERO = "000000"
+let BUF_SIZE = 65536
 
 let leer nomarch = seq {
-    use fr = new StreamReader(new FileStream(nomarch, FileMode.Open, FileAccess.Read, FileShare.Read, 4096))
+    use fr = new StreamReader(new FileStream(nomarch, FileMode.Open, FileAccess.Read, FileShare.Read, BUF_SIZE))
     while not fr.EndOfStream do 
         yield fr.ReadLine()
 }
 
 let escribir nomarch (lineas : string seq) =
-    use fw = new StreamWriter(nomarch, false, Encoding.ASCII,  4096)
+    use fw = new StreamWriter(nomarch, false, Encoding.ASCII,  BUF_SIZE)
     for linea in lineas
         do fw.WriteLine linea
 
-
-let no_es_cero (linea:string) (pos:int) = 
+let no_es_cero  (linea:string) (pos:int) = 
     let mutable result = false
-    for p in pos..pos+TAM_PERIODO-1 do
-        if linea.[p] <> '0' then 
+    let mutable i = pos
+    let top = pos+TAM_PERIODO-1
+    while i < top && result = false do
+        if linea.[i] <> '0' then 
             result <- true
+        i <- i + 1
     result
 
 let separar_periodos (linea:string) = seq {
