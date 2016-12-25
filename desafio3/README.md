@@ -50,6 +50,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
     | Clojure  |  9,53  |       1,21 | 0,48
     | Scala    |  6,71  |       1,72 | 0,67
     | Swift    |  6,35  |       1,82 | 0,71
+    | F#       |  9,90  |       1,17 | 0.46
 
 ## Lineas de código
 
@@ -62,6 +63,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Clojure  |   71 | 
     | Scala    |   82 | 
     | Swift    |  129 |
+    | F#       |   52 |
 
 ## Tiempo de Desarrollo
 
@@ -75,6 +77,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Clojure | 7:55 |
     | Scala   | 1:25 |
     | Swift   | 4:21 |
+    | F#      | 6:43 |
 
 # Licencia
 
