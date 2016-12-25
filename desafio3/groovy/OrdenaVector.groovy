@@ -19,13 +19,13 @@ class OrdenaVector {
         if(arg.size()>1 && arg[0]){
             achivoEntrada = arg[0]
         }else{
-            achivoEntrada = "D:\\Desarrollo\\EduardoDiaz\\desafio3\\vector100.txt"
+            achivoEntrada = "\\desafio3\\vector100.txt"
         }
         
         if(arg.size()>2 && arg[1]){
             archivoSalida = arg[1]
         }else{
-            archivoSalida = "D:\\Desarrollo\\EduardoDiaz\\desafio3\\salida100.txt"
+            archivoSalida = "\\desafio3\\salida100.txt"
         }
         
         new OrdenaVector().procesaArchivos(achivoEntrada, archivoSalida)
