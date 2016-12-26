@@ -37,13 +37,13 @@ public class OrdenaVector {
         if (args != null && args.length >= 1) {
             achivoEntrada = args[0];
         } else {
-            achivoEntrada = "D:\\Desarrollo\\EduardoDiaz\\desafio3\\vector100.txt";
+            achivoEntrada = "\\desafio3\\vector100.txt";
         }
 
         if (args != null && args.length >= 2) {
             archivoSalida = args[1];
         } else {
-            archivoSalida = "D:\\Desarrollo\\EduardoDiaz\\desafio3\\salida100.txt";
+            archivoSalida = "\\desafio3\\salida100.txt";
         }
 
         OrdenaVector ordenaVector = new OrdenaVector();
