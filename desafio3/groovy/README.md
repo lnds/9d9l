@@ -8,7 +8,7 @@ Configurar adecuadamente el ambiente Groovy (leer http://www.groovy-lang.org/ins
 
 ## Compilación
 
- 	$ groovyc OrdenaVector
+ 	$ groovyc OrdenaVector.groovy
 
 Esto dejará un archivo binario con el nombre OrdenaVector.class en el directorio actual.
 

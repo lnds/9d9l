@@ -1,8 +1,10 @@
+
 /**
  *
  * Version 1.0 463148 ms 7,7min
  * Version 2.0 311940 ms 5,2min
  * Version 3.0 305809 ms 5.0min
+ * Version 4.0 40043  ms 0.6min
  * @author MigSoft
  */
 class OrdenaVector {
@@ -13,22 +15,16 @@ class OrdenaVector {
     
     static main(arg){
         def inicio = new Date()
-        def achivoEntrada
-        def archivoSalida
-        
-        if(arg.size()>1 && arg[0]){
-            achivoEntrada = arg[0]
-        }else{
-            achivoEntrada = "\\desafio3\\vector100.txt"
-        }
-        
         if(arg.size()>2 && arg[1]){
-            archivoSalida = arg[1]
-        }else{
-            archivoSalida = "\\desafio3\\salida100.txt"
+            println "Error no se ingresaron argumentos requeridos"
+            println "Ejemplo groovy OrdenaVector [archivo entrada] [archivo salida]"
+            return
         }
         
+        def achivoEntrada = arg[0]
+        def archivoSalida = arg[1]
         new OrdenaVector().procesaArchivos(achivoEntrada, archivoSalida)
+        
         def fin = new Date()
         
         println "Tiempo ocupado: ${fin.time-inicio.time}"
@@ -40,8 +36,9 @@ class OrdenaVector {
         InputStreamReader isr = new InputStreamReader(fis);
         BufferedReader br = new BufferedReader(isr);
         File salidaArch = new File(salida)
+        BufferedWriter output = new BufferedWriter(new FileWriter(salidaArch))
         while ((linea = br.readLine()) != null) {
-            salidaArch << procesaLinea(linea)+"\n"
+            output << procesaLinea(linea)+"\n"
         }
     }
     
