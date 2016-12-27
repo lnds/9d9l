@@ -31,24 +31,23 @@ public class OrdenaVector {
      */
     public static void main(String[] args) {
         Date inicio = new Date();
-        String achivoEntrada;
-        String archivoSalida;
-
-        if (args != null && args.length >= 1) {
-            achivoEntrada = args[0];
-        } else {
-            achivoEntrada = "\\desafio3\\vector100.txt";
+       
+        if(args == null || args.length < 2){
+            System.err.println("Error no se ingresaron argumentos requeridos");
+            System.err.println("Ejemplo java OrdenaVector archivo_entrada archivo_salida");
+            return;
         }
 
-        if (args != null && args.length >= 2) {
-            archivoSalida = args[1];
-        } else {
-            archivoSalida = "\\desafio3\\salida100.txt";
+        File entrada = new File(args[0]);
+        if(!entrada.isFile()){
+            System.err.println("El archivo indicado no existe ("+args[0]+")");
+            return;
         }
-
+        File salida = new File(args[1]);
+        
         OrdenaVector ordenaVector = new OrdenaVector();
         try {
-            ordenaVector.procesaArchivos(achivoEntrada, archivoSalida);
+            ordenaVector.procesaArchivos(entrada, salida);
         } catch (IOException ex) {
             Logger.getLogger(OrdenaVector.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -57,18 +56,16 @@ public class OrdenaVector {
         System.out.println("Tiempo ocupado: " + (fin.getTime() - inicio.getTime()));
     }
 
-    public void procesaArchivos(String entrada, String salida) throws FileNotFoundException, IOException {
+    public void procesaArchivos(File entrada, File salida) throws FileNotFoundException, IOException {
         String linea;
         try (InputStream fis = new FileInputStream(entrada)) {
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
-            File salidaArch = new File(salida);
-            try (BufferedWriter output = new BufferedWriter(new FileWriter(salidaArch))) {
+            try (BufferedWriter output = new BufferedWriter(new FileWriter(salida))) {
                 while ((linea = br.readLine()) != null) {
                     output.write(procesaLinea(linea) + "\n");
                 }
             }
-            System.out.println("Salida: "+salidaArch.getAbsolutePath());
         }
     }
 

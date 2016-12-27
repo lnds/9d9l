@@ -21,7 +21,11 @@ class OrdenaVector {
             return
         }
         
-        def achivoEntrada = arg[0]
+        def achivoEntrada = new File(arg[0])
+        if(!achivoEntrada.isFile()){
+            println("El archivo indicado no existe (${arg[0]})");
+            return
+        }
         def archivoSalida = arg[1]
         new OrdenaVector().procesaArchivos(achivoEntrada, archivoSalida)
         
