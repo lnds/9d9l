@@ -11,23 +11,16 @@ class OrdenaVector {
     static final int INICIO_CADENA=9
     String rellenoBlanco = "".padRight( VECTOR * MAX_VECTOR +1, ' ' )
     
-    static main(arg){
+    static int main(arg){
+        
+        if(arg.size()!= 2){
+            println "uso: ordenar-vector archivo_entrada archivo_salida"
+            return -1;
+        }
+        def achivoEntrada = arg[0]
+        def archivoSalida = arg[1]
+
         def inicio = new Date()
-        def achivoEntrada
-        def archivoSalida
-        
-        if(arg.size()>1 && arg[0]){
-            achivoEntrada = arg[0]
-        }else{
-            achivoEntrada = "\\desafio3\\vector100.txt"
-        }
-        
-        if(arg.size()>2 && arg[1]){
-            archivoSalida = arg[1]
-        }else{
-            archivoSalida = "\\desafio3\\salida100.txt"
-        }
-        
         new OrdenaVector().procesaArchivos(achivoEntrada, archivoSalida)
         def fin = new Date()
         

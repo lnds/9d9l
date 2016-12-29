@@ -6,6 +6,9 @@ La invocación del programa es la siguiente:
 
     $ ordenar_vector archivo_entrada archivo_salida
 
+Si no se le entregan argumentos al programa este debe salir con un mensaje de error.
+Al finalizar debe desplegar el tiempo, en minutos y segundos, empleado en procesar todo el archivo de entrada.
+
 La entrada consiste en un archivo en que cada línea se divide en:
 
     Encabezado: 9 dígitos
@@ -32,8 +35,6 @@ La operación que se debe realizar es la siguiente:
 
 El programa ordenar_vector.c implementa correctamente este comportamiento, se puede usar de referencia.
 
-La salida estándar además debe desplegar la cantidad de líneas leidas y el tiempo, en segundos, empleado en procesar todo el archivo de entrada.
-
 
 # Resultados
 
@@ -42,15 +43,16 @@ La salida estándar además debe desplegar la cantidad de líneas leidas y el ti
 Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón de vectores, la tercera columna es el tiempo en C dividido por el tiempo en el lenguaje respectivo. El tiempo promedio se sacó sobre una muestra de 5 ejecuciones del programa. La columna Proporción es la división del tiempo en el lenguaje sobre el tiempo original en C (mide cuantas veces es más rápido con respecto a C), mientras mayor este número significa que el programa es más rápido. La columna Proporción 2 mide la velocidad con respecto al programa en C optimizado (compilado con la opción -O3).
 
     | Lenguaje | Tiempo | Proporción | Proporción 2
-    | C        | 11,56  |       1,00 | -
-    | C-opt    |  4,53  |       2,55 | 1,00
-    | Rust     |  5,53  |       2,09 | 0,82
-    | Go       |  3,44  |       3,36 | 1,32
-    | Haskell  | 10,15  |       1,14 | 0,45
-    | Clojure  |  9,53  |       1,21 | 0,48
-    | Scala    |  6,71  |       1,72 | 0,67
-    | Swift    |  6,35  |       1,82 | 0,71
-    | F#       |  9,90  |       1,17 | 0.46
+    | C        |  8,80  |       1,00 | -
+    | C-opt    |  3,54  |       2,48 | 1,00
+    | Rust     |  3,99  |       2,20 | 0,89
+    | Go       |  2,92  |       3,02 | 1,22
+    | Haskell  |  8,05  |       1,09 | 0,44
+    | Clojure  |  8,01  |       1,10 | 0,44
+    | Scala    |  6,02  |       1,46 | 0,59
+    | Swift    |  4.66  |       1,89 | 0,76
+    | F#       |  8.64  |       1,02 | 0.41
+    | Kotlin   |  3.81  |       2.31 | 0.93
 
 ## Lineas de código
 
@@ -64,6 +66,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Scala    |   82 | 
     | Swift    |  129 |
     | F#       |   52 |
+    | Kotlin   |   60 |
 
 ## Tiempo de Desarrollo
 
@@ -78,6 +81,11 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Scala   | 1:25 |
     | Swift   | 4:21 |
     | F#      | 6:43 |
+    | Kotlin  | 1:34 |
+
+## Aportes
+
+    
 
 # Licencia
 
