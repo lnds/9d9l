@@ -1,8 +1,10 @@
+
 /**
  *
  * Version 1.0 463148 ms 7,7min
  * Version 2.0 311940 ms 5,2min
  * Version 3.0 305809 ms 5.0min
+ * Version 4.0 40043  ms 0.6min
  * @author MigSoft
  */
 class OrdenaVector {
@@ -11,6 +13,7 @@ class OrdenaVector {
     static final int INICIO_CADENA=9
     String rellenoBlanco = "".padRight( VECTOR * MAX_VECTOR +1, ' ' )
     
+
     static int main(arg){
         
         if(arg.size()!= 2){
@@ -22,6 +25,7 @@ class OrdenaVector {
 
         def inicio = new Date()
         new OrdenaVector().procesaArchivos(achivoEntrada, archivoSalida)
+        
         def fin = new Date()
         
         println "Tiempo ocupado: ${fin.time-inicio.time}"
@@ -33,8 +37,9 @@ class OrdenaVector {
         InputStreamReader isr = new InputStreamReader(fis);
         BufferedReader br = new BufferedReader(isr);
         File salidaArch = new File(salida)
+        BufferedWriter output = new BufferedWriter(new FileWriter(salidaArch))
         while ((linea = br.readLine()) != null) {
-            salidaArch << procesaLinea(linea)+"\n"
+            output << procesaLinea(linea)+"\n"
         }
     }
     
