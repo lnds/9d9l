@@ -13,20 +13,17 @@ class OrdenaVector {
     static final int INICIO_CADENA=9
     String rellenoBlanco = "".padRight( VECTOR * MAX_VECTOR +1, ' ' )
     
-    static main(arg){
-        def inicio = new Date()
-        if(arg.size()>2 && arg[1]){
-            println "Error no se ingresaron argumentos requeridos"
-            println "Ejemplo groovy OrdenaVector [archivo entrada] [archivo salida]"
-            return
-        }
+
+    static int main(arg){
         
-        def achivoEntrada = new File(arg[0])
-        if(!achivoEntrada.isFile()){
-            println("El archivo indicado no existe (${arg[0]})");
-            return
+        if(arg.size()!= 2){
+            println "uso: ordenar-vector archivo_entrada archivo_salida"
+            return -1;
         }
+        def achivoEntrada = arg[0]
         def archivoSalida = arg[1]
+
+        def inicio = new Date()
         new OrdenaVector().procesaArchivos(achivoEntrada, archivoSalida)
         
         def fin = new Date()
