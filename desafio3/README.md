@@ -6,6 +6,9 @@ La invocación del programa es la siguiente:
 
     $ ordenar_vector archivo_entrada archivo_salida
 
+Si no se le entregan argumentos al programa este debe salir con un mensaje de error.
+Al finalizar debe desplegar el tiempo, en minutos y segundos, empleado en procesar todo el archivo de entrada.
+
 La entrada consiste en un archivo en que cada línea se divide en:
 
     Encabezado: 9 dígitos
@@ -32,8 +35,6 @@ La operación que se debe realizar es la siguiente:
 
 El programa ordenar_vector.c implementa correctamente este comportamiento, se puede usar de referencia.
 
-La salida estándar además debe desplegar la cantidad de líneas leidas y el tiempo, en segundos, empleado en procesar todo el archivo de entrada.
-
 
 # Resultados
 
@@ -51,6 +52,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
     | Scala    |  6,02  |       1,46 | 0,59
     | Swift    |  4.66  |       1,89 | 0,76
     | F#       |  8.64  |       1,02 | 0.41
+    | Kotlin   |  3.81  |       2.31 | 0.93
 
 ## Lineas de código
 
@@ -64,6 +66,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Scala    |   82 | 
     | Swift    |  129 |
     | F#       |   52 |
+    | Kotlin   |   60 |
 
 ## Tiempo de Desarrollo
 
@@ -78,6 +81,11 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Scala   | 1:25 |
     | Swift   | 4:21 |
     | F#      | 6:43 |
+    | Kotlin  | 1:34 |
+
+## Aportes
+
+    
 
 # Licencia
 
