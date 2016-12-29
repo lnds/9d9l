@@ -23,3 +23,5 @@ salida.out
 *.xlsx
 /desafio1/swift/Packages
 /desafio3/kotlin/.gradle
+.DS_Store
+.stack-work

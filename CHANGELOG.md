@@ -8,6 +8,18 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.3.8] - 2016-12-28
+
+## Added
+
+- Solución en Kotlin
+
+## Changed
+
+- Ajusta las medidas a nuevo computador
+- Especifica un poco mejor los requerimientos
+- Cambia cabal por stack en la versión Haskell
+
 ## [0.3.7] - 2016-12-25
 
 ## Added
