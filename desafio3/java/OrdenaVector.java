@@ -4,16 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.IOException;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -57,14 +56,19 @@ public class OrdenaVector {
     }
 
     public void procesaArchivos(File entrada, File salida) throws FileNotFoundException, IOException {
-        String linea;
-        try (InputStream fis = new FileInputStream(entrada)) {
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
-            try (BufferedWriter output = new BufferedWriter(new FileWriter(salida))) {
-                while ((linea = br.readLine()) != null) {
-                    output.write(procesaLinea(linea) + "\n");
+        try (BufferedWriter output = new BufferedWriter(new FileWriter(salida))) {
+            Consumer<String> c = (linea) -> {
+                try {
+                    output.write(this.procesaLinea(linea));
+                } catch (IOException ex) {
+                    Logger.getLogger(OrdenaVector.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            };
+
+            try (InputStream fis = new FileInputStream(entrada)) {
+                InputStreamReader isr = new InputStreamReader(fis);
+                BufferedReader br = new BufferedReader(isr);
+                br.lines().parallel().forEach(c);
             }
         }
     }
@@ -72,24 +76,24 @@ public class OrdenaVector {
     public String procesaLinea(String linea) {
         int inicio = INICIO_CADENA;
         int fin = INICIO_CADENA + VECTOR;
-        HashSet salida = new HashSet();
+        ArrayList<String> salida = new ArrayList();
         while (linea.length() > fin) {
             String fecha = linea.substring(inicio, fin);
             inicio += VECTOR;
             fin += VECTOR;
             salida.add(fecha);
         }
-        salida.remove("000000");
         int elementos = salida.size();
         if (elementos == 0) {//sin elementos
-            return linea.substring(0,INICIO_CADENA)+"N";
+            return linea.substring(0, INICIO_CADENA) + "N\n";
         } else if (elementos > MAX_VECTOR) {//con mas de 23 elementos
-            return linea.substring(0,INICIO_CADENA)+"S"+RELLENO_BLANCO;
+            return linea.substring(0, INICIO_CADENA) + "S" + RELLENO_BLANCO + "\n";
         } else {
-            ArrayList list = new ArrayList<>(Arrays.asList(salida.toArray()));
-            Collections.sort(list);
-            Collections.reverse(list);
-            return linea.substring(0,INICIO_CADENA)+"D"+String.join("", list);
+            String mergedString = salida.parallelStream().
+                    filter(string -> !"000000".equals(string)).
+                    sorted((e1, e2) -> e2.compareTo(e1)).                    
+                    collect(Collectors.joining(""));
+            return linea.substring(0, INICIO_CADENA) + "D" + mergedString + "\n";
         }
     }
 
