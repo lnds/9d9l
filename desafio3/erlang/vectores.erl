@@ -11,7 +11,8 @@
 -define(LARGO_LINEA, 838).
 -define(TAM_SALIDA, 148).
 -define(TAM_RELLENO, 139).
--define(RELLENO, "      ").
+-define(S_RELLENO, "S                                                                                                                                          ").
+-define(N_RELLENO, "N                                                                                                                                          ").
 -define(CEROS, "000000").
 
 
@@ -51,45 +52,34 @@ procesar_vector(Vector, Salida, Nl) ->
 	end.
 
 ordenar_vector(Vector) ->
-	{Encabezado,Periodos} = separar_y_ordenar_periodos(Vector),
+	Encabezado = string:left(Vector, ?POS_VECTOR),
+	Periodos = sets:to_list(separar_periodos(string:strip(Vector, right, $\n))),
 	Largo = length(Periodos),
-	if Largo =:= 0 -> Encabezado ++ string:left("N", ?TAM_RELLENO);
-	   Largo > ?ELEMENTOS_VECTOR -> Encabezado ++ string:left("S", ?TAM_RELLENO);
+	if Largo =:= 0 -> [Encabezado|?N_RELLENO];
+	   Largo > ?ELEMENTOS_VECTOR -> [Encabezado|?S_RELLENO];
 	   true ->  P = lists:reverse(lists:sort(Periodos)),
 	   			S = lists:flatten(P),
 	   			L = (?TAM_RELLENO-length(S)) - 1,
-	   			Encabezado ++ "D" ++ S ++ string:left(" ", L)
+	   			[Encabezado,"D",S,string:left(" ", L)]
 	end.
-
-separar_y_ordenar_periodos(Vector) ->
-	{string:left(Vector, ?POS_VECTOR), eliminar_duplicados(separar_periodos(string:strip(Vector, right, $\n)))}.
-
 
 separar_periodos(Vector) ->
 	Largo = length(Vector),
-	separar_periodos(string:substr(Vector, ?POS_VECTOR+1), [], Largo).
+	separar_periodos(string:substr(Vector, ?POS_VECTOR+1), sets:new(), Largo-?POS_VECTOR).
 
 
 separar_periodos(Linea, Periodos, ?TAM_PERIODO) -> 
 	if Linea =:= ?CEROS -> Periodos;
-	   true -> [Linea|Periodos]
+	   true -> sets:add_element(Linea, Periodos)
 	end;
 
-separar_periodos(Linea, Periodos, _) ->
+separar_periodos(Linea, Periodos, Largo) ->
 	Periodo = string:substr(Linea, 1, ?TAM_PERIODO),
 	Resto = string:substr(Linea, ?TAM_PERIODO+1),
-	Largo = length(Resto),
-	if Periodo =:= ?CEROS -> separar_periodos(Resto, Periodos, Largo);
-	   true -> separar_periodos(Resto, [Periodo|Periodos], Largo)
+	if Periodo =:= ?CEROS -> separar_periodos(Resto, Periodos, Largo-?TAM_PERIODO);
+	   true -> separar_periodos(Resto, sets:add_element(Periodo, Periodos),  Largo-?TAM_PERIODO)
 	end.
 	
-eliminar_duplicados(Periodos) ->
-	Largo = length(Periodos),
-	if Largo =:= 0 -> Periodos;
-	   true -> S = sets:from_list(Periodos),
-	           sets:to_list(S)
-	end.
-
 
 cronometrar(F) -> 
     statistics(wall_clock),
