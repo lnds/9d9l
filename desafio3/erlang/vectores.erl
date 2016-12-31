@@ -57,7 +57,7 @@ ordenar_vector(Vector) ->
 	Largo = length(Periodos),
 	if Largo =:= 0 -> [Encabezado|?N_RELLENO];
 	   Largo > ?ELEMENTOS_VECTOR -> [Encabezado|?S_RELLENO];
-	   true ->  P = lists:reverse(lists:sort(Periodos)),
+	   true ->  P = lists:sort(fun(X,Y) -> Y < X end, Periodos),
 	   			S = lists:flatten(P),
 	   			L = (?TAM_RELLENO-length(S)) - 1,
 	   			[Encabezado,"D",S,string:left(" ", L)]
