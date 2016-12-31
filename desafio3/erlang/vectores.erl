@@ -11,6 +11,8 @@
 -define(LARGO_LINEA, 838).
 -define(TAM_SALIDA, 148).
 -define(TAM_RELLENO, 139).
+-define(RELLENO, "      ").
+-define(CEROS, "000000").
 
 
 main() -> io:format(?ERROR).
@@ -53,7 +55,10 @@ ordenar_vector(Vector) ->
 	Largo = length(Periodos),
 	if Largo =:= 0 -> Encabezado ++ string:left("N", ?TAM_RELLENO);
 	   Largo > ?ELEMENTOS_VECTOR -> Encabezado ++ string:left("S", ?TAM_RELLENO);
-	   true -> Encabezado ++ string:left("D" ++ Periodos, ?TAM_RELLENO)
+	   true ->  P = lists:reverse(lists:sort(Periodos)),
+	   			S = lists:flatten(P),
+	   			L = (?TAM_RELLENO-length(S)) - 1,
+	   			Encabezado ++ "D" ++ S ++ string:left(" ", L)
 	end.
 
 separar_y_ordenar_periodos(Vector) ->
@@ -66,21 +71,25 @@ separar_periodos(Vector) ->
 
 
 separar_periodos(Linea, Periodos, ?TAM_PERIODO) -> 
-	if Linea =:= "000000" -> Periodos;
-	   true -> [Linea|Periodos]
+	if Linea =:= ?CEROS -> Periodos;
+	   true -> [[Linea]|Periodos]
 	end;
 
 separar_periodos(Linea, Periodos, _) ->
 	Periodo = string:substr(Linea, 1, ?TAM_PERIODO),
 	Resto = string:substr(Linea, ?TAM_PERIODO+1),
 	Largo = length(Resto),
-	if Periodo =:= "000000" -> separar_periodos(Resto, Periodos, Largo);
-	   true -> separar_periodos(Resto, [Periodo|Periodos], Largo)
+	if Periodo =:= ?CEROS -> separar_periodos(Resto, Periodos, Largo);
+	   true -> separar_periodos(Resto, [[Periodo]|Periodos], Largo)
 	end.
 	
 ordenar_periodos(Periodos) ->
-	PeriodosOrdenados = lists:reverse(lists:sort(Periodos)),
-	string:join(PeriodosOrdenados, "").
+	Largo = length(Periodos),
+	if Largo =:= 0 -> Periodos;
+	   true ->
+	S = sets:from_list(Periodos),
+	sets:to_list(S)
+end.
 
 
 cronometrar(F) -> 
