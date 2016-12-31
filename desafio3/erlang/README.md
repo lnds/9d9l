@@ -7,7 +7,7 @@ Esta es la implementación en Erlang del desafío 3.
 Para probarlo debes hacer:
 
 	$ erlc vectores.erl
-	$ erl -noshell -s vectores main [archivo_entrada archivo_salida] -s init stop
+	$ erl -noshell -s vectores main archivo_entrada archivo_salida -s init stop
 
 ## Compilación
 
@@ -19,7 +19,7 @@ Esto genera un archivo vectores.beam que se ejecuta con la VM de Erlang.
 
 Generado el archivo .beam puedes ejecutarlo  haciendo:
 
-    $  erl -noshell -s vectores main  [archivo_entrada archivo_salida] -s init stop
+    $  erl -noshell -s vectores main archivo_entrada archivo_salida -s init stop
 
 
 ## Documentación

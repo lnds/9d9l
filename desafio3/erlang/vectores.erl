@@ -30,7 +30,7 @@ preparar_salida(error, Reason,_) ->
 	io:format("ERROR, No pudo abrir archivo de entrada: ~s\n", [Reason]);
 
 preparar_salida(ok, Entrada, ArchivoEntrada) ->
-	{Status, Salida} = file:open(ArchivoEntrada, [write]),
+	{Status, Salida} = file:open(ArchivoEntrada, [write, delayed_write]),
 	procesar_vectores(Status, Entrada, Salida, 0).
 
 
@@ -45,9 +45,9 @@ procesar_vectores(ok, Entrada, Salida, Nl) ->
 
 procesar_vector(Vector, Salida, Nl) ->
 	Largo = string:len(Vector),
-	if Largo =:= ?LARGO_LINEA -> io:fwrite(Salida,"~s\n", [ordenar_vector(Vector)]);
+	if Largo =:= ?LARGO_LINEA -> file:write(Salida, ordenar_vector(Vector)++"\n");
 	   true -> io:format("error linea ~b, largo ~b debe ser ~b\n", [Nl, Largo, ?LARGO_LINEA]),
-	   		   io:fwrite(Salida, "~s", [Vector])
+	   		   file:write(Salida, Vector)
 	end.
 
 ordenar_vector(Vector) ->
@@ -62,7 +62,7 @@ ordenar_vector(Vector) ->
 	end.
 
 separar_y_ordenar_periodos(Vector) ->
-	{string:left(Vector, ?POS_VECTOR), ordenar_periodos(separar_periodos(string:strip(Vector, right, $\n)))}.
+	{string:left(Vector, ?POS_VECTOR), eliminar_duplicados(separar_periodos(string:strip(Vector, right, $\n)))}.
 
 
 separar_periodos(Vector) ->
@@ -72,7 +72,7 @@ separar_periodos(Vector) ->
 
 separar_periodos(Linea, Periodos, ?TAM_PERIODO) -> 
 	if Linea =:= ?CEROS -> Periodos;
-	   true -> [[Linea]|Periodos]
+	   true -> [Linea|Periodos]
 	end;
 
 separar_periodos(Linea, Periodos, _) ->
@@ -80,16 +80,15 @@ separar_periodos(Linea, Periodos, _) ->
 	Resto = string:substr(Linea, ?TAM_PERIODO+1),
 	Largo = length(Resto),
 	if Periodo =:= ?CEROS -> separar_periodos(Resto, Periodos, Largo);
-	   true -> separar_periodos(Resto, [[Periodo]|Periodos], Largo)
+	   true -> separar_periodos(Resto, [Periodo|Periodos], Largo)
 	end.
 	
-ordenar_periodos(Periodos) ->
+eliminar_duplicados(Periodos) ->
 	Largo = length(Periodos),
 	if Largo =:= 0 -> Periodos;
-	   true ->
-	S = sets:from_list(Periodos),
-	sets:to_list(S)
-end.
+	   true -> S = sets:from_list(Periodos),
+	           sets:to_list(S)
+	end.
 
 
 cronometrar(F) -> 
