@@ -61,16 +61,12 @@ ordenar_vector(Vector) ->
 	Encabezado = substr(Vector, 1, ?POS_VECTOR),
 	Periodos = separar_periodos(substr(Vector, ?POS_VECTOR+1, ?LARGO_VECTOR), new(), ?LARGO_VECTOR),%separar_periodos(Vector),
 	Largo = size(Periodos),
-	if Largo =:= 0 -> [Encabezado|?N_RELLENO];
-	   Largo > ?ELEMENTOS_VECTOR -> [Encabezado|?S_RELLENO];
+	if Largo =:= 0 -> Encabezado ++ ?N_RELLENO;
+	   Largo > ?ELEMENTOS_VECTOR -> Encabezado ++ ?S_RELLENO;
 	   true ->  P = reverse(to_list(Periodos)),
 	   			L = (?TAM_RELLENO-len(P)*?TAM_PERIODO) - 1,
 	   			[Encabezado,"D", P, left(" ", L)]
 	end.
-
-separar_periodos(Vector) ->
-	separar_periodos(substr(Vector, ?POS_VECTOR+1, ?LARGO_VECTOR), new(), ?LARGO_VECTOR).
-
 
 separar_periodos(Linea, Periodos, ?TAM_PERIODO) -> 
 	if Linea =:= ?CEROS -> Periodos;
