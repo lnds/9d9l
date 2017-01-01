@@ -62,9 +62,8 @@ ordenar_vector(Vector) ->
 	if Largo =:= 0 -> [Encabezado|?N_RELLENO];
 	   Largo > ?ELEMENTOS_VECTOR -> [Encabezado|?S_RELLENO];
 	   true ->  P = reverse(to_list(Periodos)),
-	   			S = flatten(P),
-	   			L = (?TAM_RELLENO-len(S)) - 1,
-	   			[Encabezado,"D",S, left(" ", L)]
+	   			L = (?TAM_RELLENO-len(P)*?TAM_PERIODO) - 1,
+	   			[Encabezado,"D", P, left(" ", L)]
 	end.
 
 separar_periodos(Vector) ->
