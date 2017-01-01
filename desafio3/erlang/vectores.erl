@@ -15,6 +15,7 @@
 -define(LARGO_LINEA, 838).
 -define(TAM_SALIDA, 148).
 -define(TAM_RELLENO, 139).
+-define(LARGO_VECTOR, 828).
 -define(S_RELLENO, "S                                                                                                                                          ").
 -define(N_RELLENO, "N                                                                                                                                          ").
 -define(CEROS, "000000").
@@ -24,7 +25,8 @@ main() -> io:format(?ERROR).
 main([Entrada,Salida]) -> 
 	cronometrar(fun() -> 
 		procesar_archivo(Entrada, Salida)
-	end).
+	end);
+main([_,_|_]) -> io:format(?ERROR).
 
 
 procesar_archivo(ArchivoEntrada, ArchivoSalida) ->
@@ -44,7 +46,7 @@ procesar_vectores(error, _, Reason, _) ->
 
 procesar_vectores(ok, Entrada, Salida, Nl) ->
 	case file:read_line(Entrada) of 
-		eof -> file:close(Entrada);
+		eof -> file:close(Entrada), file:close(Salida);
 		{ok,Linea} -> procesar_vector(Linea, Salida, Nl), procesar_vectores(ok, Entrada, Salida, Nl+1)
 	end.
 
@@ -57,7 +59,7 @@ procesar_vector(Vector, Salida, Nl) ->
 
 ordenar_vector(Vector) ->
 	Encabezado = substr(Vector, 1, ?POS_VECTOR),
-	Periodos = separar_periodos(strip(Vector, right, $\n)),
+	Periodos = separar_periodos(substr(Vector, ?POS_VECTOR+1, ?LARGO_VECTOR), new(), ?LARGO_VECTOR),%separar_periodos(Vector),
 	Largo = size(Periodos),
 	if Largo =:= 0 -> [Encabezado|?N_RELLENO];
 	   Largo > ?ELEMENTOS_VECTOR -> [Encabezado|?S_RELLENO];
@@ -67,8 +69,7 @@ ordenar_vector(Vector) ->
 	end.
 
 separar_periodos(Vector) ->
-	Largo = ?LARGO_LINEA-1,
-	separar_periodos(substr(Vector, ?POS_VECTOR+1), new(), Largo-?POS_VECTOR).
+	separar_periodos(substr(Vector, ?POS_VECTOR+1, ?LARGO_VECTOR), new(), ?LARGO_VECTOR).
 
 
 separar_periodos(Linea, Periodos, ?TAM_PERIODO) -> 
