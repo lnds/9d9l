@@ -1,5 +1,9 @@
 -module (vectores).
+-compile({no_auto_import,[size/1]}).
 -export ([main/0, main/1]).
+-import (string, [substr/2, substr/3, len/1, strip/3, left/2]).
+-import (lists, [sort/2, flatten/1, reverse/1]).
+-import (ordsets, [to_list/1, add_element/2, size/1, new/0]).
 
 -define(ERROR, "uso: ordenar_vectores archivo_entrada archivo_salida\n").
 -define(POS_VECTOR, 9).
@@ -45,39 +49,39 @@ procesar_vectores(ok, Entrada, Salida, Nl) ->
 	end.
 
 procesar_vector(Vector, Salida, Nl) ->
-	Largo = string:len(Vector),
+	Largo = len(Vector),
 	if Largo =:= ?LARGO_LINEA -> file:write(Salida, ordenar_vector(Vector)++"\n");
 	   true -> io:format("error linea ~b, largo ~b debe ser ~b\n", [Nl, Largo, ?LARGO_LINEA]),
 	   		   file:write(Salida, Vector)
 	end.
 
 ordenar_vector(Vector) ->
-	Encabezado = string:left(Vector, ?POS_VECTOR),
-	Periodos = sets:to_list(separar_periodos(string:strip(Vector, right, $\n))),
-	Largo = length(Periodos),
+	Encabezado = substr(Vector, 1, ?POS_VECTOR),
+	Periodos = separar_periodos(strip(Vector, right, $\n)),
+	Largo = size(Periodos),
 	if Largo =:= 0 -> [Encabezado|?N_RELLENO];
 	   Largo > ?ELEMENTOS_VECTOR -> [Encabezado|?S_RELLENO];
-	   true ->  P = lists:sort(fun(X,Y) -> Y < X end, Periodos),
-	   			S = lists:flatten(P),
-	   			L = (?TAM_RELLENO-length(S)) - 1,
-	   			[Encabezado,"D",S,string:left(" ", L)]
+	   true ->  P = reverse(to_list(Periodos)),
+	   			S = flatten(P),
+	   			L = (?TAM_RELLENO-len(S)) - 1,
+	   			[Encabezado,"D",S, left(" ", L)]
 	end.
 
 separar_periodos(Vector) ->
-	Largo = length(Vector),
-	separar_periodos(string:substr(Vector, ?POS_VECTOR+1), sets:new(), Largo-?POS_VECTOR).
+	Largo = ?LARGO_LINEA-1,
+	separar_periodos(substr(Vector, ?POS_VECTOR+1), new(), Largo-?POS_VECTOR).
 
 
 separar_periodos(Linea, Periodos, ?TAM_PERIODO) -> 
 	if Linea =:= ?CEROS -> Periodos;
-	   true -> sets:add_element(Linea, Periodos)
+	   true -> add_element(Linea, Periodos)
 	end;
 
 separar_periodos(Linea, Periodos, Largo) ->
-	Periodo = string:substr(Linea, 1, ?TAM_PERIODO),
-	Resto = string:substr(Linea, ?TAM_PERIODO+1),
+	Periodo = substr(Linea, 1, ?TAM_PERIODO),
+	Resto = substr(Linea, ?TAM_PERIODO+1),
 	if Periodo =:= ?CEROS -> separar_periodos(Resto, Periodos, Largo-?TAM_PERIODO);
-	   true -> separar_periodos(Resto, sets:add_element(Periodo, Periodos),  Largo-?TAM_PERIODO)
+	   true -> separar_periodos(Resto, add_element(Periodo, Periodos),  Largo-?TAM_PERIODO)
 	end.
 	
 
