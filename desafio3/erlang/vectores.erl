@@ -35,7 +35,7 @@ preparar_salida(error, Reason,_) ->
 	io:format("ERROR, No pudo abrir archivo de entrada: ~s\n", [Reason]);
 
 preparar_salida(ok, Entrada, ArchivoEntrada) ->
-	{Status, Salida} = file:open(ArchivoEntrada, [write, delayed_write]),
+	{Status, Salida} = file:open(ArchivoEntrada, [write, raw, delayed_write]),
 	procesar_vectores(Status, Entrada, Salida, 0).
 
 
