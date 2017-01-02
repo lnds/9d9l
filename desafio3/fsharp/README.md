@@ -14,7 +14,7 @@ Para probarlo debes hacer:
 
 ## Compilación
 
- 	$ fsharpc -O FSharp.Data/bin/FSharp.Data.dll ordenar_vectores.fs
+ 	$ fsharpc -O ordenar_vectores.fs
 
 Esto dejará un archivo .exe en el directorio actual.
 
@@ -22,7 +22,7 @@ Esto dejará un archivo .exe en el directorio actual.
 
 Generado el .exe puedes ejecutarlo directamente haciendo:
 
-    $ mono Weather.exe ordenar_vectores.exe archivo_entrada archivo_salida
+    $ mono ordenar_vectores.exe archivo_entrada archivo_salida
 
 
 ## Documentación
