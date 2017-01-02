@@ -78,13 +78,15 @@ func main() {
 		
 	entrada, err := os.Open(os.Args[1])
 	if err != nil {
-		panic(fmt.Sprintf("No pudo abrir archivo %s, causa: %s\n", os.Args[1], err))
+		fmt.Printf("ERROR: No pudo abrir archivo %s, causa: %s\n", os.Args[1], err)
+		os.Exit(-1)
 	}
 	defer entrada.Close()
 
 	salida, err := os.Create(os.Args[2])
 	if err != nil {
-		panic(fmt.Sprintf("No pudo crear archivo %s, causa: %s\n", os.Args[2], err))
+		fmt.Printf("ERROR: No pudo crear archivo %s, causa: %s\n", os.Args[2], err)
+		os.Exit(-1)
 	}
 	defer salida.Close()
 
