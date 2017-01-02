@@ -6,7 +6,6 @@ import java.io._
 
 object Main {
 
-
   val bufferSize = 4096
   val encoding = "UTF-8"
   val time_report_message = "tiempo ocupado: "
@@ -47,7 +46,7 @@ object Main {
       else if (len > tamVector)
           "S" + " " * tamRelleno
       else 
-          "D" +  periodos.mkString + " "*(tamRelleno-len*tamPeriodo)
+          "D" + periodos.mkString + " "*(tamRelleno-len*tamPeriodo)
     )
   }
 

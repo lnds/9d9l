@@ -65,7 +65,11 @@ let filtrar_linea (n:int, linea : string)=
 
 
 let procesar_vectores entrada salida =
-   leer entrada |> Seq.map filtrar_linea |> escribir salida
+    try
+        leer entrada |> Seq.map filtrar_linea |> escribir salida
+    with
+        | :? System.IO.FileNotFoundException -> 
+            printfn "no pudo abrir archivo %s"  entrada
 
 [<EntryPoint>]
 let main(argv: string[]) = 

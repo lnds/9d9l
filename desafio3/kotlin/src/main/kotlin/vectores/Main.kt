@@ -53,9 +53,13 @@ fun procesarLinea(nl:Int, linea:String) : String {
 fun procesarVectores(archivoEntrada:String, archivoSalida:String) {
     val salida = File(archivoSalida).printWriter()
     var nl = 0
-    File(archivoEntrada).forEachLine { linea ->
-        salida.println(procesarLinea(nl, linea))
-        nl += 1
+    try {
+        File(archivoEntrada).forEachLine { linea ->
+            salida.println(procesarLinea(nl, linea))
+            nl += 1
+        }
+    } catch (ex:java.io.FileNotFoundException) {
+        println("no pudo abrir archivo "+archivoEntrada)
     }
     salida.close()
 }

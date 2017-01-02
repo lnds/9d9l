@@ -48,7 +48,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
     | Rust     |  3,99  |       2,20 | 0,89
     | Go       |  2,92  |       3,02 | 1,22
     | Haskell  |  8,05  |       1,09 | 0,44
-    | Clojure  |  8,01  |       1,10 | 0,44
+    | Clojure  |  7.79  |       1,13 | 0,45
     | Scala    |  6,02  |       1,46 | 0,59
     | Swift    |  4.66  |       1,89 | 0,76
     | F#       |  8.64  |       1,02 | 0.41
@@ -63,7 +63,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Rust     |   90 |
     | Go       |   94 |
     | Haskell  |   62 |
-    | Clojure  |   71 | 
+    | Clojure  |   70 | 
     | Scala    |   82 | 
     | Swift    |  129 |
     | F#       |   52 |
@@ -79,7 +79,7 @@ Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://Timi
     | Rust    | 7:23 |
     | Go      | 3:25 |
     | Haskell | 4:51 |
-    | Clojure | 7:55 |
+    | Clojure | 8:15 |
     | Scala   | 1:25 |
     | Swift   | 4:21 |
     | F#      | 6:43 |
@@ -97,7 +97,7 @@ Ordenados del más rápido al más lento:
     | Rust     |    3.99  |
     | Swift    |    4.66  |
     | Scala    |    6.02  |
-    | Clojure  |    8.01  |
+    | Clojure  |    7.79  |
     | Haskell  |    8.05  |
     | F#       |    8.64  |
     | C        |    8.80  |
