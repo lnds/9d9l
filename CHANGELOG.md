@@ -8,6 +8,16 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.3.9]
+
+## Added - 2017-01-02
+
+- Solución en Erlang
+
+## Changed
+
+- Aportes en Java
+
 ## [0.3.8] - 2016-12-28
 
 ## Added
