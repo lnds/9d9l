@@ -5,25 +5,19 @@ Este es el desafío 2 escrito en Haskell
 
 ## Configuración
 
-Debes instalar Cabal (https://www.haskell.org/cabal/)
-
-Luego debes insddtalar estos paquetes:
-
-	cabal install clock
-	cabal install formatting
-	cabal install split
+Esta versión ocupa Stack
 
 ## Ejecución
 
 Para probarlo puedes hacer:
 
-	$ cabal run -- archivo_entrada archivo_salida
+	$ stack exec ordenarvector archivo_entrada archivo_salida
 
 ## Compilación
 
- 	$ cabal build
+ 	$ stack build
 
-Esto dejará un archivo ejecutable en el directorio dist/build/weather
+Esto dejará un archivo ejecutable en el directorio .stack-work/dist/x86_64/Cabal-1.22.5.0/build/ordenarvector/ordenarvector
 
 
 ## Uso
@@ -31,8 +25,6 @@ Esto dejará un archivo ejecutable en el directorio dist/build/weather
 Generado el binario puedes ejecutarlo directamente haciendo:
 
     $ dist/build/ordenarvector/ordenarvector archivo_entrada archivo_salida
-
-Recuerda configurar la variable de ambiente WEATHER_API_KEY para ejecutar el programa.
 
 
 ## Documentación

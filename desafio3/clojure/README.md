@@ -24,7 +24,7 @@ Donde VERSION es la versión definida en project.clj.
 
 ## Uso
 
-	$ java -jar target/uberjar/ordenar-vector-VERSION-standalone.jar [-p] ciudad1 ciudad2 ciudad3 ...
+	$ java -jar target/uberjar/ordenar-vector-VERSION-standalone.jar archivo_entrada archivo_salida
 	
 ## Licencia
 
