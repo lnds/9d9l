@@ -67,7 +67,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Scala    |   82 | 
     | Swift    |  129 |
     | F#       |   52 |
-    | Kotlin   |   60 |
+    | Kotlin   |   64 |
     | Erlang   |   75 |
 
 ## Tiempo de Desarrollo
@@ -88,20 +88,19 @@ Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://Timi
 
 ## Ranking
 
-Ordenados del más rápido al más lento:
+Ordenados del más corto al más largo:
 
-    | Lenguaje |   Tiempo |
-    | Go       |    2.92  |
-    | C Opt.   |    3.54  |
-    | Kotlin   |    3.81  |
-    | Rust     |    3.99  |
-    | Swift    |    4.66  |
-    | Scala    |    6.02  |
-    | Clojure  |    7.79  |
-    | Haskell  |    8.05  |
-    | F#       |    8.64  |
-    | C        |    8.80  |
-    | Erlang   |   49.25  |
+    # |  Lenguaje |   Lineas |
+    1 |  F#       |     52   |
+    2 |  Haskell  |     62   |   
+    3 |  Kotlin   |     64   |
+    4 |  Clojure  |     70   |
+    5 |  Erlang   |     75   |
+    6 |  Scala    |     82   |
+    7 |  C        |     90   |
+    8 |  Rust     |     90   |
+    9 |  Go       |     94   |
+   10 |  Swift    |    129   |
 
 ## Aportes
 

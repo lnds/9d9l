@@ -33,9 +33,9 @@
 	(let [periodos  (extraer-periodos linea)
 		  n (count periodos)]
 		 (cond 
-			(zero? n) (.concat "N" relleno-vector)
-		 	(> n elementos) (.concat "S" relleno-vector)
-		 	:else (.concat "D" (s/join (take elementos (concat (sort #(compare ^String %2 ^String %1) periodos) (repeat relleno))))))))
+			(zero? n) (str "N" relleno-vector)
+		 	(> n elementos) (str "S" relleno-vector)
+		 	:else (str "D" (s/join (take elementos (concat (sort #(compare ^String %2 ^String %1) periodos) (repeat relleno))))))))
 
 (defn filtrar-linea [[n ^String linea]]
 	(if (= tam-linea (.length linea)) 
