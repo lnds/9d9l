@@ -18,9 +18,9 @@
 -define(TAM_SALIDA, 148).
 -define(TAM_RELLENO, 139).
 -define(LARGO_VECTOR, 828).
--define(S_RELLENO, "S                                                                                                                                          ").
--define(N_RELLENO, "N                                                                                                                                          ").
--define(CEROS, "000000").
+-define(S_RELLENO, <<"S                                                                                                                                          ">>).
+-define(N_RELLENO, <<"N                                                                                                                                          ">>).
+-define(CEROS, <<"000000">>).
 
 
 main() -> io:format(?ERROR).
@@ -32,14 +32,14 @@ main([_,_|_]) -> io:format(?ERROR).
 
 
 procesar_archivo(ArchivoEntrada, ArchivoSalida) ->
-	{Status, Entrada} = file:open(ArchivoEntrada,[read, raw, read_ahead]),
+	{Status, Entrada} = file:open(ArchivoEntrada,[read, raw, binary, {read_ahead, 64000000}]),
 	preparar_salida(Status,Entrada, ArchivoSalida).
 
 preparar_salida(error, Reason,_) ->
 	io:format("ERROR, No pudo abrir archivo de entrada: ~s\n", [Reason]);
 
 preparar_salida(ok, Entrada, ArchivoEntrada) ->
-	{Status, Salida} = file:open(ArchivoEntrada, [write, raw, delayed_write]),
+	{Status, Salida} = file:open(ArchivoEntrada, [write, raw, binary, {delayed_write, 64000000, 5}]),
 	procesar_vectores(Status, Entrada, Salida, 0).
 
 
@@ -53,16 +53,15 @@ procesar_vectores(ok, Entrada, Salida, Nl) ->
 	end.
 
 procesar_vector(Vector, Salida, Nl) ->
-	Largo = len(Vector),
-	if Largo =:= ?LARGO_LINEA -> 
-			file:write(Salida, [ordenar_vector(Vector)|"\n"]);
+	Largo = byte_size(Vector),
+	if Largo =:= ?LARGO_LINEA -> file:write(Salida, [ordenar_vector(Vector), "\n"]);
 	   true -> io:format("error linea ~b, largo ~b debe ser ~b\n", [Nl, Largo, ?LARGO_LINEA]),
 	   		   file:write(Salida, Vector)
 	end.
 
 ordenar_vector(Vector) ->
-	Encabezado = substr(Vector, 1, ?POS_VECTOR),
-	Periodos = separar_periodos(substr(Vector, ?INI_VECTOR, ?LARGO_VECTOR), new(), ?LARGO_VECTOR),
+	Encabezado = binary:part(Vector, 0, ?POS_VECTOR),
+	Periodos = separar_periodos(binary:part(Vector, ?POS_VECTOR, ?LARGO_VECTOR), 0, ?LARGO_VECTOR, new()),
 	Largo = size(Periodos),
 	if Largo =:= 0 -> [Encabezado|?N_RELLENO];
 	   Largo > ?ELEMENTOS_VECTOR -> [Encabezado|?S_RELLENO];
@@ -71,16 +70,16 @@ ordenar_vector(Vector) ->
 	   			[Encabezado, "D", P, chars(32, L)]
 	end.
 
-separar_periodos(Linea, Periodos, ?TAM_PERIODO) -> 
-	if Linea =:= ?CEROS -> Periodos;
-	   true -> add_element(Linea, Periodos)
+separar_periodos(Linea, Pos, ?TAM_PERIODO, Periodos) -> 
+	Periodo = binary:part(Linea, Pos, ?TAM_PERIODO),
+	if Periodo =:= ?CEROS -> Periodos;
+	   true -> add_element(Periodo, Periodos)
 	end;
 
-separar_periodos(Linea, Periodos, Largo) ->
-	Periodo = substr(Linea, 1, ?TAM_PERIODO),
-	Resto = substr(Linea, ?TAM_PERIODO_MAS_1),
-	if Periodo =:= ?CEROS -> separar_periodos(Resto, Periodos, Largo-?TAM_PERIODO);
-	   true -> separar_periodos(Resto, add_element(Periodo, Periodos),  Largo-?TAM_PERIODO)
+separar_periodos(Linea, Pos, Largo, Periodos) ->
+	Periodo = binary:part(Linea, Pos, ?TAM_PERIODO),
+	if Periodo =:= ?CEROS -> separar_periodos(Linea, Pos+?TAM_PERIODO, Largo-?TAM_PERIODO, Periodos);
+	   true -> separar_periodos(Linea, Pos+?TAM_PERIODO, Largo-?TAM_PERIODO, add_element(Periodo, Periodos))
 	end.
 	
 

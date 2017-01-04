@@ -4,24 +4,24 @@ Claramente Erlang no es un lenguaje diseñado para este tipo de labores, y sus b
 
 La primera ejecución de este programa tomaba casi 4 minutos.
 
-He logrado reducir el tiempo a cerca de 45 segundos, lo que considero suficiente.
+He logrado reducir el tiempo a casi 12 segundos gracias a que al implementar la solución en Elixir comprendí como usar binaries para optimizar este código.
 
 
 ## Archivos
 
-Gran parte de la optimización se debe a que abrimos los archivos en modo raw. 
+Gran parte de la optimización se debe a que abrimos los archivos en modo raw y binario. 
 Notar la extraña forma de abrir los archivos:
 
 
     procesar_archivo(ArchivoEntrada, ArchivoSalida) ->
-        {Status, Entrada} = file:open(ArchivoEntrada,[read, raw, read_ahead]),
+        {Status, Entrada} = file:open(ArchivoEntrada,[read, raw, binary, {read_ahead, 64000000}]),
         preparar_salida(Status,Entrada, ArchivoSalida).
 
     preparar_salida(error, Reason,_) ->
         io:format("ERROR, No pudo abrir archivo de entrada: ~s\n", [Reason]);
 
     preparar_salida(ok, Entrada, ArchivoEntrada) ->
-        {Status, Salida} = file:open(ArchivoEntrada, [write, raw, delayed_write]),
+        {Status, Salida} = file:open(ArchivoEntrada, [write, raw, binary, {delayed_write, 64000000, 5}]),
         procesar_vectores(Status, Entrada, Salida, 0).
 
 
@@ -29,7 +29,6 @@ Notar la extraña forma de abrir los archivos:
         io:format("ERROR, No pudo crear archivo de salida: ~s\n", [Reason]);
 
     procesar_vectores(ok, Entrada, Salida, Nl) ->
-        ...
 
 
 La función file:open retorna una tupla {Status, FileHandle}, si tiene error Status corresponde al atom error, si todo está bien, Status corresponde al atom ok.
@@ -52,24 +51,24 @@ En caso contrario, hemos leido una linea y procesamos el vector contenido en est
 Primero verificamos el largo del vector de entrada, si corresponde lo procesamos, de lo contrario mostramos un error en la salida estándar y continuamos.
 
     procesar_vector(Vector, Salida, Nl) ->
-        Largo = len(Vector),
-        if Largo =:= ?LARGO_LINEA -> file:write(Salida, ordenar_vector(Vector)++"\n");
-           true -> io:format("error linea ~b, largo ~b debe ser ~b\n", [Nl, Largo, ?LARGO_LINEA]),
-                   file:write(Salida, Vector)
-        end.
+    Largo = byte_size(Vector),
+    if Largo =:= ?LARGO_LINEA -> file:write(Salida, [ordenar_vector(Vector), "\n"]);
+       true -> io:format("error linea ~b, largo ~b debe ser ~b\n", [Nl, Largo, ?LARGO_LINEA]),
+               file:write(Salida, Vector)
+    end.
 
 La función para ordenar vectores es como sigue:
 
-    ordenar_vector(Vector) ->
-        Encabezado = substr(Vector, 1, ?POS_VECTOR),
-        Periodos = separar_periodos(substr(Vector, ?POS_VECTOR+1, ?LARGO_VECTOR), new(), ?LARGO_VECTOR),%separar_periodos(Vector),
-        Largo = size(Periodos),
-        if Largo =:= 0 -> [Encabezado|?N_RELLENO];
-           Largo > ?ELEMENTOS_VECTOR -> [Encabezado|?S_RELLENO];
-           true ->  P = reverse(to_list(Periodos)),
-                    L = (?TAM_RELLENO-len(P)*?TAM_PERIODO) - 1,
-                    [Encabezado,"D", P, left(" ", L)]
-        end.
+   ordenar_vector(Vector) ->
+    Encabezado = binary:part(Vector, 0, ?POS_VECTOR),
+    Periodos = separar_periodos(binary:part(Vector, ?POS_VECTOR, ?LARGO_VECTOR), 0, ?LARGO_VECTOR, new()),
+    Largo = size(Periodos),
+    if Largo =:= 0 -> [Encabezado|?N_RELLENO];
+       Largo > ?ELEMENTOS_VECTOR -> [Encabezado|?S_RELLENO];
+       true ->  P = reverse(to_list(Periodos)),
+                L = (?TAM_RELLENO-len(P)*?TAM_PERIODO) - 1, 
+                [Encabezado, "D", P, chars(32, L)]
+    end.
 
 Para almacenar cada periodo usamos un ordset (conjunto ordenado) que creamos con la función new().
 Al inicio del programa incluimos todos los siguientes módulos y funciones:
@@ -80,18 +79,23 @@ Al inicio del programa incluimos todos los siguientes módulos y funciones:
 
 La separación de los periodos se realiza del siguiente modo:
 
-    separar_periodos(Linea, Periodos, ?TAM_PERIODO) -> 
-        if Linea =:= ?CEROS -> Periodos;
-           true -> add_element(Linea, Periodos)
+    separar_periodos(Linea, Pos, ?TAM_PERIODO, Periodos) -> 
+        Periodo = binary:part(Linea, Pos, ?TAM_PERIODO),
+        if Periodo =:= ?CEROS -> Periodos;
+           true -> add_element(Periodo, Periodos)
         end;
 
-    separar_periodos(Linea, Periodos, Largo) ->
-        Periodo = substr(Linea, 1, ?TAM_PERIODO),
-        Resto = substr(Linea, ?TAM_PERIODO+1),
-        if Periodo =:= ?CEROS -> separar_periodos(Resto, Periodos, Largo-?TAM_PERIODO);
-           true -> separar_periodos(Resto, add_element(Periodo, Periodos),  Largo-?TAM_PERIODO)
+    separar_periodos(Linea, Pos, Largo, Periodos) ->
+        Periodo = binary:part(Linea, Pos, ?TAM_PERIODO),
+        if Periodo =:= ?CEROS -> separar_periodos(Linea, Pos+?TAM_PERIODO, Largo-?TAM_PERIODO, Periodos);
+           true -> separar_periodos(Linea, Pos+?TAM_PERIODO, Largo-?TAM_PERIODO, add_element(Periodo, Periodos))
         end.
 
-La primera versión ocurre cuando estamos procesando el último periodo que tendrá largo ?TAM_PERIODO.
+La primera versión de la función ocurre cuando estamos procesando el último periodo que tendrá largo ?TAM_PERIODO.
 Las demás llamadas serán las que irán acumulando los periodos dentro del vector en un conjunto llamado Periodos.
+
+Notar que ?CEROS se define así:
+
+    -define(CEROS, <<"000000">>).
+
 
