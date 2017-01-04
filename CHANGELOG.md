@@ -8,9 +8,22 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
-## [0.3.9]
+## [0.3.11] - 2017-01-03
 
-## Added - 2017-01-02
+## Added 
+
+- Solucion en Elixir
+
+## [0.3.10]- 2017-01-03
+
+## Changed 
+
+- documentacion
+- correcciones
+
+## [0.3.9] - 2017-01-02
+
+## Added 
 
 - Solución en Erlang
 
