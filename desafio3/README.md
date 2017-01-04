@@ -54,6 +54,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
     | F#       |  8.64  |       1,02 | 0.41
     | Kotlin   |  3.81  |       2.31 | 0.93
     | Erlang   | 49.25  |       0.18 | 0.07
+    | Elixir   | 14.33  |       0.61 | 0.25
 
 ## Lineas de código
 
@@ -69,6 +70,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | F#       |   52 |
     | Kotlin   |   64 |
     | Erlang   |   75 |
+    | Elixir   |  100 |
 
 ## Tiempo de Desarrollo
 
@@ -85,6 +87,7 @@ Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://Timi
     | F#      | 6:43 |
     | Kotlin  | 1:34 |
     | Erlang  | 7:45 |
+    | Elixir  | 1:48 |
 
 ## Ranking
 
@@ -100,15 +103,17 @@ Ordenados del más corto al más largo:
     7 |  C        |     90   |
     8 |  Rust     |     90   |
     9 |  Go       |     94   |
-   10 |  Swift    |    129   |
+   10 |  Elixir   |    100   |
+   11 |  Swift    |    129   |
 
 ## Aportes
 
-    
+    Elixir: Eduardo Diaz
+    Java  : Miguel Gonzalez
 
 # Licencia
 
-	(c) 2016 Eduardo Díaz.
+	(c) 2016, 2017 Eduardo Díaz.
 
 	El código de este proyecto se distribuye bajo licencia MIT, ver el archivo LICENSE para los detalles.
 
