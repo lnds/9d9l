@@ -8,11 +8,17 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.3.12] - 2017-01-04
+
+## Changed
+
+- Solución en Erlang optimizada usando Binaries. Esto vino después de que resolví el desafío en Elixir.
+
 ## [0.3.11] - 2017-01-03
 
 ## Added 
 
-- Solucion en Elixir
+- Solucion Desafío 3 en Elixir
 
 ## [0.3.10]- 2017-01-03
 

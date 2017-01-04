@@ -53,7 +53,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
     | Swift    |  4.66  |       1,89 | 0,76
     | F#       |  8.64  |       1,02 | 0.41
     | Kotlin   |  3.81  |       2.31 | 0.93
-    | Erlang   | 49.25  |       0.18 | 0.07
+    | Erlang   | 11.28  |       0.78 | 0.31
     | Elixir   | 14.33  |       0.61 | 0.25
 
 ## Lineas de código
@@ -69,7 +69,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Swift    |  129 |
     | F#       |   52 |
     | Kotlin   |   64 |
-    | Erlang   |   75 |
+    | Erlang   |   74 |
     | Elixir   |  100 |
 
 ## Tiempo de Desarrollo
@@ -86,7 +86,7 @@ Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://Timi
     | Swift   | 4:21 |
     | F#      | 6:43 |
     | Kotlin  | 1:34 |
-    | Erlang  | 7:45 |
+    | Erlang  | 8:45 |
     | Elixir  | 1:48 |
 
 ## Ranking
@@ -98,7 +98,7 @@ Ordenados del más corto al más largo:
     2 |  Haskell  |     62   |   
     3 |  Kotlin   |     64   |
     4 |  Clojure  |     70   |
-    5 |  Erlang   |     75   |
+    5 |  Erlang   |     74   |
     6 |  Scala    |     82   |
     7 |  C        |     90   |
     8 |  Rust     |     90   |
