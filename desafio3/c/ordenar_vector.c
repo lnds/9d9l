@@ -21,7 +21,7 @@
  
  
 
-#define BUFFER_SIZE 4096
+#define BUFFER_SIZE (65536)
 #define POS_VECTOR 9 // donde empieza el vector
 #define ELEMENTOS_VECTOR 23
 #define VECTOR_ELEM_SIZE 6 // tamano del elemento del vector
@@ -83,6 +83,7 @@ char* procesar_linea(char* linea, int num_linea)
 		memset(linea+POS_VECTOR+1, ' ', VECTOR_SIZE);
 	} else {
 		linea[POS_VECTOR] = 'D';
+		memset(linea+(POS_VECTOR+tam_vector*VECTOR_ELEM_SIZE+1), ' ', VECTOR_SIZE-tam_vector*VECTOR_ELEM_SIZE);
 	}
 	linea[POS_VECTOR+VECTOR_SIZE+1] = '\n';
 	linea[POS_VECTOR+VECTOR_SIZE+2] = '\0';
@@ -91,36 +92,39 @@ char* procesar_linea(char* linea, int num_linea)
 
 int ordena_vector(char* vector)
 {
-	char vector_trabajo[VECTOR_SIZE*CANTIDAD_INSTITUCIONES][VECTOR_ELEM_SIZE];
 	int i, j;
 	int n = 0;
 	char* p = vector;
-	char* vend = vector+(VECTOR_SIZE*VECTOR_ELEM_SIZE);
-	memset((char*)vector_trabajo, '0', VECTOR_SIZE*CANTIDAD_INSTITUCIONES*VECTOR_ELEM_SIZE);
+	char* v_end = vector+(VECTOR_SIZE*VECTOR_ELEM_SIZE);
 	
 	// por cada elemento del vector
-	for (p = vector; p < vend && *p != ' '; p+= VECTOR_ELEM_SIZE)
+	for (p = vector; p < v_end; p += VECTOR_ELEM_SIZE)
 	{
 		// sort por insercion
-		for (i = 0; i < n && strncmp(p, vector_trabajo[i], VECTOR_ELEM_SIZE) < 0; i++)
-			;
+		char* q = vector;
+
+		if (strncmp(p, "000000", VECTOR_ELEM_SIZE) == 0) continue;
+
+		for (i = 0; i < n && strncmp(p, q, VECTOR_ELEM_SIZE) < 0; i++)
+			q += VECTOR_ELEM_SIZE;
+
         if (i == n) {
-    		if (strncmp(p, vector_trabajo[n], VECTOR_ELEM_SIZE) != 0)
-  		 		memmove(vector_trabajo[n++], p, VECTOR_ELEM_SIZE);
+        	if (p == q) {
+        		n++;
+        	}
+    		else if (strncmp(p, q, VECTOR_ELEM_SIZE) != 0) {
+  		 		memmove(q, p, VECTOR_ELEM_SIZE);
+		  		n++;	
+  		 	}
 	  	}
-	    else {			
-	    	if (strncmp(p, vector_trabajo[i], VECTOR_ELEM_SIZE) != 0) {
-	  			for (j = VECTOR_SIZE-1; j > i; j--)
-	  				memmove((char*)vector_trabajo[j], vector_trabajo[j-1], VECTOR_ELEM_SIZE);
-	  			memmove(vector_trabajo[i], p, VECTOR_ELEM_SIZE);
-	  			n++;	
-	  		}
-	  	}
-  	
+	    else if (strncmp(p, q, VECTOR_ELEM_SIZE) != 0) {
+    		char tmp[VECTOR_ELEM_SIZE];
+    		memmove(tmp, p, VECTOR_ELEM_SIZE);
+    		memmove(q + VECTOR_ELEM_SIZE, q, (n-i)*VECTOR_ELEM_SIZE);
+  			memmove(q, tmp, VECTOR_ELEM_SIZE);
+	  		n++;	
+  		}
 	} // for
-	
-	memset(vector, ' ', VECTOR_ELEM_SIZE*VECTOR_SIZE+1);
-	for (i = 0, p = vector+1; i < n; i++, p+= VECTOR_ELEM_SIZE)
-		memmove(p, (char*)vector_trabajo[i], VECTOR_ELEM_SIZE);
+	memmove(vector+1, vector, n*VECTOR_ELEM_SIZE);
 	return n;
 }
