@@ -23,7 +23,7 @@ public class OrdenaVector {
     private static final int VECTOR = 6;
     private static final int MAX_VECTOR = 23;
     private static final int INICIO_CADENA = 9;
-    private static final String RELLENO_BLANCO = fill("",VECTOR * MAX_VECTOR +1, ' ' );
+    private static final String RELLENO_BLANCO = fill("", VECTOR * MAX_VECTOR, ' ' );
 
     /**
      * @param args the command line arguments
@@ -31,7 +31,7 @@ public class OrdenaVector {
     public static void main(String[] args) {
         Date inicio = new Date();
        
-        if(args == null || args.length < 2){
+        if(args == null || args.length != 2){
             System.err.println("Error no se ingresaron argumentos requeridos");
             System.err.println("Ejemplo java OrdenaVector archivo_entrada archivo_salida");
             return;
@@ -52,7 +52,8 @@ public class OrdenaVector {
         }
 
         Date fin = new Date();
-        System.out.println("Tiempo ocupado: " + (fin.getTime() - inicio.getTime()));
+        double elapsed = (fin.getTime() - inicio.getTime())/1000.0; 
+        System.out.println("Tiempo ocupado: " + elapsed);
     }
 
     public void procesaArchivos(File entrada, File salida) throws FileNotFoundException, IOException {
@@ -68,7 +69,7 @@ public class OrdenaVector {
             try (InputStream fis = new FileInputStream(entrada)) {
                 InputStreamReader isr = new InputStreamReader(fis);
                 BufferedReader br = new BufferedReader(isr);
-                br.lines().parallel().forEach(c);
+                br.lines().forEach(c);
             }
         }
     }
@@ -76,24 +77,24 @@ public class OrdenaVector {
     public String procesaLinea(String linea) {
         int inicio = INICIO_CADENA;
         int fin = INICIO_CADENA + VECTOR;
-        ArrayList<String> salida = new ArrayList();
-        while (linea.length() > fin) {
-            String fecha = linea.substring(inicio, fin);
+        ArrayList<String> salida = new ArrayList<>();
+        while (inicio < linea.length()) {
+            String periodo = linea.substring(inicio, fin);
             inicio += VECTOR;
             fin += VECTOR;
-            salida.add(fecha);
+            if (!periodo.equals("000000") && !salida.contains(periodo))
+                salida.add(periodo);
         }
         int elementos = salida.size();
         if (elementos == 0) {//sin elementos
-            return linea.substring(0, INICIO_CADENA) + "N\n";
+            return linea.substring(0, INICIO_CADENA) + "N" + RELLENO_BLANCO + "\n";
         } else if (elementos > MAX_VECTOR) {//con mas de 23 elementos
             return linea.substring(0, INICIO_CADENA) + "S" + RELLENO_BLANCO + "\n";
         } else {
-            String mergedString = salida.parallelStream().
-                    filter(string -> !"000000".equals(string)).
+            String mergedString = salida.stream().
                     sorted((e1, e2) -> e2.compareTo(e1)).                    
                     collect(Collectors.joining(""));
-            return linea.substring(0, INICIO_CADENA) + "D" + mergedString + "\n";
+            return linea.substring(0, INICIO_CADENA) + "D" + mergedString + fill("", (MAX_VECTOR-elementos)*VECTOR, ' ')+ "\n";
         }
     }
 
