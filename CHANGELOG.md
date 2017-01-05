@@ -8,6 +8,17 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.3.13] - 2017-01-05
+
+## Added
+
+- Titulo del siguiente desafio en README.md
+
+## Changed
+
+- Corrige bugs en la version java
+- Actualiza tiempos en README.md del desafío 3
+
 ## [0.3.12] - 2017-01-04
 
 ## Changed

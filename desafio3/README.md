@@ -55,6 +55,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
     | Kotlin   |  3.81  |       2.31 | 0.93
     | Erlang   | 11.28  |       0.78 | 0.31
     | Elixir   | 14.33  |       0.61 | 0.25
+    | Java     |  5.65  |       1.56 | 0.63
 
 ## Lineas de código
 
@@ -71,6 +72,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Kotlin   |   64 |
     | Erlang   |   74 |
     | Elixir   |  100 |
+    | Java     |   90 |
 
 ## Tiempo de Desarrollo
 
@@ -91,6 +93,22 @@ Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://Timi
 
 ## Ranking
 
+Ordenado del más rápido al más lento:
+
+    |  # | lenguaje     | Tiempo |
+    |  1 | Go           |   2.92 |
+    |  2 | C Optimizado |   3.54 |
+    |  3 | Kotlin       |   3.81 |
+    |  4 | Rust         |   3.99 |
+    |  5 | Swift        |   4.66 |
+    |  6 | Java         |   5.65 |
+    |  7 | Scala        |   6.02 |
+    |  8 | Clojure      |   7.79 |
+    |  9 | Haskell      |   8.05 |
+    | 10 | F#           |   8.64 |
+    | 11 | C            |   8.80 |
+    | 12 | Erlang       |  11.28 |
+
 Ordenados del más corto al más largo:
 
     # |  Lenguaje |   Lineas |
@@ -102,9 +120,10 @@ Ordenados del más corto al más largo:
     6 |  Scala    |     82   |
     7 |  C        |     90   |
     8 |  Rust     |     90   |
-    9 |  Go       |     94   |
-   10 |  Elixir   |    100   |
-   11 |  Swift    |    129   |
+    9 |  Java     |     90   |
+   10 |  Go       |     94   |
+   12 |  Elixir   |    100   |
+   12 |  Swift    |    129   |
 
 ## Aportes
 
