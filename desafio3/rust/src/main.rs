@@ -6,7 +6,7 @@ use std::io::LineWriter;
 use std::io::Write;
 use std::fs::File;
 use std::str;
-use std::ptr;
+use std::collections::BTreeSet;
 
 const POS_VECTOR: usize = 9;
 const ELEMENTOS_VECTOR: usize = 23;
@@ -17,56 +17,43 @@ const TAM_VECTOR_ENTRADA: usize = TAM_VECTOR * CANT_INSTITUCIONES;
 const LARGO_LINEA: usize = POS_VECTOR + TAM_VECTOR_ENTRADA;
 const TAM_SALIDA: usize = POS_VECTOR + 1 + TAM_VECTOR;
 
-static CERO : [u8;TAM_PERIODO] = ['0' as u8; TAM_PERIODO];
-
+fn periodo_valido(periodo:&[u8]) -> bool {
+	let mut i = 0;
+	while i < TAM_PERIODO {
+		if periodo[i] != '0' as u8 {
+			return true;
+		}
+		i += 1;
+	}
+	return false;
+}
 
 fn ordenar_vector(vector:&[u8],  result:&mut [u8]) {
-	let mut n = 0;
-	let mut trabajo = ['0' as u8; TAM_VECTOR_ENTRADA];
+	let mut periodos = BTreeSet::new();
 
 	for p in vector.chunks(TAM_PERIODO) {
-
-		if p == CERO { continue; }
-
-		let mut i = 0;
-		let mut q = 0;
-		while i < n && p < &trabajo[q..q+TAM_PERIODO] { i += 1; q += TAM_PERIODO; } // busca si p está en el arreglo
-
-		if i < n && p == &trabajo[q..q+TAM_PERIODO] { continue; } // si ya existe lo ignora
-
-		// inserta p en el arreglo
-		if i == n {
-			let q = n * TAM_PERIODO;
-			&trabajo[q..q+TAM_PERIODO].clone_from_slice(p);
-		} else {
-			for j in (i+1..ELEMENTOS_VECTOR).rev() {
-				let q = j*TAM_PERIODO;
-				unsafe {
-					ptr::copy_nonoverlapping(&mut trabajo[q-TAM_PERIODO], &mut trabajo[q], TAM_PERIODO)
-				}
-			}
-			let q = i*TAM_PERIODO;
-			trabajo[q..q+TAM_PERIODO].clone_from_slice(p);
+		if periodo_valido(p) {
+			periodos.insert(p);
 		}
-		n += 1;
 	}
 
 	// retorna el resultado
-	if n == 0 {
+	if periodos.is_empty() {
 		result[0] = 'N' as u8;
-	} else if n > ELEMENTOS_VECTOR {
+	} else if periodos.len() > ELEMENTOS_VECTOR {
 		result[0] = 'S' as u8;
 	} else {
 		result[0] = 'D' as u8;
-		for i in 0..n {
-			let p = i*TAM_PERIODO;
-			result[p+1..p+1+TAM_PERIODO].clone_from_slice(&trabajo[p..p+TAM_PERIODO])
+		let mut p = 1;
+		for per in periodos.iter().rev() {
+			result[p..p+TAM_PERIODO].clone_from_slice(&per);
+			p += TAM_PERIODO;
 		}
 	}
 }
 
 
-fn procesar_linea(buf: &Vec<u8>) -> [u8; TAM_SALIDA] {
+fn procesar_linea(buf: &[u8]) -> [u8; TAM_SALIDA] {
 	let mut res : [u8; TAM_SALIDA] = [' ' as u8; TAM_SALIDA];
 	res[0..POS_VECTOR].clone_from_slice(&buf[0..POS_VECTOR]);
 	ordenar_vector(&buf[POS_VECTOR..], &mut res[POS_VECTOR..]); 
@@ -85,11 +72,11 @@ fn main() {
 
 	let entrada = match File::open(&args[1]) {
 		Err(e) => panic!("No pudo abrir archivo {}, causa: {}", args[1], e.description()),
-		Ok(file) => BufReader::new(file)
+		Ok(file) => BufReader::with_capacity(1024*1024, file)
 	};
 	let mut salida = match File::create(&args[2]) {
 		Err(e) => panic!("No pudo crear archivo {}, causa: {}", args[2], e.description()),
-		Ok(file) => LineWriter::new(file)
+		Ok(file) => LineWriter::with_capacity(1024*1024, file)
 	};
 
 	for (num_linea, linea) in entrada.lines().enumerate() {
