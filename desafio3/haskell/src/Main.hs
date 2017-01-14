@@ -18,7 +18,7 @@ instituciones = 6
 elementos = 23 
 elementos' = 23 :: Int
 
-tam_vector = 148 -- elementos * tam_periodo + pos_vector + 1
+tam_vector = 148  -- elementos * tam_periodo + pos_vector + 1
 tam_linea = 837 -- pos_vector + elementos * tam_periodo * instituciones
 
 justWhen :: (a -> Bool) -> (a -> b) -> (a -> Maybe b)
@@ -27,23 +27,23 @@ justWhen f g a = if f a then Just (g a) else Nothing
 sortDesc :: Ord a => [a] -> [a]
 sortDesc = sortBy (flip compare)
 
+periodo_valido :: LB.ByteString -> Bool
+periodo_valido xs = LB.any (/= '0') xs
+
 not_null :: LB.ByteString -> Bool
 not_null = not . L.null
 
 chunksOf :: Int64 -> LB.ByteString -> [LB.ByteString]
-chunksOf x xs = unfoldr (justWhen not_null (L.splitAt x)) xs 
-
-periodo_valido :: LB.ByteString -> Bool
-periodo_valido xs = LB.any (/= '0') xs
+chunksOf x xs = unfoldr (justWhen not_null (LB.splitAt x)) xs 
 
 clasificar_resultado :: [LB.ByteString] -> [LB.ByteString]
 clasificar_resultado xs 
     | null xs = ["N"]
     | (length xs) > elementos' = ["S"]
-    | otherwise = "D" :  take elementos' xs
+    | otherwise = "D" : sortDesc xs
 
 ordenar_periodos :: [LB.ByteString] -> [LB.ByteString] 
-ordenar_periodos xs =  sortDesc $ nub $ (filter periodo_valido xs)
+ordenar_periodos xs = nub (filter periodo_valido xs)
 
 ordenar_vector :: LB.ByteString -> LB.ByteString
 ordenar_vector linea  
@@ -51,7 +51,7 @@ ordenar_vector linea
     | otherwise = LB.concat [final, pad] 
         where (encabezado, resto) = L.splitAt pos_vector linea
               periodos = clasificar_resultado $ ordenar_periodos $ chunksOf tam_periodo resto
-              final    = LB.concat [encabezado,  LB.concat periodos]
+              final    = LB.concat (encabezado:periodos)
               pad      = LB.replicate (tam_vector - (LB.length final)) ' ' 
 
 filtrar_linea :: (Int, LB.ByteString) -> IO LB.ByteString

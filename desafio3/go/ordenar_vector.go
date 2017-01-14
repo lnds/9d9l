@@ -12,59 +12,61 @@ const LARGO_LINEA = POS_VECTOR + TAM_VECTOR_ENTRADA
 const TAM_SALIDA = POS_VECTOR + 1 + TAM_VECTOR
 
 var cero = make([]byte, TAM_PERIODO, TAM_PERIODO)
+var	periodo = make([]byte, TAM_PERIODO, TAM_PERIODO)
+
+const BUF_SIZE = 1024*1024*10
+var buffer = make([]byte, BUF_SIZE)
 
 
-func ordenar_vector(buf []byte, result []byte) {
+func ordenar_vector(buf []byte) int {
 	n := 0	
-	trabajo := make([]byte, TAM_VECTOR_ENTRADA, TAM_VECTOR_ENTRADA)
-	for i := 0; i < TAM_PERIODO; i++ { cero[i] = '0' }
-	for i := 0; i < TAM_VECTOR_ENTRADA; i ++ { trabajo[i] = '0' }
 	for p := 0; p < TAM_VECTOR_ENTRADA; p += TAM_PERIODO {
-		periodo := buf[p:p+TAM_PERIODO]
-		if bytes.Equal(periodo, cero) { continue }
+		copy(periodo, buf[p:p+TAM_PERIODO])
+		if bytes.Equal(periodo, cero) { 
+			continue 
+		}
+
 		i := 0
 		q := 0
-		for i < n && bytes.Compare(periodo, trabajo[q:q+TAM_PERIODO]) < 0 {
-			i++
+		for ;i < n && bytes.Compare(periodo, buf[q:q+TAM_PERIODO]) < 0; i++ {
 			q += TAM_PERIODO 
 		}
 
-		if i < n && bytes.Equal(periodo, trabajo[q:q+TAM_PERIODO]) { continue }
-
 		if i == n {
-			q := n*TAM_PERIODO
-			copy(trabajo[q:q+TAM_PERIODO], periodo)
-		} else  {
-			for j := ELEMENTOS_VECTOR-1; j > i; j-- { 
-				q := j*TAM_PERIODO
-				copy(trabajo[q:q+TAM_PERIODO], trabajo[q-TAM_PERIODO:q])
+			if p == q {
+				n++
+			} else if bytes.Compare(periodo, buf[q:q+TAM_PERIODO]) != 0 {
+				copy(buf[q:q+TAM_PERIODO], periodo)
+				n++
 			}
-			q := i*TAM_PERIODO
-			copy(trabajo[q:q+TAM_PERIODO], periodo)
+		} else if bytes.Compare(periodo, buf[q:q+TAM_PERIODO]) != 0 {
+			l := (n-i)*TAM_PERIODO
+			copy(buf[q+TAM_PERIODO:q+TAM_PERIODO+l], buf[q:q+l])
+			copy(buf[q:q+TAM_PERIODO], periodo)
+			n++
 		}
-		n++
 	}
-	if n == 0 {
-		result[0] = 'N'
-	} else if n > ELEMENTOS_VECTOR {
-		result[0] = 'S'
-	} else {
-		result[0] = 'D'
-		copy(result[1:n*TAM_PERIODO+1], trabajo[0:n*TAM_PERIODO])
-	}
+	copy(buf[1:n*TAM_PERIODO+1], buf[0:n*TAM_PERIODO])
+	return n
+	
 }
 
 func procesar_linea(buf []byte) []byte {
-	result := make([]byte, TAM_SALIDA, TAM_SALIDA)
-	i := 0
-	for ; i < POS_VECTOR; i++ {
-		result[i] = buf[i]
+	n := ordenar_vector(buf[POS_VECTOR:])
+	ini := POS_VECTOR+1
+	largo := POS_VECTOR+1+TAM_VECTOR
+	if n == 0 {
+		buf[POS_VECTOR] = 'N'
+	} else if n > ELEMENTOS_VECTOR {
+		buf[POS_VECTOR] = 'S'
+	} else {
+		buf[POS_VECTOR] = 'D'
+		ini = POS_VECTOR+1+n*TAM_PERIODO
 	}
-	for ; i < TAM_SALIDA; i++ {
-		result[i] = ' '
+	for i := ini; i < largo; i++ {
+		buf[i] = ' '
 	}
-	ordenar_vector(buf[POS_VECTOR:], result[POS_VECTOR:])
-	return result 
+	return buf[0:POS_VECTOR+1+TAM_VECTOR] 
 }
 
 func main() {
@@ -91,9 +93,11 @@ func main() {
 	defer salida.Close()
 
 	lector := bufio.NewScanner(entrada)
+	lector.Buffer(buffer, BUF_SIZE)
 	writer  := bufio.NewWriter(salida)
 	defer writer.Flush()
 
+	for i := 0; i < TAM_PERIODO; i++ { cero[i] = '0' }
 	for nl := 0; lector.Scan(); nl++ {
 		linea := lector.Bytes()
 		if len(linea) != LARGO_LINEA {
@@ -101,7 +105,8 @@ func main() {
 			writer.WriteString(fmt.Sprintf("%s\n", linea))
 		} else {
 			vector := procesar_linea(linea)
-			writer.WriteString(fmt.Sprintf("%s\n", vector))
+			writer.Write(vector)
+			writer.WriteByte('\n')
 		}
 	}
 	duration := time.Since(start)
