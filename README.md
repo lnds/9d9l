@@ -21,7 +21,7 @@ Los lenguajes elegidos son:
 	1. Toque y Fama: un viejo juego via consola.
 	2. Weather: lee información sobre el clima de distintas ciudades en forma secuencial o concurrente.
 	3. Vectores: operar sobre archivos con muchos datos.
-	4. Black Jackson: jugar Black Jack con una interfaz Json
+	4. Compresión: comprimir usando código de Huffman.
 	5. TBD
 	6. TBD
 	7. TBD
