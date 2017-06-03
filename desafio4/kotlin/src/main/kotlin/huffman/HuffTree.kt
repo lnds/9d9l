@@ -13,11 +13,14 @@ class HuffLeaf(frequency: Int, val symbol: Char) : HuffTree(frequency) {
 
 }
 
+val maxSymbols = 256
+
+
 class HuffNode(var left: HuffTree, var right: HuffTree) : HuffTree(left.frequency+right.frequency)
 
 class HuffHeap {
 
-    var heap = arrayOfNulls<HuffTree>(Symbols.maxSymbols+1)
+    var heap = arrayOfNulls<HuffTree>(maxSymbols+1)
     var last = 0
 
     fun insert(tree:HuffTree) {
@@ -38,7 +41,7 @@ class HuffHeap {
         }
     }
 
-    fun full() = last == Symbols.maxSymbols
+    fun full() = last == maxSymbols
 
     fun empty() = last == 0
 
@@ -107,7 +110,7 @@ fun buildCodeList(tree: HuffTree,  codes : MutableList<List<Int>?>, prefix : Arr
 
 fun buildCodes(tree: HuffTree) : Array<String> {
     var prefix = StringBuffer()
-    val codes = Array<String>(Symbols.maxSymbols, {""})
+    val codes = Array<String>(maxSymbols, {""})
     buildCodes(tree, codes, prefix)
     return codes
 }

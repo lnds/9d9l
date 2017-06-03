@@ -68,7 +68,7 @@ fun  decompress(inputFile: String, outputFile: String) {
 
 fun calcFrequencies(bytes:ByteArray) : IntArray {
     // calc frequencies
-    val freqs = IntArray(Symbols.maxSymbols+1)
+    val freqs = IntArray(maxSymbols+1)
     bytes.forEach { symbol -> freqs[symbol.toInt() and 0xFFFF]++ }
     return freqs
 }
