@@ -91,7 +91,7 @@ fun buildTree(freqs : IntArray) : HuffTree {
 fun buildCodeList(tree: HuffTree,  codes : MutableList<List<Int>?>, prefix : ArrayList<Int>) {
     when (tree) {
         is HuffLeaf ->
-            codes[tree.symbol.toInt() and 0xFFFF] =  ArrayList<Int>(prefix)
+            codes[tree.symbolIndex()] =  ArrayList<Int>(prefix)
 
         is HuffNode -> {
             prefix.add(0)

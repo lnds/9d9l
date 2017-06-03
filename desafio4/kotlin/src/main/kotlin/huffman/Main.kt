@@ -1,8 +1,6 @@
 package huffman
 
-import java.io.BufferedOutputStream
-import java.io.File
-import java.io.FileOutputStream
+import java.io.*
 
 /**
  * Main entry point
@@ -33,21 +31,38 @@ fun compress(inputFile: String, outputFile: String) {
     val freqs = calcFrequencies(bytes)
     val huffTree = buildTree(freqs)
     val codes = buildCodes(huffTree)
-    val out = BitOutputStream(BufferedOutputStream(FileOutputStream(outputFile)))
+    val output = BitOutputStream(BufferedOutputStream(FileOutputStream(outputFile)))
 
-    writeTree(huffTree, out)
-    out.write(bytes.size)
+    writeTree(huffTree, output)
+    println("comprime, size="+bytes.size)
+    output.write(bytes.size)
     bytes.forEach { symbol ->
         val code = codes[symbol.toInt() and 0xFFFF]
-        code.forEach { bit -> out.write(bit == '1') }
+        code.forEach { bit -> output.write(bit == '1') }
     }
-    out.close()
+    output.close()
 }
 
 
 
 fun  decompress(inputFile: String, outputFile: String) {
-    println("decompress ${inputFile} ${outputFile}")
+    val input = BitInputStream(BufferedInputStream(FileInputStream(inputFile)))
+    val output = BitOutputStream(BufferedOutputStream(FileOutputStream(outputFile)))
+
+    val huffTree = readTree(input)
+    val length = input.readInt()
+    println("descomprime, size="+length)
+
+    for (i in 0..length-1) {
+        var node = huffTree
+        while (node is HuffNode) {
+            val bit = input.readBoolean()
+            node = if (bit) node.right else node.left
+        }
+        if (node is HuffLeaf)
+            output.write(node.symbol)
+    }
+    output.close()
 }
 
 
@@ -73,4 +88,7 @@ fun writeTree(tree:HuffTree, out:BitOutputStream) {
     }
 }
 
-
+fun readTree(input : BitInputStream) : HuffTree = if (input.readBoolean())
+                                                      HuffLeaf(-1, input.readChar())
+                                                  else
+                                                      HuffNode(readTree(input), readTree(input))
