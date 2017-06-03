@@ -15,8 +15,7 @@ class HuffLeaf(frequency: Int, val symbol: Char) : HuffTree(frequency) {
 
 val maxSymbols = 256
 
-
-class HuffNode(var left: HuffTree, var right: HuffTree) : HuffTree(left.frequency+right.frequency)
+class HuffNode(val left: HuffTree, val right: HuffTree) : HuffTree(left.frequency+right.frequency)
 
 class HuffHeap {
 
@@ -89,27 +88,8 @@ fun buildTree(freqs : IntArray) : HuffTree {
     return trees.extract()
 }
 
-
-
-fun buildCodeList(tree: HuffTree,  codes : MutableList<List<Int>?>, prefix : ArrayList<Int>) {
-    when (tree) {
-        is HuffLeaf ->
-            codes[tree.symbolIndex()] =  ArrayList<Int>(prefix)
-
-        is HuffNode -> {
-            prefix.add(0)
-            buildCodeList(tree.left, codes, prefix)
-            prefix.removeAt( prefix.size - 1)
-
-            prefix.add(1)
-            buildCodeList(tree.right, codes, prefix)
-            prefix.removeAt(prefix.size- 1)
-        }
-    }
-}
-
 fun buildCodes(tree: HuffTree) : Array<String> {
-    var prefix = StringBuffer()
+    val prefix = StringBuffer()
     val codes = Array<String>(maxSymbols, {""})
     buildCodes(tree, codes, prefix)
     return codes

@@ -4,8 +4,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.NoSuchElementException
 
-
-
 /**
  * Input bits from a stream
  * Created by ediaz on 6/3/17.
@@ -54,10 +52,9 @@ class BitInputStream(val input : InputStream) : BitStream(input)  {
 
     fun readInt(): Int {
         var x = 0
-        for (i in 0..3) {
+        (0..3).forEach { i ->
             val c = readChar()
-            x = x shl 8
-            x = x or c.toInt()
+            x = (x shl 8) or c.toInt()
         }
         return x
     }

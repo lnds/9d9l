@@ -34,7 +34,6 @@ fun compress(inputFile: String, outputFile: String) {
     val output = BitOutputStream(BufferedOutputStream(FileOutputStream(outputFile)))
 
     writeTree(huffTree, output)
-    println("comprime, size="+bytes.size)
     output.write(bytes.size)
     bytes.forEach { symbol ->
         val code = codes[symbol.toInt() and 0xFFFF]
@@ -43,15 +42,12 @@ fun compress(inputFile: String, outputFile: String) {
     output.close()
 }
 
-
-
 fun  decompress(inputFile: String, outputFile: String) {
     val input = BitInputStream(BufferedInputStream(FileInputStream(inputFile)))
     val output = BitOutputStream(BufferedOutputStream(FileOutputStream(outputFile)))
 
     val huffTree = readTree(input)
     val length = input.readInt()
-    println("descomprime, size="+length)
 
     for (i in 0..length-1) {
         var node = huffTree
@@ -64,7 +60,6 @@ fun  decompress(inputFile: String, outputFile: String) {
     }
     output.close()
 }
-
 
 fun calcFrequencies(bytes:ByteArray) : IntArray {
     // calc frequencies

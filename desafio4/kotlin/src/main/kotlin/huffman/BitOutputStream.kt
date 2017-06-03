@@ -24,7 +24,7 @@ class BitOutputStream(val output : OutputStream) : BitStream(output) {
         if (byte < 0 || byte >= 256)
             throw IllegalArgumentException("Argument must be in range 0..255. Received: "+byte)
 
-        for (i in 0..7){
+        (0..7).forEach { i ->
             val bit = ((byte ushr (8 - i -1)) and 1)
             writeBit(bit)
         }
@@ -41,7 +41,6 @@ class BitOutputStream(val output : OutputStream) : BitStream(output) {
         bitsInBuffer = 0
     }
 
-
     fun flush() {
         clearBuffer()
         output.flush()
@@ -55,8 +54,6 @@ class BitOutputStream(val output : OutputStream) : BitStream(output) {
     fun write(b: Boolean) {
         writeBit(if (b) 1 else 0)
     }
-
-
 
     fun write(i: Int) {
         writeByte((i ushr 24) and 0xFF)
