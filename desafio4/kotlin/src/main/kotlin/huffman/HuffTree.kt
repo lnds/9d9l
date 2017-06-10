@@ -1,19 +1,18 @@
 package huffman
 
+val maxSymbols = 256
+
 /**
  * Build HuffmanTree from frequency table of symbols
  * Created by ediaz on 5/21/17.
  */
-abstract class HuffTree(val frequency : Int) {
-}
+abstract class HuffTree(val frequency : Int)
 
 class HuffLeaf(frequency: Int, val symbol: Char) : HuffTree(frequency) {
 
     fun symbolIndex(): Int = symbol.toInt() and 0xFFFF
 
 }
-
-val maxSymbols = 256
 
 class HuffNode(val left: HuffTree, val right: HuffTree) : HuffTree(left.frequency+right.frequency)
 
@@ -73,19 +72,19 @@ class HuffHeap {
 }
 
 fun buildTree(freqs : IntArray) : HuffTree {
-    val trees = HuffHeap()
+    val heap = HuffHeap()
     freqs.forEachIndexed { sym, freq ->
         if (freq > 0) {
-            trees.insert(HuffLeaf(freq, sym.toChar()))
+            heap.insert(HuffLeaf(freq, sym.toChar()))
         }
     }
 
-    while (trees.size() > 1) {
-        val a = trees.extract()
-        val b = trees.extract()
-        trees.insert(HuffNode(a, b))
+    while (heap.size() > 1) {
+        val a = heap.extract()
+        val b = heap.extract()
+        heap.insert(HuffNode(a, b))
     }
-    return trees.extract()
+    return heap.extract()
 }
 
 fun buildCodes(tree: HuffTree) : Array<String> {
