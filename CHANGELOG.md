@@ -8,6 +8,12 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.4.1]
+
+## Added
+
+- Solución en Kotlin
+
 ## [0.4.0] - 2017-05-21
 
 ## Added

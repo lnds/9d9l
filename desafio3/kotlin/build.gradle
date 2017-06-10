@@ -3,6 +3,9 @@ buildscript {
     ext.kotlin_xml_dsl_version = '0.1.5'
     repositories {
         mavenCentral()
+         maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"

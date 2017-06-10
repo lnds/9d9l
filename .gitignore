@@ -26,3 +26,10 @@ salida.out
 .DS_Store
 .stack-work
 /desafio3/kotlin/build
+.gradle/
+.gradle
+desafio4/kotlin/.gradle/
+desafio4/kotlin/.gradle
+/desafio4/kotlin/build
+/desafio4/kotlin/gradle
+*.huf

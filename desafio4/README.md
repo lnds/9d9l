@@ -48,3 +48,49 @@ Una alternativa es tener una tabla de frecuencias fija, pero esta no necesariame
 Hay que considerar que si todos los símbolo tienen la misma frecuencia, el código de Huffman degenera en la codificación binaria tradicional y no hay compresión.
 
 Para aprender más sobre el algoritmo leer: https://en.wikipedia.org/wiki/Huffman_coding
+
+
+# Resultados
+
+## Tiempos
+
+Tiempos promedios, expresados en segundos, para procesar un archivo de tamaño XX Mb.
+
+    | Lenguaje | Tiempo | 
+    | Kotlin   |        |
+
+## Lineas de código
+
+Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
+
+	| Lenguaje | LOC |
+    | Kotlin   |     |
+
+## Tiempo de Desarrollo
+
+Tiempos aproximados para desarrollar cada solución, medidos en horas:minutos, considera codificación, pruebas e investigación.
+Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://TimingApp.com/)
+
+    | Kotlin  | |
+
+## Ranking
+
+Ordenado del más rápido en ejecuci'on al más lento:
+
+    |  # | lenguaje     | Tiempo |
+    
+
+Ordenados del más corto en lineas de código, al más largo:
+
+    # |  Lenguaje |   Lineas |
+ 
+
+## Aportes
+
+ 
+
+# Licencia
+
+	(c) 2016, 2017 Eduardo Díaz.
+
+	El código de este proyecto se distribuye bajo licencia MIT, ver el archivo LICENSE para los detalles.
