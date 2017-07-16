@@ -8,6 +8,12 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.4.2]
+
+## Added
+
+- Soluciones en Scala
+
 ## [0.4.1]
 
 ## Added
