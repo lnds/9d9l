@@ -2,6 +2,7 @@ package huffman
 
 import bitio.{BitInputStream, BitOutputStream}
 
+import scala.annotation.tailrec
 import scala.util.control.Breaks._
 
 /**
@@ -66,7 +67,7 @@ object HuffTree {
   def build(freqs: List[(Char, Int)]): HuffTree = {
 
     val leaves = freqs
-      .map { case (sym, freq) => HuffLeaf(freq, sym) }.distinct
+      .map { case (sym, freq) => HuffLeaf(freq, sym) }
       .sortWith((l1: HuffLeaf, l2: HuffLeaf) => l1.frequency < l2.frequency)
     until(singleton, combine)(leaves).head
   }
@@ -75,10 +76,11 @@ object HuffTree {
 
   def combine(trees: List[HuffTree]) : List[HuffTree] =
     trees match {
-      case Nil => Nil
       case left :: right :: tail => (HuffNode(left, right) :: tail).sortWith((l1,l2) => l1.frequency < l2.frequency)
+      case _ => trees
     }
 
+  @tailrec
   def until[A](singleton: A => Boolean, combine: A => A)(data: A) : A =
     if (singleton(data)) data else until(singleton, combine)(combine(data))
 

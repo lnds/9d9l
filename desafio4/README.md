@@ -58,24 +58,27 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de tamaño X
 
     | Lenguaje | Tiempo | 
     | Kotlin   |        |
+    | Scala	   |        |
 
 ## Lineas de código
 
 Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
 
-	| Lenguaje | LOC |
-    | Kotlin   |     |
+	| Lenguaje |  LOC | LOC2 |
+    | Kotlin   |  267 |  266 |
+    | Scala    |  280 |  226 |
 
 ## Tiempo de Desarrollo
 
 Tiempos aproximados para desarrollar cada solución, medidos en horas:minutos, considera codificación, pruebas e investigación.
 Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://TimingApp.com/)
 
-    | Kotlin  | |
+    | Kotlin  | 5:33 |
+    | Scala   | 3:03 |
 
 ## Ranking
 
-Ordenado del más rápido en ejecuci'on al más lento:
+Ordenado del más rápido en ejecución al más lento:
 
     |  # | lenguaje     | Tiempo |
     
