@@ -13,7 +13,7 @@
   (= (first leaf) :leaf))
 
 (defn weight [node]
-  (nth node 1))
+  (second node))
 
 (defn node [left right]
   (list :node (+ (weight left) (weight right))  left right))
@@ -21,8 +21,20 @@
 (defn node? [node]
   (= (first node) :node))
 
+(defn sym [tree]
+  (if (nil? tree) nil
+                  (if (leaf? tree)
+                      (nth tree 2)
+                       nil)))
+
+(defn left-node [tree]
+  (if (node? tree) (nth tree 2) nil))
+
+(defn right-node [tree]
+  (if (node? tree) (nth tree 3) nil))
+
 (defn sort-tree [tree]
-  (sort-by  weight > tree))
+  (sort-by  weight < tree))
 
 (defn make-tree [leaves]
   (loop [trees leaves]
@@ -30,12 +42,37 @@
         (first trees)
         (recur (sort-tree (cons (node (first trees) (second trees)) (drop 2 trees))) ))))
 
+(defn make-codes
+  ([tree] (make-codes tree []))
+  ([tree code]
+    (if (leaf? tree)
+      {(sym tree) code}
+      (conj
+        (make-codes (left-node tree) (conj code 0))
+        (make-codes (right-node tree) (conj code 1))))))
+
+(defn sym-as-bits [tree]
+             (when (leaf? tree) (byte-to-bits (sym tree))))
+
+(defn tree-as-bits [tree]
+  (cond
+    (leaf? tree) [1 (sym-as-bits tree)]
+    (node? tree) [0 (flatten (tree-as-bits (left-node tree)))  (flatten (tree-as-bits (right-node tree)))]))
+
+(defn- print-codes [codes]
+  (doseq [key (sort (keys codes))]
+    (println key "->" (get codes key))))
+
 (defn compress [input output]
   (let [bytes (read-bytes input)
-        freqs (sort-by val > (seq (frequencies bytes)))
-        leaves (map (partial apply leaf)  freqs)
-        tree (make-tree leaves)]
-    (println tree)))
+        freq (sort-by val < (seq (frequencies bytes)))
+        leaves (map (partial apply leaf)  freq)
+        tree (make-tree leaves)
+        codes (make-codes tree)]
+    (print-codes codes)
+    (write-encoded output (flatten [(tree-as-bits tree) (int-to-bits (count bytes)) (flatten (map codes bytes))]))))
+
+;     (write-encoded output (flatten [(tree-as-bits tree)) (int-to-bits (count bytes)) (flatten (map codes bytes))] )))
 
 (defn decompress [input output])
 
