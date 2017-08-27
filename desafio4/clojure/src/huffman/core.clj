@@ -17,11 +17,11 @@
 
 (defn node? [node] (= (first node) :node))
 
-(defn sym [tree] (when-not (nil? tree) (when (leaf? tree) (nth tree 2))))
+(defn sym [tree]  (nth tree 2))
 
-(defn left-node [tree] (when (node? tree) (nth tree 2)))
+(defn left-node [tree] (nth tree 2))
 
-(defn right-node [tree] (when (node? tree) (nth tree 3)))
+(defn right-node [tree] (nth tree 3))
 
 (defn sort-tree [tree] (sort-by  weight < tree))
 
