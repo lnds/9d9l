@@ -3,6 +3,7 @@
   (:gen-class))
 
 (use 'huffman.io)
+(use 'huffman.bits)
 
 (defn usage [] (println "Uso: huffman [-c|-d] archivo_entrada archivo_salida"))
 
@@ -39,13 +40,12 @@
         (make-codes (left-node tree) (conj code 0))
         (make-codes (right-node tree) (conj code 1))))))
 
-(defn sym-as-bits [tree]
-             (when (leaf? tree) (byte-to-bits (sym tree))))
+(defn sym-as-bits [tree] (when (leaf? tree) (byte-to-bits (sym tree))))
 
 (defn tree-as-bits [tree]
   (cond
     (leaf? tree) [1 (sym-as-bits tree)]
-    (node? tree) [0 (flatten (tree-as-bits (left-node tree)))  (flatten (tree-as-bits (right-node tree)))]))
+    (node? tree) [0 (tree-as-bits (left-node tree))  (tree-as-bits (right-node tree))]))
 
 (defn- print-codes [codes]
   (doseq [key (sort (keys codes))]
@@ -59,7 +59,60 @@
         codes (make-codes tree)]
     (write-encoded output (flatten [(tree-as-bits tree) (int-to-bits (count bytes)) (flatten (map codes bytes))]))))
 
-(defn decompress [input output])
+
+(declare read-tree)
+
+(defn read-sym [bits]
+          [(drop 8 bits) (bits-to-byte (take 8 bits))])
+
+(defn read-leaf [bits]
+  (let [[rest-bits sym] (read-sym bits)]
+    [rest-bits (leaf sym -1)]))
+
+(defn read-node [bits]
+  (let [[right-bits left] (read-tree bits)
+        [rest-bits right] (read-tree right-bits)]
+    [rest-bits (node left right)]))
+
+(defn read-tree [bits]
+  (if (= 1 (first bits))
+    (read-leaf (rest bits))
+    (read-node (rest bits))))
+
+(defn read-int [bits]
+  (bits-to-int (take 32 bits)))
+
+(declare tree-decode)
+
+(defn leaf-decode [tree bits]
+  [bits (sym tree)])
+
+(defn node-decode [tree bits]
+  (if (= 1 (first bits))
+    (tree-decode (right-node tree) (rest bits))
+    (tree-decode (left-node tree) (rest bits))))
+
+(defn tree-decode [tree bits]
+  (if (leaf? tree)
+    (leaf-decode tree bits)
+    (node-decode tree bits)))
+
+(defn decode-bits [tree coded-bits]
+  (loop [bits coded-bits bytes []]
+    (if (empty? bits)
+      bytes
+      (let [[rest-bits sym] (tree-decode tree bits)]
+        (recur rest-bits (conj bytes sym))))))
+
+(defn decompress [input output]
+  (let [bytes (read-bytes input)
+        bits (flatten (encode-bytes-to-bits bytes))
+        [int-bits tree] (read-tree bits)
+        codes (make-codes tree)
+        len (read-int int-bits)
+        rest-bits (drop 32 int-bits)
+        out-bytes (decode-bits tree rest-bits)]
+    (write-bytes output (byte-array out-bytes))))
 
 (defn process [[cmd input-file output-file]]
   (case cmd
