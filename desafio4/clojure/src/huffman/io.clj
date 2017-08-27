@@ -8,15 +8,7 @@
 (defn read-bytes [filename]
   (Files/readAllBytes (get-path filename)))
 
-(defn encode-bytes [^Integer num]
-  [^Byte (bit-and (unsigned-bit-shift-right num 24) 0xFF)
-   ^Byte (bit-and (unsigned-bit-shift-right num 16) 0xFF)
-   ^Byte (bit-and (unsigned-bit-shift-right num  8) 0xFF)
-   ^Byte (bit-and (unsigned-bit-shift-right num  0) 0xFF)])
-
-
-
-(defn pad-bits-to-byte-size [bits pad-size]
+(defn- pad-bits-to-byte-size [bits pad-size]
   (let [l (count bits)]
     (if (< l pad-size)
       (flatten (cons bits (repeat (- pad-size l) 0)))
@@ -31,13 +23,13 @@
 (defn byte-to-bits [b]
   (loop [byt (short b) bits []]
     (if (zero? byt)
-      (into [] (reverse (pad-bits-to-byte-size bits 8)) )
+      (vec (reverse (pad-bits-to-byte-size bits 8)) )
       (recur (short (unsigned-bit-shift-right byt 1)) (conj bits (short (bit-and byt 0x01)))))))
 
 (defn int-to-bits [i]
   (loop [byt (int i) bits []]
     (if (zero? byt)
-      (into [] (reverse (pad-bits-to-byte-size bits 32)) )
+      (vec (reverse (pad-bits-to-byte-size bits 32)) )
       (recur (int (unsigned-bit-shift-right byt 1)) (conj bits (int (bit-and byt 0x01)))))))
 
 (defn encode-bits-to-bytes [bits]
@@ -48,8 +40,6 @@
 
 (defn write-encoded [filename  bits]
   (let [bytes (encode-bits-to-bytes bits)]
-    (println "bits = " bits)
     (println (count bits))
-    (println "bytes = " bytes)
     (println (count bytes))
     (write-bytes filename (byte-array bytes))))

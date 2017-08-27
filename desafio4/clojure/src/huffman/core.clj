@@ -22,16 +22,15 @@
   (= (first node) :node))
 
 (defn sym [tree]
-  (if (nil? tree) nil
-                  (if (leaf? tree)
-                      (nth tree 2)
-                       nil)))
+  (when-not (nil? tree)
+    (when (leaf? tree)
+      (nth tree 2))))
 
 (defn left-node [tree]
-  (if (node? tree) (nth tree 2) nil))
+  (when (node? tree) (nth tree 2)))
 
 (defn right-node [tree]
-  (if (node? tree) (nth tree 3) nil))
+  (when (node? tree) (nth tree 3)))
 
 (defn sort-tree [tree]
   (sort-by  weight < tree))
@@ -71,8 +70,6 @@
         codes (make-codes tree)]
     (print-codes codes)
     (write-encoded output (flatten [(tree-as-bits tree) (int-to-bits (count bytes)) (flatten (map codes bytes))]))))
-
-;     (write-encoded output (flatten [(tree-as-bits tree)) (int-to-bits (count bytes)) (flatten (map codes bytes))] )))
 
 (defn decompress [input output])
 
