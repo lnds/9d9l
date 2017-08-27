@@ -47,10 +47,6 @@
     (leaf? tree) [1 (sym-as-bits tree)]
     (node? tree) [0 (tree-as-bits (left-node tree))  (tree-as-bits (right-node tree))]))
 
-(defn- print-codes [codes]
-  (doseq [key (sort (keys codes))]
-    (println key "->" (get codes key))))
-
 (defn compress [input output]
   (let [bytes (read-bytes input)
         freq (sort-by val < (seq (frequencies bytes)))
@@ -98,11 +94,11 @@
     (node-decode tree bits)))
 
 (defn decode-bits [tree coded-bits]
-  (loop [bits coded-bits bytes []]
+  (loop [bits coded-bits bytes (transient [])]
     (if (empty? bits)
-      bytes
+      (persistent! bytes)
       (let [[rest-bits sym] (tree-decode tree bits)]
-        (recur rest-bits (conj bytes sym))))))
+        (recur rest-bits (conj! bytes sym))))))
 
 (defn decompress [input output]
   (let [bytes (read-bytes input)
