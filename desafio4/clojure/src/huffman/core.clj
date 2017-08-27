@@ -6,34 +6,23 @@
 
 (defn usage [] (println "Uso: huffman [-c|-d] archivo_entrada archivo_salida"))
 
-(defn leaf [symbol freq]
-  (list :leaf freq symbol))
+(defn leaf [symbol freq] (list :leaf freq symbol))
 
-(defn leaf? [leaf]
-  (= (first leaf) :leaf))
+(defn leaf? [leaf] (= (first leaf) :leaf))
 
-(defn weight [node]
-  (second node))
+(defn weight [node] (second node))
 
-(defn node [left right]
-  (list :node (+ (weight left) (weight right))  left right))
+(defn node [left right] (list :node (+ (weight left) (weight right))  left right))
 
-(defn node? [node]
-  (= (first node) :node))
+(defn node? [node] (= (first node) :node))
 
-(defn sym [tree]
-  (when-not (nil? tree)
-    (when (leaf? tree)
-      (nth tree 2))))
+(defn sym [tree] (when-not (nil? tree) (when (leaf? tree) (nth tree 2))))
 
-(defn left-node [tree]
-  (when (node? tree) (nth tree 2)))
+(defn left-node [tree] (when (node? tree) (nth tree 2)))
 
-(defn right-node [tree]
-  (when (node? tree) (nth tree 3)))
+(defn right-node [tree] (when (node? tree) (nth tree 3)))
 
-(defn sort-tree [tree]
-  (sort-by  weight < tree))
+(defn sort-tree [tree] (sort-by  weight < tree))
 
 (defn make-tree [leaves]
   (loop [trees leaves]
@@ -68,7 +57,6 @@
         leaves (map (partial apply leaf)  freq)
         tree (make-tree leaves)
         codes (make-codes tree)]
-    (print-codes codes)
     (write-encoded output (flatten [(tree-as-bits tree) (int-to-bits (count bytes)) (flatten (map codes bytes))]))))
 
 (defn decompress [input output])
