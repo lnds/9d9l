@@ -8,71 +8,77 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.4.3]
+
+### Added 
+
+- Solución en Clojure
+
 ## [0.4.2]
 
-## Added
+### Added
 
 - Soluciones en Scala
 
 ## [0.4.1]
 
-## Added
+### Added
 
 - Solución en Kotlin
 
 ## [0.4.0] - 2017-05-21
 
-## Added
+### Added
 
 - Describe el desafío 4.
 
 ## [0.3.13] - 2017-01-05
 
-## Added
+### Added
 
 - Titulo del siguiente desafio en README.md
 
-## Changed
+### Changed
 
 - Corrige bugs en la version java
 - Actualiza tiempos en README.md del desafío 3
 
 ## [0.3.12] - 2017-01-04
 
-## Changed
+### Changed
 
 - Solución en Erlang optimizada usando Binaries. Esto vino después de que resolví el desafío en Elixir.
 
 ## [0.3.11] - 2017-01-03
 
-## Added 
+### Added 
 
 - Solucion Desafío 3 en Elixir
 
 ## [0.3.10]- 2017-01-03
 
-## Changed 
+### Changed 
 
 - documentacion
 - correcciones
 
 ## [0.3.9] - 2017-01-02
 
-## Added 
+### Added 
 
 - Solución en Erlang
 
-## Changed
+### Changed
 
 - Aportes en Java
 
 ## [0.3.8] - 2016-12-28
 
-## Added
+### Added
 
 - Solución en Kotlin
 
-## Changed
+### Changed
 
 - Ajusta las medidas a nuevo computador
 - Especifica un poco mejor los requerimientos
@@ -80,17 +86,17 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [0.3.7] - 2016-12-25
 
-## Added
+### Added
 
 - Solución en F# al desafío 4
 
 ## [0.3.6] - 2016-10-28
 
-## Added
+### Added
 
 - Solución en Swift al desafío 3
 
-## Changed
+### Changed
 
 - Mueve la solución en c a su propio directorio
 - Aplica optimización del compilador a solución en C
@@ -100,21 +106,21 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [0.3.5] - 2016-10-15
 
-## Added
+### Added
 
 - Solución en Scala al desafío 3
 
-## Changed
+### Changed
 
 - bug en la macro mytime en Clojure
 
 ## [0.3.4] - 2016-10-12
 
-## Added
+### Added
 
 - Solución en Clojure al desafío 3.
 
-## Changed
+### Changed
 
 - Se corrigen bugs en las versiones en C, Rust y Go.
 - Se corrigen estadisticas debido a lo anterior.
@@ -163,7 +169,7 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 ### Added
 - Implementa solución en F#
 
-## Changed
+### Changed
 - Agrega la información de temperatura máxima, mínima y actual en todos los reportes
 
 ## [0.2.6]
