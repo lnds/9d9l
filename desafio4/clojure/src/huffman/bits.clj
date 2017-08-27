@@ -19,16 +19,16 @@
       (recur (bit-or (bit-shift-left int 1) (first bits)) (rest bits)))))
 
 (defn byte-to-bits [b]
-  (loop [byt (short (bit-and b 0xFF)) bits []]
+  (loop [byt (short (bit-and b 0xFF)) bits (transient [])]
     (if (zero? byt)
-      (vec (reverse (pad-bits-to-byte-size bits 8)) )
-      (recur (short (bit-and (unsigned-bit-shift-right byt 1) 0xFF)) (conj bits (short (bit-and byt 0x01)))))))
+      (reverse (pad-bits-to-byte-size (persistent! bits) 8))
+      (recur (short (bit-and (unsigned-bit-shift-right byt 1) 0xFF)) (conj! bits (short (bit-and byt 0x01)))))))
 
 (defn int-to-bits [i]
-  (loop [byt (int i) bits []]
+  (loop [byt (int i) bits (transient []) ]
     (if (zero? byt)
-      (vec (reverse (pad-bits-to-byte-size bits 32)) )
-      (recur (int (unsigned-bit-shift-right byt 1)) (conj bits (int (bit-and byt 0x01)))))))
+      (reverse (pad-bits-to-byte-size (persistent! bits) 32))
+      (recur (int (unsigned-bit-shift-right byt 1)) (conj! bits (int (bit-and byt 0x01)))))))
 
 (defn encode-bits-to-bytes [bits]
   (map bits-to-byte (partition 8 bits)))
