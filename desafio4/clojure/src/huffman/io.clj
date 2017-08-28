@@ -3,7 +3,6 @@
 
 (use 'huffman.bits)
 
-
 (defn get-path [filename]
   (Paths/get filename (make-array String 0)))
 

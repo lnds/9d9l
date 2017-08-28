@@ -40,20 +40,24 @@
         (make-codes (left-node tree) (conj code 0))
         (make-codes (right-node tree) (conj code 1))))))
 
-(defn sym-as-bits [tree] (when (leaf? tree) (byte-to-bits (sym tree))))
+(defn sym-as-bits [tree]  (byte-to-bits (sym tree)))
 
 (defn tree-as-bits [tree]
   (cond
     (leaf? tree) [1 (sym-as-bits tree)]
     (node? tree) [0 (tree-as-bits (left-node tree))  (tree-as-bits (right-node tree))]))
 
+(defn encode-bits [codes bytes]
+  (flatten (map codes bytes)))
+
 (defn compress [input output]
   (let [bytes (read-bytes input)
-        freq (sort-by val < (seq (frequencies bytes)))
-        leaves (map (partial apply leaf)  freq)
+        freq (sort-by val <  (frequencies bytes))
+        leaves (map (partial apply leaf) freq)
         tree (make-tree leaves)
         codes (make-codes tree)]
-    (write-encoded output (flatten [(tree-as-bits tree) (int-to-bits (count bytes)) (flatten (map codes bytes))]))))
+    (write-encoded output (flatten [(tree-as-bits tree)
+                                    (encode-bits codes bytes)] ))))
 
 
 (declare read-tree)
@@ -103,10 +107,8 @@
 (defn decompress [input output]
   (let [bytes (read-bytes input)
         bits (flatten (encode-bytes-to-bits bytes))
-        [int-bits tree] (read-tree bits)
+        [rest-bits tree] (read-tree bits)
         codes (make-codes tree)
-        len (read-int int-bits)
-        rest-bits (drop 32 int-bits)
         out-bytes (decode-bits tree rest-bits)]
     (write-bytes output (byte-array out-bytes))))
 
