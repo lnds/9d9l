@@ -8,7 +8,13 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
-## [0.4.3]
+## [0.4.3.1] - 2017-08.28
+
+### Changes
+
+- Simplifica solución en Clojure
+
+## [0.4.3] - 2017-08-27
 
 ### Added 
 
