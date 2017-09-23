@@ -3,7 +3,6 @@ pub mod io;
 
 use huffman::io::{BitInputStream, BitOutputStream};
 
-
 pub const MAX_SYMBOLS: usize = 256;
 
 #[derive(Clone)]
@@ -70,9 +69,7 @@ fn read_char(tree: &Tree, reader: &mut BitInputStream) -> u8 {
 	}
 }
 
-
 struct Heap {
-	
 	data: Vec<Option<Tree>>,
 	last: usize
 }
@@ -127,18 +124,14 @@ impl Heap {
 }
 
 pub struct HuffTree {
-
 	tree: Tree,
-
+	codes: Vec<String>
 }
-
-
-
 
 impl HuffTree {
 
-
-	pub fn build(freqs:[usize; MAX_SYMBOLS]) -> HuffTree {
+	pub fn build(mut reader: &mut BitInputStream) -> HuffTree {
+		let freqs :[usize; MAX_SYMBOLS] = HuffTree::calc_frecuencies(&mut reader);
 		let mut heap = Heap::new(MAX_SYMBOLS);
 		for (s, &f) in freqs.iter().enumerate() {
 			if f > 0 {
@@ -150,11 +143,13 @@ impl HuffTree {
 			let r = heap.extract().unwrap();
 			heap.insert(Tree::Node(freq_tree(&l)+freq_tree(&r), Box::new(l), Box::new(r)))
 		}
+		let tree = heap.extract().unwrap();
+		let codes = HuffTree::build_codes(&tree);
 		HuffTree {
-			tree: heap.extract().unwrap()
+			tree: tree,
+			codes: codes
 		}
 	}
-
 
 	fn read_tree(reader: &mut BitInputStream) -> Tree {
 		let flag = reader.read_bool();
@@ -169,29 +164,55 @@ impl HuffTree {
 
 	pub fn read(reader: &mut BitInputStream) -> HuffTree {
 		HuffTree {
-			tree: HuffTree::read_tree(reader)
+			tree: HuffTree::read_tree(reader),
+			codes: vec![]
 		}
-	}
-
-	pub fn read_length(&mut self, reader: &mut BitInputStream) -> usize {
-		reader.read_int() as usize
-	}
-
-	pub fn read_char(&mut self, reader: &mut BitInputStream) -> [u8;1] {
-		let m = read_char(&self.tree, reader);
-		[m;1]
-	}
-
-	pub fn build_codes(tree:&HuffTree) -> Vec<String> {
-		let mut prefix:String = "".into();
-		let mut codes: Vec<String> = vec!["".into(); MAX_SYMBOLS];
-		dump_codes(&tree.tree, &mut codes, &mut prefix);
-		codes.clone()
 	}
 
 	pub fn write_to(&mut self, writer: &mut BitOutputStream) {
 		write_tree(&self.tree, writer);
 	}
 
+	pub fn write_symbols(&mut self, reader: &mut BitInputStream, writer: &mut BitOutputStream) {
+		let bytes = reader.get_bytes();
+		let len = bytes.len();
+		writer.write_int(len as u32);
+		for &symbol in bytes.iter() {
+			let code = &self.codes[symbol as usize];
+			for c in code.chars() {
+				writer.write_bit(c.to_digit(2).unwrap() as u8);
+			}
+		}
+	}
+
+	pub fn compress(&mut self, mut reader: &mut BitInputStream, mut writer: &mut BitOutputStream) {
+		self.write_to(&mut writer);
+		self.write_symbols(&mut reader, &mut writer);
+		writer.close();
+	}
+
+	pub fn decompress(&mut self, reader: &mut BitInputStream, writer: &mut BitOutputStream) {
+		let len = reader.read_int() as usize;
+		for _ in 0..len {
+			writer.write_byte(read_char(&self.tree, reader) as u16);
+		} 
+	}
+
+	fn build_codes(tree: &Tree) -> Vec<String> {
+		let mut prefix:String = "".into();
+		let mut codes: Vec<String> = vec!["".into(); MAX_SYMBOLS];
+		dump_codes(&tree, &mut codes, &mut prefix);
+		codes.clone()
+	}
+
+	fn calc_frecuencies(reader: &mut BitInputStream) -> [usize; MAX_SYMBOLS] {
+		let mut freqs : [usize; MAX_SYMBOLS] = [0; MAX_SYMBOLS];
+		let bytes = reader.get_bytes();
+		for &b in bytes.iter() {
+			freqs[b as usize] += 1;
+		}
+		freqs
+	}
+	
 }
 

@@ -1,13 +1,9 @@
-
 use std::io::prelude::*;
 use std::fs::File;
 use std::error::Error;
 use std::io::BufWriter;
 
-
-
 pub struct BitInputStream {
-
 	buffer : u16,
 	pos : usize,
 	bits_in_buffer : i16,
@@ -44,6 +40,10 @@ impl BitInputStream {
 		bis.len = bis.bytes.len();
 		bis.fill_buffer();
 		bis
+	}
+
+	pub fn get_bytes(&mut self) -> &Vec<u8> {
+		&self.bytes
 	}
 
 	pub fn read_char(&mut self) -> u8 {
@@ -89,7 +89,6 @@ impl BitInputStream {
 			self.bits_in_buffer = 8;
 			self.pos += 1;
 		}
-		
 	}
 }
 
@@ -106,7 +105,6 @@ impl BitOutputStream {
 
 	pub fn write_bit(&mut self, bit: u8) {
 		if bit != 0 && bit != 1 { panic!("argument must be 0 or 1., received {}", bit); }
-
 		self.buffer = (self.buffer << 1) | (bit as u16);
 		self.bits_in_buffer += 1;
 		if self.bits_in_buffer == 8 {
@@ -141,7 +139,7 @@ impl BitOutputStream {
 		self.written += 1;
 	}
 
-	pub fn flush(&mut self) {
+	pub fn close(&mut self) {
     	self.clear_buffer();
     	self.out.flush().unwrap();
     }
