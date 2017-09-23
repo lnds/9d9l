@@ -59,7 +59,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de tamaño X
     | Lenguaje | Tiempo | 
     | Kotlin   |        |
     | Scala	   |        |
-    | Clojire  |        |
+    | Clojure  |        |
 
 ## Lineas de código
 
@@ -69,6 +69,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Kotlin   |  267 |  266 |
     | Scala    |  280 |  226 |
     | Clojure  |  152 |   na |
+    | Rust     |  351 |      |
 
 ## Tiempo de Desarrollo
 
@@ -78,6 +79,7 @@ Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://Timi
     | Kotlin  | 5:01 |
     | Scala   | 3:46 |
     | Clojure | 4:48 |
+    | Rust    | 6:56 |
 
 ## Ranking
 

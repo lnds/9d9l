@@ -8,7 +8,13 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
-## [0.4.3.1] - 2017-08.28
+## [0.4.4] - 2017-09-23
+
+### Added
+
+- Solución en Rust
+
+## [0.4.3.1] - 2017-08-28
 
 ### Changes
 
