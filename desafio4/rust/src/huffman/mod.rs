@@ -1,5 +1,7 @@
 
-use lzw::BitWriter;
+pub mod io;
+
+use huffman::io::{BitInputStream, BitOutputStream};
 
 
 pub const MAX_SYMBOLS: usize = 256;
@@ -12,8 +14,8 @@ enum Tree {
 
 fn freq_tree(t:&Tree) -> usize {
 	match *t {
-		Tree::Leaf(f,_) => f,
-		Tree::Node(f,_,_)=> f
+		Tree::Leaf(f, _) => f,
+		Tree::Node(f, _, _)=> f
 	}
 }
 
@@ -39,16 +41,31 @@ fn dump_codes(tree:&Tree, codes: &mut Vec<String>, prefix: &mut String) {
 	}
 }
 
-fn write_tree(tree:&Tree, writer:&mut BitWriter) {
+fn write_tree(tree:&Tree, writer:&mut BitOutputStream) {
 	match *tree {
 		Tree::Leaf(_, sym) => {
-			writer.write_bits(1, 1).unwrap();
-			writer.write_bits(sym as u16, 8).unwrap();
+			writer.write_bit(1);
+			writer.write_byte(sym as u16);
 		}
 		Tree::Node(_, ref left, ref right) => {
-			writer.write_bits(0, 1).unwrap();
+			writer.write_bit(0);
 			write_tree(left, writer);
 			write_tree(right, writer);
+		}
+	}
+}
+
+fn read_char(tree: &Tree, reader: &mut BitInputStream) -> u8 {
+	match *tree {
+		Tree::Leaf(_, sym) => {
+			sym
+		}
+		Tree::Node(_, ref left, ref right) => {
+			if reader.read_bool() {
+				read_char(right, reader)
+			} else {
+				read_char(left, reader)
+			}
 		}
 	}
 }
@@ -116,6 +133,8 @@ pub struct HuffTree {
 }
 
 
+
+
 impl HuffTree {
 
 
@@ -136,6 +155,33 @@ impl HuffTree {
 		}
 	}
 
+
+	fn read_tree(reader: &mut BitInputStream) -> Tree {
+		let flag = reader.read_bool();
+		if flag {
+			Tree::Leaf(0, reader.read_char())
+		} else {
+			let l = HuffTree::read_tree(reader);
+			let r = HuffTree::read_tree(reader);
+			Tree::Node(0, Box::new(l), Box::new(r))
+		}
+	}
+
+	pub fn read(reader: &mut BitInputStream) -> HuffTree {
+		HuffTree {
+			tree: HuffTree::read_tree(reader)
+		}
+	}
+
+	pub fn read_length(&mut self, reader: &mut BitInputStream) -> usize {
+		reader.read_int() as usize
+	}
+
+	pub fn read_char(&mut self, reader: &mut BitInputStream) -> [u8;1] {
+		let m = read_char(&self.tree, reader);
+		[m;1]
+	}
+
 	pub fn build_codes(tree:&HuffTree) -> Vec<String> {
 		let mut prefix:String = "".into();
 		let mut codes: Vec<String> = vec!["".into(); MAX_SYMBOLS];
@@ -143,7 +189,7 @@ impl HuffTree {
 		codes.clone()
 	}
 
-	pub fn write_to(&mut self, writer: &mut BitWriter) {
+	pub fn write_to(&mut self, writer: &mut BitOutputStream) {
 		write_tree(&self.tree, writer);
 	}
 

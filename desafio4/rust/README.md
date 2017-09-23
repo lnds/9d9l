@@ -27,6 +27,6 @@ En el directorio doc se encuentra un documento que describe las particularidades
 
 ## Licencia
 
-Copyright © 2015, 2016 Eduardo Díaz
+Copyright ©  2017 Eduardo Díaz
 
 Distribuido bajo licencia MIT (ver archivo LICENSE para los detalles).

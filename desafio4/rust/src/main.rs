@@ -1,16 +1,13 @@
 mod huffman;
 
-extern crate lzw;
 use std::env;
 use std::io::prelude::*;
 use std::fs::File;
 use std::io::BufWriter;
 use std::error::Error;
-use lzw::MsbWriter;
-use lzw::BitWriter;
 use huffman::MAX_SYMBOLS;
 use huffman::HuffTree;
-
+use huffman::io::{BitInputStream, BitOutputStream};
 
 
 fn usage() {
@@ -37,19 +34,28 @@ fn compress(input:&String, output:&String) {
 	let freqs = calc_frecuencies(&bytes);
 	let mut tree = HuffTree::build(freqs);
 	let codes = HuffTree::build_codes(&tree);
-	let mut writer = MsbWriter::new(BufWriter::new(File::create(output).unwrap()));
+	let mut writer = BitOutputStream::new(output);
 	tree.write_to(&mut writer);
+	let len = bytes.len();
+	writer.write_int(len as u32);
 	for &symbol in bytes.iter() {
 		let code = &codes[symbol as usize];
 		for c in code.chars() {
-			writer.write_bits(c.to_digit(2).unwrap() as u16, 1).unwrap();
+			writer.write_bit(c.to_digit(2).unwrap() as u8);
 		}
 	}
+	writer.flush();
 }
 
 
 fn decompress(input:&String, output:&String) {
-	println!("descomprimir {} en {}", input, output);
+	let mut reader = BitInputStream::new(&input);
+	let mut writer = BufWriter::new(File::create(output).unwrap());
+	let mut tree = HuffTree::read(&mut reader);
+	let len = tree.read_length(&mut reader);
+	for _ in 0..len {
+		writer.write(&tree.read_char(&mut reader)).unwrap();
+	} 
 }
 
 fn calc_frecuencies(bytes:&[u8]) -> [usize; MAX_SYMBOLS] {

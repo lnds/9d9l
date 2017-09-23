@@ -4,4 +4,3 @@ version = "0.1.0"
 authors = ["Eduardo Díaz Cortés <ediaz@dcc8090.cl>"]
 
 [dependencies]
-lzw = "0.10.0"
