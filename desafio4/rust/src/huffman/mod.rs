@@ -168,7 +168,6 @@ impl HuffTree {
 			codes: vec![]
 		}
 	}
-
 	pub fn write_to(&mut self, writer: &mut BitOutputStream) {
 		write_tree(&self.tree, writer);
 	}
@@ -213,6 +212,5 @@ impl HuffTree {
 		}
 		freqs
 	}
-	
 }
 

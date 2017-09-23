@@ -143,5 +143,4 @@ impl BitOutputStream {
     	self.clear_buffer();
     	self.out.flush().unwrap();
     }
-  
 }
