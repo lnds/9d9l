@@ -42,9 +42,7 @@ impl BitInputStream {
 		bis
 	}
 
-	pub fn get_bytes(&mut self) -> &Vec<u8> {
-		&self.bytes
-	}
+	pub fn get_bytes(&mut self) -> &Vec<u8> { &self.bytes }
 
 	pub fn read_char(&mut self) -> u8 {
 		if self.eof { panic!("reading from empty input stream"); }

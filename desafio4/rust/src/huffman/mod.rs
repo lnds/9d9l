@@ -212,7 +212,5 @@ impl HuffTree {
 		}
 		freqs
 	}
-
-	
 }
 

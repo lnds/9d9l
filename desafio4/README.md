@@ -69,7 +69,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Kotlin   |  267 |  266 |
     | Scala    |  280 |  226 |
     | Clojure  |  152 |   na |
-    | Rust     |  351 |      |
+    | Rust     |  336 |      |
 
 ## Tiempo de Desarrollo
 
