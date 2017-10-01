@@ -8,7 +8,7 @@ Configurar adecuadamente el ambiente Go (leer How to Write Go Code https://golan
 
 Para probarlo puedes hacer:
 
-	$ go run huffman.go [-c|/d] archivo_entrada archivo_salida 
+	$ go run huffman.go io.go hufftree.go heap.go [-c|/d] archivo_entrada archivo_salida 
 
 ## Compilación
 

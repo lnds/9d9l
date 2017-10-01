@@ -1,7 +1,5 @@
 package main
 
-import("fmt")
-
 const MAX_SYMBOLS = 256
 type Tree interface {
 	Freq() uint
@@ -119,7 +117,6 @@ func (h *HuffTree) Compress(reader *BitInputStream, writer *BitOutputStream) {
 
 func (h *HuffTree) Decompress(reader *BitInputStream, writer *BitOutputStream) {
 	len := reader.ReadInt()
-	fmt.Printf("decompress len = %d\n", len)
 	for i := uint32(0); i < len; i++ {
 		writer.WriteByte(uint16(h.tree.ReadChar(reader)))
 	}

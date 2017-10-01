@@ -1,6 +1,6 @@
 package main
 
-import ("os"; "log"; "io/ioutil"; "bufio"; "fmt")
+import ("os"; "log"; "io/ioutil"; "bufio")
 
 type BitInputStream struct {
 	buffer uint16
@@ -65,8 +65,6 @@ func (i *BitInputStream) ReadBool() bool {
 func (i *BitInputStream) ReadChar() byte {
 	if i.eof { log.Fatal("reading from empty input stream") }
 
-	fmt.Printf("read char pos = %d\n", i.pos)
-
 	x := i.buffer
 	if i.bitsInBuffer == 8 {
 		i.fillBuffer()
@@ -81,7 +79,6 @@ func (i *BitInputStream) ReadChar() byte {
 }
 
 func (i *BitInputStream) ReadInt() uint32 {
-	fmt.Printf("read int pos = %d\n", i.pos)
 	x := uint32(i.ReadChar())
 	x = (x << 8) | uint32(i.ReadChar())
 	x = (x << 8) | uint32(i.ReadChar())
