@@ -16,7 +16,6 @@ pub struct BitOutputStream {
 	out : BufWriter<File>,
 	buffer : u16,
 	bits_in_buffer : i16,
-	written: usize
 }
 
 impl BitInputStream {
@@ -42,9 +41,7 @@ impl BitInputStream {
 		bis
 	}
 
-	pub fn get_bytes(&mut self) -> &Vec<u8> {
-		&self.bytes
-	}
+	pub fn get_bytes(&mut self) -> &Vec<u8> { &self.bytes }
 
 	pub fn read_char(&mut self) -> u8 {
 		if self.eof { panic!("reading from empty input stream"); }
@@ -98,8 +95,7 @@ impl BitOutputStream {
 		BitOutputStream {
 			out: BufWriter::new(File::create(output).unwrap()),
 			buffer : 0 ,
-			bits_in_buffer : 0,
-			written: 0
+			bits_in_buffer : 0
 		}
 	}
 
@@ -136,7 +132,6 @@ impl BitOutputStream {
 		self.out.write(&[self.buffer as u8]).unwrap();
 		self.buffer = 0;
 		self.bits_in_buffer = 0;
-		self.written += 1;
 	}
 
 	pub fn close(&mut self) {
