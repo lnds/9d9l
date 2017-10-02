@@ -70,6 +70,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Scala    |  280 |  226 |
     | Clojure  |  152 |   na |
     | Rust     |  336 |      |
+    | Go	   |  338 |   na |
 
 ## Tiempo de Desarrollo
 
