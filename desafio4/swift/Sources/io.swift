@@ -78,16 +78,15 @@ class BitInputStream {
 }
 
 class BitOutputStream {
-	var out : UnsafeMutablePointer<FILE>!
+	var out : Data
 
 	var buffer : UInt16 = 0
 	var bitsInBuffer : UInt16 = 0
+	var output : String
 
 	init(outputFile: String) {
-		out = fopen(outputFile, "wb")
-		if out == nil {
-			_panic(msg: "no pudo abrir archivo: "+outputFile)
-		}
+		out = Data()
+		output = outputFile
 	}
 
 	func writeBitc(bit: Character) {
@@ -131,13 +130,13 @@ class BitOutputStream {
 		if bitsInBuffer > 0 {
 			buffer = buffer << (8 - bitsInBuffer)
 		}
-		fwrite(&buffer, 1, 1, out)
+		out.append(UInt8(buffer))
 		buffer = 0
 		bitsInBuffer = 0
 	}
 
 	func close() {
-		clearBuffer()
-		fclose(out)
+		let nsdata = NSData(data: out)
+		nsdata.write(toFile: output, atomically: true)
 	}
 }
