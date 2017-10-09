@@ -8,6 +8,16 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.4.6] - 2017-10-8
+
+- Solución en Swift
+
+## [0.4.5] - 2017-10-1
+
+## Added
+
+- Solución en Go
+
 ## [0.4.4] - 2017-09-23
 
 ### Added
