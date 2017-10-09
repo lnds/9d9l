@@ -1,10 +1,6 @@
 import Foundation
 
-extension String {
-    var ascii: [UInt8?] {
-        return unicodeScalars.map { UInt8($0.value) }
-    }
-}
+let MAX_SYMBOLS = 256
 
 protocol Tree {
 	
@@ -17,7 +13,6 @@ protocol Tree {
 	func readChar(reader: BitInputStream) -> UInt8
 }
 
-let MAX_SYMBOLS = 256
 
 class Leaf : Tree {
 	
