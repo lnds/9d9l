@@ -8,6 +8,10 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.4.7] - 2017-10-14
+
+- Solución en F#
+
 ## [0.4.6.1] - 2017-10-9
 
 - Solución en Swift mejorada, elimina código estilo C.
