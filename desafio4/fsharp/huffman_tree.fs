@@ -38,8 +38,6 @@ module Trees =
                 let ch = this.ReadChar(reader)
                 writer.WriteByte(ch)
         
-    let MAX_SYMBOLS = 256
-    
     let calcFreqs (l:byte list) = 
         l |> Seq.groupBy(fun c -> c) |> Seq.map (fun (c, l) -> c, (List.ofSeq l).Length) |> Seq.toList
         
@@ -68,8 +66,6 @@ module Trees =
         loop tree [] |> dict
         
     
-        
-    
     let rec readTree (reader:BitInputStream) =
         let b = reader.ReadBit()
         if b then 
@@ -85,25 +81,19 @@ module Trees =
                 let left = readTree(reader)
                 let right = readTree(reader)
                 Node(left, right, -1)
-                
-                
         
     let compress (input:string) (output:string) = 
         let bs = File.ReadAllBytes input
         let tree =  List.ofArray bs |> calcFreqs |> buildTree
         let codes = makeCodes tree
-        let writer = new BitOutputStream(output)
+        use writer = new BitOutputStream(output)
         tree.WriteTo(writer)
         for b in bs do
             writer.WriteBits(codes.[b])
-        writer.Close()
-            
             
     let decompress (input:string) (output:string) =
-        let reader = new BitInputStream(input)
+        use reader = new BitInputStream(input)
         let tree = readTree(reader)
         let writer = File.OpenWrite(output)
         tree.Parse reader writer
-        reader.Close()
-        writer.Close()
         

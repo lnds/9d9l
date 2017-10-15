@@ -6,7 +6,6 @@ module Program =
 
     let usage () = printfn "uso: huffman [-c|-d] entrada salida"
     
-    
     [<EntryPoint>]
     let main argv = 
         if argv.Length <> 3 then
