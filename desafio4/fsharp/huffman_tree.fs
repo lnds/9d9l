@@ -6,8 +6,8 @@ module Trees =
     open Huffman.IO
 
     type Tree =
-        | Leaf of byte * frequency:int
-        | Node of left:Tree  * right: Tree  * frequency:int
+        | Leaf of byte * int
+        | Node of Tree  * Tree  * int
     
         member this.Freq() =
             match this with

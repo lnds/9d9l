@@ -30,10 +30,9 @@ module IO =
             let v = !buffer &&& (byte mask)
             pos := !pos + 1L
             v >= 1uy
-            
-        member this.Eof with
-            get() = 
-                stream.Position >= stream.Length && !len <= 0
+        
+        member this.Eof 
+            with get() = stream.Position >= stream.Length && !len <= 0
             
         member this.ReadBit() =
             if this.Eof then
