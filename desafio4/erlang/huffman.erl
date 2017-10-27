@@ -42,6 +42,18 @@ tree_as_bits({L,R}) ->
 tree_as_bits(Symbol) -> 
 	<<1:1, Symbol>>.
 
+% build a tree from file
+
+read_tree(<<1:1, Rest/bitstring>>) -> read_leaf(Rest);
+read_tree(<<0:1, Rest/bitstring>>) -> read_node(Rest).
+
+read_leaf(<<Sym:8, Rest/bitstring>>) -> {{Sym,-1}, Rest}.
+
+read_node(Bits) -> 
+	{L, Rest1} = read_tree(Bits),
+	{R, Rest2} = read_tree(Rest1),
+	{{L,R}, Rest2}.
+
 %build_codes from a tree build all codes
 build_codes({L,R}) ->
 	build_codes(L, <<0:1>>) ++ build_codes(R, <<1:1>>).
@@ -61,5 +73,27 @@ calc_freqs([Head|Tail], Acum) ->
 	{Block, Rest} = lists:splitwith(fun (X) -> X == Head end, Tail),
 	calc_freqs(Rest, [{Head, 1+length(Block)} | Acum]).
 
+decode(Code, Tree) -> decode(Code, Tree, Tree, []).
 
-descomprimir(Entrada, Salida) -> io:format("comprimir ~s en ~s\n", [Entrada,Salida]).
+decode(<<>>, _, _, Result) -> 
+	lists:reverse(Result);
+
+decode(<<1:1, Bits/bitstring>>, {Sym,-1},  Tree, Result) -> 
+	decode(<<1:1, Bits/bitstring>>, Tree, Tree, [Sym|Result]);
+
+decode(<<1:1, Rest/bitstring>>, {_, R={_,_}}, Tree, Result) ->
+	decode(Rest, R, Tree, Result);
+
+decode(<<0:1, Bits/bitstring>>, {Sym,-1},  Tree, Result) -> 
+	decode(<<0:1, Bits/bitstring>>, Tree, Tree, [Sym|Result]);
+
+decode(<<0:1, Rest/bitstring>>, {L={_,_}, _}, Tree, Result) ->
+	decode(Rest, L, Tree, Result).
+
+
+
+descomprimir(Entrada, Salida) -> 
+	{ok, Binary} = file:read_file(Entrada),
+	{Tree, Code} = read_tree(Binary),
+	Dump = decode(Code, Tree),
+	ok = file:write_file(Salida, Dump).
