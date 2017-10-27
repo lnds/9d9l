@@ -28,7 +28,6 @@ encode(Bytes) ->
 	Dump = << <<(dict:fetch(Char, Dict))/bits>> || Char <- Bytes >>,
 	{Dump, Tree}.
 
-
 % build a huffman tree
 build_tree([{Node, _} | []]) -> Node; %only one
 build_tree(Nodes) ->
@@ -73,24 +72,21 @@ calc_freqs([Head|Tail], Acum) ->
 	{Block, Rest} = lists:splitwith(fun (X) -> X == Head end, Tail),
 	calc_freqs(Rest, [{Head, 1+length(Block)} | Acum]).
 
-decode(Code, Tree) -> decode(Code, Tree, Tree, []).
+decode(Code, Tree) -> 
+	L = [X || <<X:1>> <= Code],
+	decode(L, Tree, Tree, []).
 
-decode(<<>>, _, _, Result) -> 
+decode([], _, _, Result) -> 
 	lists:reverse(Result);
 
-decode(<<1:1, Bits/bitstring>>, {Sym,-1},  Tree, Result) -> 
-	decode(<<1:1, Bits/bitstring>>, Tree, Tree, [Sym|Result]);
-
-decode(<<1:1, Rest/bitstring>>, {_, R={_,_}}, Tree, Result) ->
+decode([1|Rest], {_, R={_,_}}, Tree, Result) ->
 	decode(Rest, R, Tree, Result);
 
-decode(<<0:1, Bits/bitstring>>, {Sym,-1},  Tree, Result) -> 
-	decode(<<0:1, Bits/bitstring>>, Tree, Tree, [Sym|Result]);
+decode([0|Rest], {L={_,_}, _}, Tree, Result) ->
+	decode(Rest, L, Tree, Result);
 
-decode(<<0:1, Rest/bitstring>>, {L={_,_}, _}, Tree, Result) ->
-	decode(Rest, L, Tree, Result).
-
-
+decode(L, {Sym,-1},  Tree, Result) -> 
+	decode(L, Tree, Tree, [Sym|Result]).
 
 descomprimir(Entrada, Salida) -> 
 	{ok, Binary} = file:read_file(Entrada),
