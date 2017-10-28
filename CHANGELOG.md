@@ -8,6 +8,10 @@ Usamos también Semantic Versioning [http://semver.org/](http://semver.org/)
 
 ## [Unreleased]
 
+## [0.4.8] - 2017-10-28
+
+- Solución en Erlang
+
 ## [0.4.7] - 2017-10-14
 
 - Solución en F#
