@@ -73,6 +73,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Go	   |  338 |   na |
     | Swift    |  334 |   na |
     | F#       |  197 |   na |
+    | Erlang   |   69 |   na |
 
 ## Tiempo de Desarrollo
 
@@ -86,6 +87,7 @@ Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://Timi
     | Go	  | 3:15 |
     | Swift   | 3:18 |
     | F#	  | 4:28 |
+    | Erlang  | 4:25 |
 
 ## Ranking
 
