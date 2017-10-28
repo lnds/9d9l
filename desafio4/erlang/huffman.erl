@@ -10,8 +10,6 @@ main([Opt,Entrada,Salida]) when Opt =:= 'c' -> comprimir(Entrada, Salida);
 main([Opt,Entrada,Salida]) when Opt =:= 'd' -> descomprimir(Entrada, Salida);
 main([_]) -> io:format(?USAGE).
 
-
-
 comprimir(Entrada, Salida) -> 
 	{ok, Binary} = file:read_file(Entrada),
 	Bytes = binary_to_list(Binary),
@@ -20,6 +18,13 @@ comprimir(Entrada, Salida) ->
 	PS = (8 - ((bit_size(DTree) + bit_size(Dump)) rem 8)) rem 8,
 	PDump = <<DTree:(bit_size(DTree))/bitstring, Dump:(bit_size(Dump))/bitstring, 0:PS>>,
 	ok = file:write_file(Salida, PDump).
+
+
+descomprimir(Entrada, Salida) -> 
+	{ok, Binary} = file:read_file(Entrada),
+	{Tree, Code} = read_tree(Binary),
+	Dump = decode(Code, Tree),
+	ok = file:write_file(Salida, Dump).
 
 encode(Bytes) ->
 	Freqs = calc_freqs(Bytes),
@@ -72,6 +77,7 @@ calc_freqs([Head|Tail], Acum) ->
 	{Block, Rest} = lists:splitwith(fun (X) -> X == Head end, Tail),
 	calc_freqs(Rest, [{Head, 1+length(Block)} | Acum]).
 
+% decode a binary using Tree
 decode(Code, Tree) -> 
 	L = [X || <<X:1>> <= Code],
 	decode(L, Tree, Tree, []).
@@ -85,11 +91,6 @@ decode([1|Rest], {_, R={_,_}}, Tree, Result) ->
 decode([0|Rest], {L={_,_}, _}, Tree, Result) ->
 	decode(Rest, L, Tree, Result);
 
-decode(L, {Sym,-1},  Tree, Result) -> 
+decode(L, {Sym, -1},  Tree, Result) -> 
 	decode(L, Tree, Tree, [Sym|Result]).
 
-descomprimir(Entrada, Salida) -> 
-	{ok, Binary} = file:read_file(Entrada),
-	{Tree, Code} = read_tree(Binary),
-	Dump = decode(Code, Tree),
-	ok = file:write_file(Salida, Dump).
