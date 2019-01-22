@@ -45,7 +45,7 @@ pad8 s | mod (length s) 8 == 0 = s
        | otherwise =  pad8 (0 : s)
 
 padRight8 s | mod (length s) 8 == 0 = s
-       | otherwise =  pad8 (s ++ [0])
+            | otherwise =  pad8 (s ++ [0])
 
 toBits c  = pad8 (packBits (ord c))
 
@@ -63,7 +63,6 @@ compress input output = do
   let treeOut = binarizeTree tree
   let outputStream = padRight8 (treeOut ++ binaryOut)
   LB.writeFile output $ LB.pack $ map fromBits (chunksOf 8 outputStream)
-
 
 readSym bits = (fromBits $ take 8 bits, drop 8 bits)
 
