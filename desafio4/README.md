@@ -103,9 +103,10 @@ Ordenado del más rápido en ejecución al más lento (medidos usando el comando
     |  5 | Scala        | 0.493s            | 0.463s               |  0.956s
     |  6 | Scala2       | 0.529s            | 0.468s               |  0.997s
     |  7 | Swift        | 0.723s            | 1.011s               |  1.734s
-    |  8 | Erlang       | 2.069s            | 2.156s               |  4.225s
-    |  9 | Clojure      | 6.973s            | 4.960s               | 11.933s
-    | 10 | F#           | 3.942s            | 8.938s               | 12.880s
+    |  8 | Haskell      | 2.384s            | 0.809s               |  3.193s
+    |  9 | Erlang       | 2.069s            | 2.156s               |  4.225s
+    | 10 | Clojure      | 6.973s            | 4.960s               | 11.933s
+    | 11 | F#           | 3.942s            | 8.938s               | 12.880s
     
 
 Ordenados del más corto en lineas de código, al más largo:
