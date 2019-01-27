@@ -56,6 +56,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
     | Erlang   | 11.28  |       0.78 | 0.31
     | Elixir   | 14.33  |       0.61 | 0.25
     | Java     |  5.65  |       1.56 | 0.63
+    | Python   | 39.85  |       4.52 | 11.25 
 
 ## Lineas de código
 

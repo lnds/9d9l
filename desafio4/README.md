@@ -74,6 +74,7 @@ Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
     | Swift    |  334 |   na |
     | F#       |  197 |   na |
     | Erlang   |   69 |   na |
+    | Haskell  |   91 |   na |
 
 ## Tiempo de Desarrollo
 
@@ -88,17 +89,37 @@ Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://Timi
     | Swift   | 3:18 |
     | F#	  | 4:28 |
     | Erlang  | 4:25 |
+    | Haskell | 7:33 |
 
 ## Ranking
 
-Ordenado del más rápido en ejecución al más lento:
+Ordenado del más rápido en ejecución al más lento (medidos usando el comando time):
 
-    |  # | lenguaje     | Tiempo |
+    |  # | lenguaje     | Tiempo Compresión | Tiempo Descompresión | Total
+    |  1 | Rust         | 0.035s            | 0.050s               |  0.085s
+    |  2 | Go           | 0.089s            | 0.141s               |  0.230s
+    |  3 | Kotlin2      | 0.200s            | 0.212s               |  0.412s
+    |  4 | Kotlin       | 0.199s            | 0.224s               |  0.423s
+    |  5 | Scala        | 0.493s            | 0.463s               |  0.956s
+    |  6 | Scala2       | 0.529s            | 0.468s               |  0.997s
+    |  7 | Swift        | 0.723s            | 1.011s               |  1.734s
+    |  8 | Erlang       | 2.069s            | 2.156s               |  4.225s
+    |  9 | Clojure      | 6.973s            | 4.960s               | 11.933s
+    | 10 | F#           | 3.942s            | 8.938s               | 12.880s
     
 
 Ordenados del más corto en lineas de código, al más largo:
 
-    # |  Lenguaje |   Lineas |
+    # | Lenguaje | Lineas |
+    1 | Erlang   |     69 |
+    2 | Haskell  |     91 |
+    3 | Clojure  |    152 |
+    4 | F#       |    197 |
+    5 | Kotlin   |    267 |
+    6 | Scala    |    280 |
+    7 | Swift    |    334 |
+    8 | Rust     |    336 |
+    9 | Go       |    338 |
  
 
 ## Aportes

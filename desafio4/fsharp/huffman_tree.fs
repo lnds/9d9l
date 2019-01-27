@@ -37,6 +37,7 @@ module Trees =
             while not reader.Eof do
                 let ch = this.ReadChar(reader)
                 writer.WriteByte(ch)
+            writer.Close()
         
     let calcFreqs (l:byte list) = 
         l |> Seq.groupBy(fun c -> c) |> Seq.map (fun (c, l) -> c, (List.ofSeq l).Length) |> Seq.toList
