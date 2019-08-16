@@ -1,7 +1,6 @@
-
 pub mod io;
 
-use huffman::io::{BitInputStream, BitOutputStream};
+use io::{BitInputStream, BitOutputStream};
 
 pub const MAX_SYMBOLS: usize = 256;
 
