@@ -129,7 +129,7 @@ impl BitOutputStream {
 		if self.bits_in_buffer > 0 {
 			self.buffer <<= 8 - self.bits_in_buffer;
 		}
-		self.out.write(&[self.buffer as u8]).unwrap();
+		self.out.write_all(&[self.buffer as u8]).unwrap();
 		self.buffer = 0;
 		self.bits_in_buffer = 0;
 	}
