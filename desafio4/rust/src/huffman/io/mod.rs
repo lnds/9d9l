@@ -20,7 +20,7 @@ pub struct BitOutputStream {
 
 impl BitInputStream {
 
-	pub fn new(file:&String) -> BitInputStream {
+	pub fn new(file: &str) -> BitInputStream {
 		let mut bis = BitInputStream {
 			buffer : 0,
 			pos : 0,
@@ -50,7 +50,7 @@ impl BitInputStream {
 		if self.bits_in_buffer == 8 {
 			self.fill_buffer();
 		} else {
-			x = x << (8 - self.bits_in_buffer);
+			x <<= 8 - self.bits_in_buffer;
 			let temp = self.bits_in_buffer;
 			self.fill_buffer();
 			self.bits_in_buffer = temp;
@@ -71,10 +71,10 @@ impl BitInputStream {
 	}
 
 	pub fn read_int(&mut self) -> u32 {
-		let mut x : u32 = self.read_char() as u32;
-		x = (x << 8) | self.read_char() as u32;
-		x = (x << 8) | self.read_char() as u32;
-		x = (x << 8) | self.read_char() as u32;
+		let mut x : u32 = u32::from(self.read_char());
+		x = (x << 8) | u32::from(self.read_char());
+		x = (x << 8) | u32::from(self.read_char());
+		x = (x << 8) | u32::from(self.read_char());
 		x
 	}
 
@@ -82,7 +82,7 @@ impl BitInputStream {
 		if self.pos == self.len {
 			self.eof = true;
 		} else {
-			self.buffer = self.bytes[self.pos] as u16;
+			self.buffer = u16::from(self.bytes[self.pos]);
 			self.bits_in_buffer = 8;
 			self.pos += 1;
 		}
@@ -91,7 +91,7 @@ impl BitInputStream {
 
 impl BitOutputStream {
 
-	pub fn new(output: &String) -> BitOutputStream {
+	pub fn new(output: &str) -> BitOutputStream {
 		BitOutputStream {
 			out: BufWriter::new(File::create(output).unwrap()),
 			buffer : 0 ,
@@ -101,7 +101,7 @@ impl BitOutputStream {
 
 	pub fn write_bit(&mut self, bit: u8) {
 		if bit != 0 && bit != 1 { panic!("argument must be 0 or 1., received {}", bit); }
-		self.buffer = (self.buffer << 1) | (bit as u16);
+		self.buffer = (self.buffer << 1) | (u16::from(bit));
 		self.bits_in_buffer += 1;
 		if self.bits_in_buffer == 8 {
 			self.clear_buffer();
@@ -112,7 +112,7 @@ impl BitOutputStream {
 		self.write_byte(((i >> 24) & 0xFF) as u16);
     	self.write_byte(((i >> 16) & 0xFF) as u16);
     	self.write_byte(((i >>  8) & 0xFF) as u16);
-    	self.write_byte(((i >>  0) & 0xFF) as u16);
+    	self.write_byte((i & 0xFF) as u16);
 	}
 
 	pub fn write_byte(&mut self, byte: u16) {
@@ -127,7 +127,7 @@ impl BitOutputStream {
 			return
 		}
 		if self.bits_in_buffer > 0 {
-			self.buffer = self.buffer << (8 - self.bits_in_buffer);
+			self.buffer <<= 8 - self.bits_in_buffer;
 		}
 		self.out.write(&[self.buffer as u8]).unwrap();
 		self.buffer = 0;

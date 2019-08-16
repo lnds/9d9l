@@ -43,7 +43,7 @@ fn write_tree(tree:&Tree, writer:&mut BitOutputStream) {
 	match *tree {
 		Tree::Leaf(_, sym) => {
 			writer.write_bit(1);
-			writer.write_byte(sym as u16);
+			writer.write_byte(u16::from(sym));
 		}
 		Tree::Node(_, ref left, ref right) => {
 			writer.write_bit(0);
@@ -104,7 +104,7 @@ impl Heap {
 			let mut j = 1;
 			while 2 * j <= self.last {
 				let mut k = 2 * j;
-				if k + 1 <= self.last && freq(&self.data[k+1]) < freq(&self.data[k]) {
+				if k < self.last && freq(&self.data[k+1]) < freq(&self.data[k]) {
 					k += 1;
 				}
 				if freq(&self.data[j]) < freq(&self.data[k]) {
@@ -145,8 +145,8 @@ impl HuffTree {
 		let tree = heap.extract().unwrap();
 		let codes = HuffTree::build_codes(&tree);
 		HuffTree {
-			tree: tree,
-			codes: codes
+			tree,
+			codes
 		}
 	}
 
@@ -192,7 +192,7 @@ impl HuffTree {
 	pub fn decompress(&mut self, reader: &mut BitInputStream, writer: &mut BitOutputStream) {
 		let len = reader.read_int() as usize;
 		for _ in 0..len {
-			writer.write_byte(read_char(&self.tree, reader) as u16);
+			writer.write_byte(u16::from(read_char(&self.tree, reader)));
 		} 
 	}
 

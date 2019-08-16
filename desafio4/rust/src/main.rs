@@ -16,14 +16,14 @@ fn process(args:Vec<String>) {
 	} 
 }
 
-fn compress(input:&String, output:&String) {
+fn compress(input: &str, output: &str) {
 	let mut reader = BitInputStream::new(input);
 	let mut writer = BitOutputStream::new(output);
 	let mut tree = HuffTree::build(&mut reader);
 	tree.compress(&mut reader, &mut writer);
 }
 
-fn decompress(input:&String, output:&String) {
+fn decompress(input: &str, output: &str) {
 	let mut reader = BitInputStream::new(input);
 	let mut writer = BitOutputStream::new(output);
 	let mut tree = HuffTree::read(&mut reader);
