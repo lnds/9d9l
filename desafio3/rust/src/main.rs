@@ -18,14 +18,7 @@ const LARGO_LINEA: usize = POS_VECTOR + TAM_VECTOR_ENTRADA;
 const TAM_SALIDA: usize = POS_VECTOR + 1 + TAM_VECTOR;
 
 fn periodo_valido(periodo:&[u8]) -> bool {
-	let mut i = 0;
-	while i < TAM_PERIODO {
-		if periodo[i] != b'0' {
-			return true;
-		}
-		i += 1;
-	}
-	false
+	periodo.iter().any(|&x| x != b'0')
 }
 
 fn ordenar_vector(vector:&[u8],  result:&mut [u8]) {
