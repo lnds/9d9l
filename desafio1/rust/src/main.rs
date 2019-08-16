@@ -2,7 +2,11 @@ extern crate rand;
 use std::io;
 use rand::Rng;
 
-enum Accion { Finalizar, Error, Jugar(Vec<u32>) }
+enum Accion { 
+	Finalizar, 
+	Error, 
+	Jugar(Vec<u32>) 
+}
 
 use Accion::*;
 
@@ -18,20 +22,22 @@ fn main() {
 	    	Error => { println!("error!\n") }
 	    	Finalizar => { 
 	    		println!("\ngracias por jugar, adios.");
-	    		break }
+	    		break 
+			}
 	    	Jugar(numero) => {
 			    println!("tu ingresaste {:?}",numero);
 	    		let (toques, famas)  = comparar(&secuencia, &numero);
 	    		println!("resultado: {} Toques {} Famas\n", toques, famas);
 	    		if famas == max {
 	    			println!("Ganaste! Acertaste al intento {}! La secuencia era {:?}.", intentos, secuencia);
-	    			break }
+	    			break 
+				}
 	    	}
 		}	
 	}
 }
 
-fn mostrar_reglas(tam:usize) {
+fn mostrar_reglas(tam: usize) {
 	println!("\
 		Bienvenido a Toque y Fama.\n\
 		==========================\n\n\
@@ -44,31 +50,37 @@ fn mostrar_reglas(tam:usize) {
 		resultado: 2 Toques 2 Famas\n\n", tam, tam);
 }
 
-fn ingresar(tam:usize) -> Accion {
+fn ingresar(tam: usize) -> Accion {
 	println!("Ingresa una secuencia de {} dígitos distintos (o escribe salir):", tam);
 	
 	let mut accion = String::new();
-	io::stdin().read_line(&mut accion).ok().expect("No pudo leer linea."); 
+	io::stdin().read_line(&mut accion).expect("No pudo leer linea."); 
 	let accion = accion.trim().to_string();
 	if accion == "salir" || accion == "" { return Accion::Finalizar }
-	return validar_entrada(tam, &accion);
+	validar_entrada(tam, &accion)
 }
 
-fn validar_entrada(tam:usize, accion:&String) -> Accion {
+fn validar_entrada(tam: usize, accion: &str) -> Accion {
 	let mut num = Vec::new();
 	for (i,c) in accion.chars().enumerate() {
-		if !c.is_digit(10) { return Error } 
-		else if i >= tam   { return Error } 
+		if !c.is_digit(10) || i >= tam {  return Error } 
 		else {
 			let digito = c.to_digit(10).unwrap();
-			if num.contains(&digito) { return Error }
+			if num.contains(&digito) { 
+				return Error 
+			}
 			num.push(digito)
 		}
 	} 
-	return if num.len() == tam { Jugar(num) } else { Error }
+	if num.len() == tam { 
+		Jugar(num) 
+	} 
+	else { 
+		Error 
+	}
 }
 
-fn comparar(sec:&Vec<u32>, num:&Vec<u32>) -> (usize, usize) {
+fn comparar(sec: &[u32], num: &[u32]) -> (usize, usize) {
 	let mut toques = 0;
 	let mut famas = 0;
 	for (i, n) in num.iter().enumerate() {
@@ -79,7 +91,7 @@ fn comparar(sec:&Vec<u32>, num:&Vec<u32>) -> (usize, usize) {
 			}
 		}
 	}
-	return (toques, famas);
+	(toques, famas)
 }
 
 fn generar_secuencia(tam:usize) -> Vec<u32> {
@@ -87,5 +99,5 @@ fn generar_secuencia(tam:usize) -> Vec<u32> {
 	let mut digitos : Vec<u32> = (0..10).collect();
 	rng.shuffle(&mut digitos);
 	digitos.truncate(tam);
-	return digitos;
+	digitos
 }
