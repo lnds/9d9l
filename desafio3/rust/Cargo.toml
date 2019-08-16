@@ -2,5 +2,6 @@
 name = "ordenar_vector"
 version = "0.1.0"
 authors = ["Eduardo  Díaz Cortés <ediaz@dcc8090.cl>"]
+edition = '2018'
 
 [dependencies]

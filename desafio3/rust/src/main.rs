@@ -20,12 +20,12 @@ const TAM_SALIDA: usize = POS_VECTOR + 1 + TAM_VECTOR;
 fn periodo_valido(periodo:&[u8]) -> bool {
 	let mut i = 0;
 	while i < TAM_PERIODO {
-		if periodo[i] != '0' as u8 {
+		if periodo[i] != b'0' {
 			return true;
 		}
 		i += 1;
 	}
-	return false;
+	false
 }
 
 fn ordenar_vector(vector:&[u8],  result:&mut [u8]) {
@@ -39,11 +39,11 @@ fn ordenar_vector(vector:&[u8],  result:&mut [u8]) {
 
 	// retorna el resultado
 	if periodos.is_empty() {
-		result[0] = 'N' as u8;
+		result[0] = b'N';
 	} else if periodos.len() > ELEMENTOS_VECTOR {
-		result[0] = 'S' as u8;
+		result[0] = b'S';
 	} else {
-		result[0] = 'D' as u8;
+		result[0] = b'D';
 		let mut p = 1;
 		for per in periodos.iter().rev() {
 			result[p..p+TAM_PERIODO].clone_from_slice(&per);
@@ -54,10 +54,10 @@ fn ordenar_vector(vector:&[u8],  result:&mut [u8]) {
 
 
 fn procesar_linea(buf: &[u8]) -> [u8; TAM_SALIDA] {
-	let mut res : [u8; TAM_SALIDA] = [' ' as u8; TAM_SALIDA];
+	let mut res : [u8; TAM_SALIDA] = [b' '; TAM_SALIDA];
 	res[0..POS_VECTOR].clone_from_slice(&buf[0..POS_VECTOR]);
 	ordenar_vector(&buf[POS_VECTOR..], &mut res[POS_VECTOR..]); 
-	return res;
+	res
 }
 
 
@@ -94,6 +94,6 @@ fn main() {
 
 	let dur  = t0.elapsed();
 	let secs = dur.as_secs();
-    let frac = dur.subsec_nanos()/1000000;
+    let frac = dur.subsec_millis();
     println!("tiempo ocupado: {}.{}s", secs, frac);
 }
