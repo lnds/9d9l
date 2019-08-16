@@ -13,7 +13,7 @@ enum ApiResult {
     WeatherReport{city: String, temp: f32, max:f32, min:f32, conditions: String}
 }
 
-fn api_call(city:&String, api_key:&String) -> ApiResult {
+fn api_call(city: &str, api_key: &str) -> ApiResult {
     let url = format!("http://api.openweathermap.org/data/2.5/weather?q={}&mode=xml&units=metric&appid={}&lang=sp", city, api_key);
     let request = RequestBuilder::new(&url).build().unwrap();
     let client = Client::new();
@@ -38,7 +38,7 @@ fn api_call(city:&String, api_key:&String) -> ApiResult {
                         let max_temp: f32= temp.attributes["max"].parse().unwrap();
                         let cur_temp: f32= temp.attributes["value"].parse().unwrap();
 
-                        return ApiResult::WeatherReport{city: city.clone(), 
+                        return ApiResult::WeatherReport{city: city.to_string(), 
                             temp: cur_temp, max: max_temp, min:min_temp, 
                             conditions: weather.attributes["value"].clone() }
                     }
@@ -46,10 +46,10 @@ fn api_call(city:&String, api_key:&String) -> ApiResult {
             }
         }
     }
-    ApiResult::Error{city: city.clone(), error: "error invocando api".to_string()}
+    ApiResult::Error{city: city.to_string(), error: "error invocando api".to_string()}
 }
 
-fn par_fetch(cities:&Vec<String>, api_key:String) -> Vec<ApiResult> {
+fn par_fetch(cities: &[String], api_key: String) -> Vec<ApiResult> {
     let (tx, rx) = mpsc::channel();
 
     for city in cities {
@@ -69,7 +69,7 @@ fn par_fetch(cities:&Vec<String>, api_key:String) -> Vec<ApiResult> {
    reports 
 }
 
-fn seq_fetch(cities:&Vec<String>, api_key:String) -> Vec<ApiResult> {
+fn seq_fetch(cities: &[String], api_key: String) -> Vec<ApiResult> {
     let mut reports : Vec<ApiResult> = Vec::with_capacity(cities.len());
     for city in cities {
         reports.push(api_call(city, &api_key));
@@ -79,11 +79,11 @@ fn seq_fetch(cities:&Vec<String>, api_key:String) -> Vec<ApiResult> {
 
 fn comp_api_result(a:&ApiResult, b:&ApiResult) -> Ordering {
     match a {
-        &ApiResult::Error{city:_, error:_} => Ordering::Less,
-        &ApiResult::WeatherReport{city:_, temp:ta, max:_, min:_, conditions:_} => 
+        ApiResult::Error{..} => Ordering::Less,
+        ApiResult::WeatherReport{temp:ta, ..} => 
             match b {
-                &ApiResult::Error{city:_, error:_} => Ordering::Less,
-                &ApiResult::WeatherReport{city:_, temp:tb, max:_, min:_, conditions:_} => 
+                ApiResult::Error{..} => Ordering::Less,
+                ApiResult::WeatherReport{temp:tb, ..} => 
                     if ta > tb { Ordering::Less } else { Ordering::Greater }
             }
     }
@@ -121,7 +121,7 @@ fn main() {
     let hours = secs / 3600;
     let mins  = (secs % 3600) / 60;
     let sec  = (secs % 3600) % 60;
-    let frac  = nanos/1000000;
+    let frac  = nanos/1_000_000;
     println!("tiempo ocupado para generar el reporte: {} = {}:{}:{}.{}", secs, hours, mins, sec, frac);
     
 }
