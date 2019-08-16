@@ -22,13 +22,8 @@ fn periodo_valido(periodo:&[u8]) -> bool {
 }
 
 fn ordenar_vector(vector:&[u8],  result:&mut [u8]) {
-	let mut periodos = BTreeSet::new();
 
-	for p in vector.chunks(TAM_PERIODO) {
-		if periodo_valido(p) {
-			periodos.insert(p);
-		}
-	}
+	let periodos : BTreeSet<&[u8]> = vector.chunks(TAM_PERIODO).filter(|p| periodo_valido(p)).collect();
 
 	// retorna el resultado
 	if periodos.is_empty() {

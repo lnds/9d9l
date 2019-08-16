@@ -63,7 +63,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
 Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
 
     | C        |   90 |
-    | Rust     |   90 |
+    | Rust     |   71 |
     | Go       |   94 |
     | Haskell  |   62 |
     | Clojure  |   70 | 
@@ -117,10 +117,10 @@ Ordenados del más corto al más largo:
     2 |  Haskell  |     62   |   
     3 |  Kotlin   |     64   |
     4 |  Clojure  |     70   |
-    5 |  Erlang   |     74   |
-    6 |  Scala    |     82   |
-    7 |  C        |     90   |
-    8 |  Rust     |     90   |
+    5 |  Rust     |     71   |
+    6 |  Erlang   |     74   |
+    7 |  Scala    |     82   |
+    8 |  C        |     90   |
     9 |  Java     |     90   |
    10 |  Go       |     94   |
    12 |  Elixir   |    100   |
