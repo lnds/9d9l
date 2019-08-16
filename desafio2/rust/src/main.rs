@@ -1,15 +1,12 @@
 extern crate getopts;
-extern crate hyper;
 extern crate treexml;
 use getopts::Options;
 use std::thread;
 use std::sync::mpsc;
 use std::env;
-use std::io::Read;
-use hyper::Client;
-use hyper::header::Connection;
 use treexml::Document;
 use std::cmp::Ordering;
+use cabot::{RequestBuilder, Client};
 
 enum ApiResult {
     Error{city: String, error: String},
@@ -18,16 +15,16 @@ enum ApiResult {
 
 fn api_call(city:&String, api_key:&String) -> ApiResult {
     let url = format!("http://api.openweathermap.org/data/2.5/weather?q={}&mode=xml&units=metric&appid={}&lang=sp", city, api_key);
+    let request = RequestBuilder::new(&url).build().unwrap();
     let client = Client::new();
-
     for _ in 1..10 {
-        match client.get(&url).header(Connection::close()).send() {
-            Err(_) => { 
+        match client.execute(&request) { 
+            Err(_) => {
                 std::thread::sleep(std::time::Duration::from_millis(100)) 
+
             },
-            Ok(mut req) => {                
-                let mut body = String::new();
-                req.read_to_string(&mut body).unwrap();
+            Ok(res) => {
+                let body = res.body_as_string().unwrap();
                 match Document::parse(body.as_bytes()) {
                     Err(_) => {
                         std::thread::sleep(std::time::Duration::from_millis(100)) 

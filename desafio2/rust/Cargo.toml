@@ -2,8 +2,9 @@
 name = "weather"
 version = "0.1.0"
 authors = ["Eduardo  Díaz Cortés <ediaz@dcc8090.cl>"]
+edition = '2018'
 
 [dependencies]
-getopts = "0.2"
-hyper = "0.7"
-treexml = "0.3.0"
+getopts = "0.2.19"
+cabot = "0.3.0"
+treexml = "0.7.0"

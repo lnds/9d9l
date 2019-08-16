@@ -2,14 +2,6 @@
 
 Esta es la implementación del desafío 2 usando Rust.
 
-## Configuración en OSX
-
-En Mac OSX hay que aplicar esto: 
-
-	export OPENSSL_INCLUDE_DIR=/usr/local/Cellar/openssl/1.0.2d_1/include/
-
-(ver https://github.com/servo/servo/issues/7303).
-
 Recuerda configurar la variable WEATHER_API_KEY
 
 	$ export WEATHER_API_KEY=api-key-entregada-por-open-weather-map-org
