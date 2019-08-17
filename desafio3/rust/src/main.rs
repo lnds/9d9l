@@ -2,7 +2,7 @@ use std::env;
 use std::error::Error;
 use std::io::BufReader;
 use std::io::BufRead;
-use std::io::LineWriter;
+use std::io::BufWriter;
 use std::io::Write;
 use std::fs::File;
 use std::str;
@@ -17,13 +17,11 @@ const TAM_VECTOR_ENTRADA: usize = TAM_VECTOR * CANT_INSTITUCIONES;
 const LARGO_LINEA: usize = POS_VECTOR + TAM_VECTOR_ENTRADA;
 const TAM_SALIDA: usize = POS_VECTOR + 1 + TAM_VECTOR;
 
-fn periodo_valido(periodo:&[u8]) -> bool {
-	periodo.iter().any(|&x| x != b'0')
-}
+const PERIODO_NULO: [u8; TAM_PERIODO] = [b'0'; TAM_PERIODO];
 
 fn ordenar_vector(vector:&[u8],  result:&mut [u8]) {
 
-	let periodos : BTreeSet<&[u8]> = vector.chunks(TAM_PERIODO).filter(|p| periodo_valido(p)).collect();
+	let periodos : BTreeSet<&[u8]> = vector.chunks(TAM_PERIODO).filter(|p| p != &PERIODO_NULO).collect();
 
 	// retorna el resultado
 	if periodos.is_empty() {
@@ -60,11 +58,11 @@ fn main() {
 
 	let entrada = match File::open(&args[1]) {
 		Err(e) => panic!("No pudo abrir archivo {}, causa: {}", args[1], e.description()),
-		Ok(file) => BufReader::with_capacity(1024*1024, file)
+		Ok(file) => BufReader::with_capacity(64*1024, file)
 	};
 	let mut salida = match File::create(&args[2]) {
 		Err(e) => panic!("No pudo crear archivo {}, causa: {}", args[2], e.description()),
-		Ok(file) => LineWriter::with_capacity(1024*1024, file)
+		Ok(file) => BufWriter::with_capacity(64*1024, file)
 	};
 
 	for (num_linea, linea) in entrada.lines().enumerate() {
@@ -75,11 +73,10 @@ fn main() {
 			writeln!(salida, "{}", str::from_utf8(&buf).unwrap()).unwrap();
 		} else {
 			let vector = procesar_linea(buf);
-			writeln!(salida, "{}", str::from_utf8(&vector).unwrap()).unwrap();
+			salida.write(&vector).unwrap();
+			salida.write(b"\n").unwrap();
 		};
-
 	}
-
 	let dur  = t0.elapsed();
 	let secs = dur.as_secs();
     let frac = dur.subsec_millis();
