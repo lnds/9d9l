@@ -5,3 +5,6 @@ authors = ["Eduardo  Díaz Cortés <ediaz@dcc8090.cl>"]
 edition = '2018'
 
 [dependencies]
+
+[profile.release]
+opt-level = 3
