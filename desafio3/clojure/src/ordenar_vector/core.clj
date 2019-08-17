@@ -1,7 +1,8 @@
 (ns ordenar-vector.core
   (:gen-class)
   (:require [clojure.string :as s])
-  (:use clojure.java.nio nio2.io nio2.watch nio2.files))
+  (:require [nio.core :as nio])
+ )
 
 (use 'clojure.java.io
 	 'ordenar-vector.tools)
