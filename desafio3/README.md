@@ -43,13 +43,13 @@ El programa ordenar_vector.c implementa correctamente este comportamiento, se pu
 Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón de vectores, la tercera columna es el tiempo en C dividido por el tiempo en el lenguaje respectivo. El tiempo promedio se sacó sobre una muestra de 5 ejecuciones del programa. La columna Proporción es la división del tiempo en el lenguaje sobre el tiempo original en C (mide cuantas veces es más rápido con respecto a C), mientras mayor este número significa que el programa es más rápido. La columna Proporción 2 mide la velocidad con respecto al programa en C optimizado (compilado con la opción -O3).
 
     | Lenguaje | Tiempo | Proporción | Proporción 2
-    | C        |  8,80  |       1,00 | -
-    | C-opt    |  3,54  |       2,48 | 1,00
-    | Rust     |  3,99  |       2,20 | 0,89
-    | Go       |  2,92  |       3,02 | 1,22
-    | Haskell  |  8,05  |       1,09 | 0,44
-    | Clojure  |  7.79  |       1,13 | 0,45
-    | Scala    |  6,02  |       1,46 | 0,59
+    | C        |  1,69  |       1,00 | -
+    | C-opt    |  1,61  |       1,06 | 1,00
+    | Rust     |  1,36  |       1,25 | 1,17
+    | Go       |  2,37  |       0,71 | 0,67
+    | Haskell  |  6,81  |       0,25 | 0,23
+    | Clojure  |  6,75  |       0,25 | 0,24
+    | Scala    |  3,73  |       0,45 | 0,43
     | Swift    |  4.66  |       1,89 | 0,76
     | F#       |  8.64  |       1,02 | 0.41
     | Kotlin   |  3.81  |       2.31 | 0.93
