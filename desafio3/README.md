@@ -50,7 +50,7 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
     | Haskell  |  6,81  |       0,25 | 0,23
     | Clojure  |  6,75  |       0,25 | 0,24
     | Scala    |  3,73  |       0,45 | 0,43
-    | Swift    |  4.66  |       1,89 | 0,76
+    | Swift    |  3,26  |       0,52 | 0,49
     | F#       |  8.64  |       1,02 | 0.41
     | Kotlin   |  3.81  |       2.31 | 0.93
     | Erlang   | 11.28  |       0.78 | 0.31
