@@ -12,14 +12,14 @@ Para probarlo puedes hacer:
 
  	$ sbt assembly
 
-Esto dejará un archivo .jar en el directorio target/scala-2.11
+Esto dejará un archivo .jar en el directorio target/scala-2.13
 
 ## Uso
 
 Una vez generado el .jar puedes ejecutarlo directamente haciendo:
 
 
-	$ java -jar target/scala-2.11/ordenar_vector-assembly-0.1.jar archivo_entrada archivo_salida
+	$ java -jar target/scala-2.13/ordenar_vector-assembly-0.1.jar archivo_entrada archivo_salida
 
 ## Documentación
 
