@@ -51,29 +51,30 @@ Tiempos promedios, expresados en segundos, para procesar un archivo de 1 millón
     | Clojure  |  6,75  |       0,25 | 0,24
     | Scala    |  3,73  |       0,45 | 0,43
     | Swift    |  3,26  |       0,52 | 0,49
-    | F#       |  8.64  |       1,02 | 0.41
-    | Kotlin   |  3.81  |       2.31 | 0.93
-    | Erlang   | 11.28  |       0.78 | 0.31
-    | Elixir   | 14.33  |       0.61 | 0.25
-    | Java     |  5.65  |       1.56 | 0.63
-    | Python   | 39.85  |       4.52 | 11.25 
+    | F#       |  7.27  |       0,23 | 0,22
+    | Kotlin   |  3,10  |       0,55 | 0,51
+    | Erlang   | 12,08  |       0,14 | 0,13
+    | Elixir   | 14,33  |       0,12 | 0,11
+    | Java     |  4,41  |       0,38 | 0,36
+    | Python   | 37,29  |       0.05 | 0,04
 
 ## Lineas de código
 
 Calculadas usando la herramienta cloc (https://github.com/AlDanial/cloc)
 
-    | C        |   90 |
-    | Rust     |   71 |
-    | Go       |   94 |
-    | Haskell  |   62 |
-    | Clojure  |   70 | 
+    | C        |   93 |
+    | Rust     |   70 |
+    | Go       |   97 |
+    | Haskell  |   91 |
+    | Clojure  |   73 | 
     | Scala    |   82 | 
-    | Swift    |  129 |
-    | F#       |   52 |
+    | Swift    |  135 |
+    | F#       |   68 |
     | Kotlin   |   64 |
-    | Erlang   |   74 |
+    | Erlang   |  149 |
     | Elixir   |  100 |
     | Java     |   90 |
+    | Python   |   49 |
 
 ## Tiempo de Desarrollo
 
@@ -97,43 +98,47 @@ Para medir estos tiempos usé la herramienta TimingApp para Mac OSX (http://Timi
 Ordenado del más rápido al más lento:
 
     |  # | lenguaje     | Tiempo |
-    |  1 | Go           |   2.92 |
-    |  2 | C Optimizado |   3.54 |
-    |  3 | Kotlin       |   3.81 |
-    |  4 | Rust         |   3.99 |
-    |  5 | Swift        |   4.66 |
-    |  6 | Java         |   5.65 |
-    |  7 | Scala        |   6.02 |
-    |  8 | Clojure      |   7.79 |
-    |  9 | Haskell      |   8.05 |
-    | 10 | F#           |   8.64 |
-    | 11 | C            |   8.80 |
-    | 12 | Erlang       |  11.28 |
+    |  1 | Rust         |   1,36 |
+    |  2 | C Optimizado |   1,61 |
+    |  3 | C            |   1,69 |
+    |  4 | Go           |   2,37 |
+    |  5 | Kotlin       |   3,10 |
+    |  6 | Swift        |   3,26 |
+    |  7 | Scala        |   3.73 |
+    |  8 | Java         |   4,41 |
+    |  9 | Clojure      |   6,75 |
+    | 10 | Haskell      |   6,81 |
+    | 11 | F#           |   7,27 |
+    | 12 | Erlang       |  12,08 |
+    | 13 | Elixir       |  14,33 |
+    | 14 | Python       |  37,29 |
 
 Ordenados del más corto al más largo:
 
     # |  Lenguaje |   Lineas |
-    1 |  F#       |     52   |
-    2 |  Haskell  |     62   |   
-    3 |  Kotlin   |     64   |
-    4 |  Clojure  |     70   |
-    5 |  Rust     |     71   |
-    6 |  Erlang   |     74   |
-    7 |  Scala    |     82   |
-    8 |  C        |     90   |
-    9 |  Java     |     90   |
-   10 |  Go       |     94   |
-   12 |  Elixir   |    100   |
-   12 |  Swift    |    129   |
+    1 |  Python   |     49   |
+    2 |  Kotlin   |     64   |   
+    3 |  F#       |     68   |
+    4 |  Rust     |     70   |
+    5 |  Clojure  |     73   |
+    6 |  Scala    |     82   |
+    7 |  Java     |     90   |
+    8 |  Haskell  |     91   |
+    9 |  C        |     93
+   10 |  Go       |     97   |
+   11 |  Elixir   |    100   |
+   12 |  Swift    |    135   |
+   13 |  Erlang   |    149   |
 
 ## Aportes
 
     Elixir: Eduardo Diaz
     Java  : Miguel Gonzalez
+    Python: Eduardo Díaz
 
 # Licencia
 
-	(c) 2016, 2017 Eduardo Díaz.
+	(c) 2016, 2017, 2019 Eduardo Díaz.
 
 	El código de este proyecto se distribuye bajo licencia MIT, ver el archivo LICENSE para los detalles.
 

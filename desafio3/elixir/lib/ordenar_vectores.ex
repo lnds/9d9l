@@ -33,10 +33,10 @@ defmodule Vectores do
 		if not File.exists?(entrada) do
 			"Archivo: #{entrada} no existe!" |> IO.puts
 		else
-			File.stream!(entrada, [:raw, :binary, read_ahead: 64_000_000])
+			File.stream!(entrada)
 				|> Stream.with_index
 				|> Stream.map(&filtrar_linea/1)
-				|> Stream.into(File.stream!(salida, [:raw, :binary, {:delayed_write, 64_000_000, 5}]))
+				|> Stream.into(File.stream!(salida))
 				|> Stream.run
 		end
 	end
