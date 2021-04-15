@@ -22,7 +22,7 @@ Los lenguajes elegidos son:
 	2. Weather: lee información sobre el clima de distintas ciudades en forma secuencial o concurrente.
 	3. Vectores: operar sobre archivos con muchos datos.
 	4. Compresión: comprimir usando código de Huffman.
-	5. TBD
+	5. Juego de Blackjack
 	6. TBD
 	7. TBD
 	8. TBD
