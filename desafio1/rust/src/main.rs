@@ -1,4 +1,3 @@
-use rand;
 use rand::seq::SliceRandom;
 use std::io;
 
@@ -63,7 +62,7 @@ fn ingresar(tam: usize) -> Accion {
         .read_line(&mut accion)
         .expect("No pudo leer linea.");
     let accion = accion.trim().to_string();
-    if accion == "salir" || accion == "" {
+    if accion == "salir" || accion.is_empty() {
         return Accion::Finalizar;
     }
     validar_entrada(tam, &accion)
