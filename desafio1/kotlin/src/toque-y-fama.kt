@@ -37,7 +37,7 @@ fun validar(tam:Int, accion:String?) : IntArray? {
         if (it.index >= tam)
             return null
         else {
-            val digit = it.value.toInt() - '0'.toInt()
+            val digit = it.value.code - '0'.code
             if (digit in num) return null
             num = num.plus(digit)
         }
