@@ -18,10 +18,11 @@ let comparar num sec =
         | (n::ns, x::xs, ys) -> 
             let (t,f) = tyf ns xs ys
             if n = x then (t,f+1) else (if List.exists (fun x -> x = n) ys then (t+1,f) else (t,f))
+        | _ -> (0,0)
     tyf num sec sec 
 
 let rec jugar tam sec i =
-    printfn "Ingresa una secuencia de %A dígitos distintos (o escribe salir):" tam
+    printfn $"Ingresa una secuencia de %A{tam} dígitos distintos (o escribe salir):"
     let accion = Console.ReadLine()
     if accion = "salir" then 
         printfn "\ngracias por jugar, adios." 
@@ -31,11 +32,11 @@ let rec jugar tam sec i =
             printfn "error!\n"
             jugar tam sec (i+1)
         else 
-            printfn "ingresaste: %A" num
+            printfn $"ingresaste: %A{num}" 
             let (toques, famas) = comparar num sec
-            printfn "resultado: %A Toques, %A Famas\n" toques famas
+            printfn $"resultado: %A{toques} Toques, %A{famas} Famas\n" 
             if tam = famas then
-                printfn "Ganaste! Acertaste al intento %A! La secuencia era %A." i sec
+                printfn $"Ganaste! Acertaste al intento %A{i}! La secuencia era %A{sec}."
             else
                 jugar tam sec (i+1)
 
@@ -46,8 +47,8 @@ let mostrarReglas tam =
     printfn "Para esto ingresas %d dígitos distintos con el fin de adivinar la secuencia."  tam
     printfn "Si has adivinado correctamente la posición de un dígito se produce una Fama."
     printfn "Si has adivinado uno de los dígitos de la secuencia, pero en una posición distinta se trata de un Toque.\n" 
-    printfn "Ejemplo: Si la secuencia es secuencia: [8, 0, 6, 1, 3] e ingresas 40863, entonces en pantalla aparecerá:"
-    printfn "tu ingresaste [4, 0, 8, 6, 3]" 
+    printfn "Ejemplo: Si la secuencia es: [8, 0, 6, 1, 3] e ingresas 40863, entonces en pantalla aparecerá:"
+    printfn "tu ingresaste [4; 0; 8; 6; 3]" 
     printfn "resultado: 2 Toques 2 Famas\n"
 
 
