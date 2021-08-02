@@ -1,8 +1,7 @@
-import FisherYates
 
 func validar(tam:Int, acc:String!) -> [Int]? {
 	var num = [Int]()
-	let chars = Array(acc.characters)
+	let chars = Array(acc)
 	for (i,c) in chars.enumerated() {
 		if i >= tam {
 			return nil
@@ -36,7 +35,9 @@ func comparar(num:[Int], sec:[Int]) -> (toques:Int, famas:Int) {
 
 let tam = 5
 
-var sec = Array([0,1,2,3,4,5,6,7,8,9].shuffled()[0..<tam])
+let numbers = 0...9
+var sec = Array(numbers.shuffled().prefix(tam))
+
 
 print (" Bienvenido a Toque y Fama.\n",
 	   "==========================\n\n",
