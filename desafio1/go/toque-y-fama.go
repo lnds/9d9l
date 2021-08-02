@@ -20,7 +20,7 @@ func mostrar_reglas(tam int) {
 		"Si has adivinado correctamente la posición de un dígito se produce una Fama.\n"+
 		"Si has adivinado uno de los dígitos de la secuencia, pero en una posición distinta se trata de un Toque.\n\n"+
 		"Ejemplo: Si la secuencia es secuencia: [8, 0, 6, 1, 3] e ingresas 40863, entonces en pantalla aparecerá:\n"+
-		"tu ingresaste [4, 0, 8, 6, 3]\n"+
+		"tu ingresaste [4 0 8 6 3]\n"+
 		"resultado: 2 Toques 2 Famas\n\n\n", tam)
 }
 
