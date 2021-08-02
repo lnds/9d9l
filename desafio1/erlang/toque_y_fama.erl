@@ -25,8 +25,8 @@ mostrar_reglas(Tam) -> io:format("Bienvenido a Toque y Fama.\n"++
 		"resultado: 2 Toques 2 Famas\n\n\n", [Tam, Tam]).
 
 generar_secuencia() ->
-	L = lists:seq(0,9), random:seed(erlang:system_time()),
-    [X||{_,X} <- lists:sort([ {random:uniform(), N} || N <- L])].
+	L = lists:seq(0,9), rand:seed(default),
+    [X||{_,X} <- lists:sort([ {rand:uniform(), N} || N <- L])].
 
 ingresar(Tam) -> 
 	io:format("Ingresa una secuencia de ~B digitos distintos (o escribe salir):~n", [Tam]),
