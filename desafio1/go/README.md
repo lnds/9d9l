@@ -13,7 +13,7 @@ Para probarlo puedes hacer:
 
 ## Compilación
 
- 	$ go build -o toque-y-fama
+ 	$ go build toque-y-fama.go
 
 Esto dejará un archivo ejecutable n el directorio actual.
 
