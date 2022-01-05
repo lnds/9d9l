@@ -1,19 +1,24 @@
-package main
+package io
 
-import ("os"; "log"; "io/ioutil"; "bufio")
+import (
+	"bufio"
+	"io/ioutil"
+	"log"
+	"os"
+)
 
 type BitInputStream struct {
-	buffer uint16
-	pos  int
-	bitsInBuffer  uint16
-	eof  bool
-	bytes  []byte
-	len  int
+	buffer       uint16
+	pos          int
+	bitsInBuffer uint16
+	eof          bool
+	bytes        []byte
+	len          int
 }
 
 type BitOutputStream struct {
-	out *bufio.Writer
-	buffer uint16
+	out          *bufio.Writer
+	buffer       uint16
 	bitsInBuffer uint16
 }
 
@@ -51,7 +56,9 @@ func NewBitOutputStream(filename string) *BitOutputStream {
 }
 
 func (i *BitInputStream) ReadBool() bool {
-	if i.eof { log.Fatal("can't read bool from input stream") }
+	if i.eof {
+		log.Fatal("can't read bool from input stream")
+	}
 
 	i.bitsInBuffer -= 1
 
@@ -63,7 +70,9 @@ func (i *BitInputStream) ReadBool() bool {
 }
 
 func (i *BitInputStream) ReadChar() byte {
-	if i.eof { log.Fatal("reading from empty input stream") }
+	if i.eof {
+		log.Fatal("reading from empty input stream")
+	}
 
 	x := i.buffer
 	if i.bitsInBuffer == 8 {
@@ -101,7 +110,9 @@ func (i *BitInputStream) fillBuffer() {
 }
 
 func (o *BitOutputStream) clearBuffer() {
-	if o.bitsInBuffer == 0 { return }
+	if o.bitsInBuffer == 0 {
+		return
+	}
 	if o.bitsInBuffer > 0 {
 		o.buffer = o.buffer << (8 - o.bitsInBuffer)
 	}
@@ -111,7 +122,9 @@ func (o *BitOutputStream) clearBuffer() {
 }
 
 func (o *BitOutputStream) WriteBit(bit uint16) {
-	if bit != 0 && bit != 1 { log.Fatal("argument must be 0 or 1.") }
+	if bit != 0 && bit != 1 {
+		log.Fatal("argument must be 0 or 1.")
+	}
 	o.buffer = (o.buffer << 1) | bit
 	o.bitsInBuffer++
 	if o.bitsInBuffer == 8 {
@@ -129,8 +142,8 @@ func (o *BitOutputStream) WriteByte(b uint16) {
 func (o *BitOutputStream) WriteInt(i uint32) {
 	o.WriteByte(uint16((i >> 24) & 0xFF))
 	o.WriteByte(uint16((i >> 16) & 0xFF))
-	o.WriteByte(uint16((i >>  8) & 0xFF))
-	o.WriteByte(uint16((i >>  0) & 0xFF))
+	o.WriteByte(uint16((i >> 8) & 0xFF))
+	o.WriteByte(uint16((i >> 0) & 0xFF))
 }
 
 func (o *BitOutputStream) Close() {

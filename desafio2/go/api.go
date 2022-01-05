@@ -6,7 +6,7 @@ import "encoding/xml"
 // with bugs fixed :)
 
 type City struct {
-	Name string `xml:"name,attr"`
+	Name    string `xml:"name,attr"`
 	Country string `xml:"country"`
 }
 
@@ -16,17 +16,16 @@ type Weather struct {
 
 type Temperature struct {
 	Value float32 `xml:"value,attr"`
-	Min float32 `xml:"min,attr"`
-	Max float32 `xml:"max,attr"`
+	Min   float32 `xml:"min,attr"`
+	Max   float32 `xml:"max,attr"`
 }
 
 type Current struct {
-	XMLName xml.Name `xml:"current"`
-	City City `xml:"city"`
+	XMLName     xml.Name    `xml:"current"`
+	City        City        `xml:"city"`
 	Temperature Temperature `xml:"temperature"`
-	Weather Weather `xml:"weather"`
+	Weather     Weather     `xml:"weather"`
 }
-
 
 func ParseCurrentWeather(content []byte) (Current, bool) {
 	v := Current{}

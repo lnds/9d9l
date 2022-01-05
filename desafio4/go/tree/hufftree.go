@@ -1,6 +1,11 @@
-package main
+package huffman
 
+import (
+	. "github.com/lnds/9d9l/huffman/io"
+
+)
 const MAX_SYMBOLS = 256
+
 type Tree interface {
 	Freq() uint
 	WriteTo(writer *BitOutputStream)
@@ -9,18 +14,18 @@ type Tree interface {
 }
 
 type Leaf struct {
-	freq uint
+	freq   uint
 	symbol byte
 }
 
 type Node struct {
-	freq uint
-	left Tree
+	freq  uint
+	left  Tree
 	right Tree
 }
 
 type HuffTree struct {
-	tree Tree
+	tree  Tree
 	codes []string
 }
 
@@ -84,12 +89,12 @@ func BuildHuffTree(reader *BitInputStream) *HuffTree {
 
 	freqs := calcFrecuencies(reader)
 	heap := NewHeap(MAX_SYMBOLS)
-	for s, f := range(freqs) {
+	for s, f := range freqs {
 		if f > 0 {
 			heap.Insert(NewLeaf(uint(f), byte(s)))
 		}
 	}
-	
+
 	for heap.Size() > 1 {
 		l := heap.Extract()
 		r := heap.Extract()
@@ -127,19 +132,18 @@ func (h HuffTree) writeSymbols(reader *BitInputStream, writer *BitOutputStream) 
 	bytes := reader.GetBytes()
 	lbytes := uint32(len(bytes))
 	writer.WriteInt(lbytes)
-	for _, s := range(bytes) {
+	for _, s := range bytes {
 		code := h.codes[s]
-		for _, c := range(code) {
+		for _, c := range code {
 			writer.WriteBit(uint16(int(c) - '0'))
 		}
 	}
 }
 
-
 func ReadHuffTree(reader *BitInputStream) *HuffTree {
 	p := new(HuffTree)
 	p.tree = readTree(reader)
-	return p	
+	return p
 }
 
 func readTree(reader *BitInputStream) Tree {
@@ -156,7 +160,7 @@ func readTree(reader *BitInputStream) Tree {
 func calcFrecuencies(reader *BitInputStream) []uint {
 	freqs := make([]uint, MAX_SYMBOLS)
 	bytes := reader.GetBytes()
-	for _, c := range(bytes) {
+	for _, c := range bytes {
 		freqs[c] += 1
 	}
 	return freqs

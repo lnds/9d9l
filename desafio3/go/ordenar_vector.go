@@ -18,7 +18,7 @@ const BUF_SIZE = 1024*1024*10
 var buffer = make([]byte, BUF_SIZE)
 
 
-func ordenar_vector(buf []byte) int {
+func ordenarVector(buf []byte) int {
 	n := 0	
 	for p := 0; p < TAM_VECTOR_ENTRADA; p += TAM_PERIODO {
 		copy(periodo, buf[p:p+TAM_PERIODO])
@@ -51,8 +51,8 @@ func ordenar_vector(buf []byte) int {
 	
 }
 
-func procesar_linea(buf []byte) []byte {
-	n := ordenar_vector(buf[POS_VECTOR:])
+func procesarLinea(buf []byte) []byte {
+	n := ordenarVector(buf[POS_VECTOR:])
 	ini := POS_VECTOR+1
 	largo := POS_VECTOR+1+TAM_VECTOR
 	if n == 0 {
@@ -72,7 +72,7 @@ func procesar_linea(buf []byte) []byte {
 func main() {
 
 	if len(os.Args) != 3 {
-		fmt.Println("Uso: ordenar_vector archivo_entrada archivo_salida")
+		fmt.Println("Uso: ordenarVector archivo_entrada archivo_salida")
 		os.Exit(0)
 	}
 
@@ -104,7 +104,7 @@ func main() {
 			fmt.Printf("!!! Largo incorrecto en linea: %d\n", nl)
 			writer.WriteString(fmt.Sprintf("%s\n", linea))
 		} else {
-			vector := procesar_linea(linea)
+			vector := procesarLinea(linea)
 			writer.Write(vector)
 			writer.WriteByte('\n')
 		}

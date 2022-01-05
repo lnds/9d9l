@@ -1,6 +1,11 @@
 package main
 
-import ("fmt"; "os")
+import (
+	"fmt"
+	"os"
+	. "github.com/lnds/9d9l/huffman/tree"
+	. "github.com/lnds/9d9l/huffman/io"
+)
 
 func usage() {
 	fmt.Println("Uso: huffman [-c|-d] archivo_entrada archivo_salida")
@@ -10,15 +15,14 @@ func usage() {
 func compress(input string, output string) {
 	reader := NewBitInputStream(input)
 	writer := NewBitOutputStream(output)
-	tree   := BuildHuffTree(reader)
+	tree := BuildHuffTree(reader)
 	tree.Compress(reader, writer)
 }
-
 
 func decompress(input string, output string) {
 	reader := NewBitInputStream(input)
 	writer := NewBitOutputStream(output)
-	tree   := ReadHuffTree(reader)
+	tree := ReadHuffTree(reader)
 	tree.Decompress(reader, writer)
 }
 
@@ -34,5 +38,5 @@ func main() {
 		decompress(os.Args[2], os.Args[3])
 	} else {
 		usage()
-	}		
+	}
 }

@@ -1,14 +1,20 @@
 package main
 
-import ("fmt"; "io/ioutil"; "net/http"; "os"; "time"; "sort")
-
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"sort"
+	"time"
+)
 
 type WeatherReport struct {
-	error string
-	city  string
-	temp  float32
-	max   float32
-	min   float32
+	error      string
+	city       string
+	temp       float32
+	max        float32
+	min        float32
 	conditions string
 }
 
@@ -16,7 +22,7 @@ const time_report_message = "tiempo ocupado para generar el reporte: "
 const report_format = "%-30.30s max:%5.1f  min:%5.1f   actual: %5.1f %s"
 const no_cities_provided_message = "debe ingresar una lista de ciudades"
 
-func make_url(city string, api_key string) string {
+func url(city string, api_key string) string {
 	return "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&mode=xml&units=metric&appid=" + api_key + "&lang=sp"
 }
 
@@ -30,23 +36,21 @@ func main() {
 	api_key := os.Getenv("WEATHER_API_KEY")
 
 	start := time.Now()
-		
-	reports  := make([]WeatherReport, 0)
 
+	reports := make([]WeatherReport, 0)
 
-	
 	if os.Args[1] == "-p" {
 		ch := make(chan WeatherReport)
 		for _, city := range os.Args[2:] {
 			go fetch(city, api_key, ch)
 		}
 		for range os.Args[2:] {
-			rep := <- ch
+			rep := <-ch
 			reports = append(reports, WeatherReport{rep.error, rep.city, rep.temp, rep.max, rep.min, rep.conditions})
 		}
 	} else {
 		for _, city := range os.Args[1:] {
-			rep := seq_fetch(city, api_key)
+			rep := seqFetch(city, api_key)
 			reports = append(reports, WeatherReport{rep.error, rep.city, rep.temp, rep.max, rep.min, rep.conditions})
 		}
 	}
@@ -64,59 +68,59 @@ func main() {
 	fmt.Printf("%s: %02.0f:%02.0f:%02.3f\n", time_report_message, duration.Hours(), duration.Minutes(), duration.Seconds())
 }
 
-
 type ByTemp []WeatherReport
 
-func (a ByTemp) Len() int { return len(a) }
-func (a ByTemp) Swap(i, j int) { a[i], a[j] = a[j], a[i]}
+func (a ByTemp) Len() int           { return len(a) }
+func (a ByTemp) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByTemp) Less(i, j int) bool { return a[i].max > a[j].max }
 
 const max_tries = 10
 const thread_sleep = 100
 
-
-func fetch(city string, api_key string, ch chan <- WeatherReport) {
-	url := make_url(city, api_key)
-	for i := 0; i < max_tries ; i++ {
-		resp, err := http.Get(url)
-		if err == nil {
-			defer resp.Body.Close()
-			body, err := ioutil.ReadAll(resp.Body)
-			if err == nil {
-				weather, success := ParseCurrentWeather(body)
-				if success {
-					ch <- WeatherReport { "",  weather.City.Name, 
-						weather.Temperature.Value, 
-						weather.Temperature.Max, weather.Temperature.Min, 
-						weather.Weather.Value}
-					return
-				} 
-			}
-		} else {
-			time.Sleep(thread_sleep)
-		}
+func fetch(city string, api_key string, ch chan<- WeatherReport) {
+	url := url(city, api_key)
+	var resp *http.Response
+	var err error
+	resp, err = http.Get(url)
+	for i := 0; i < max_tries && err == nil; i++ {
+		time.Sleep(thread_sleep)
+		resp, err = http.Get(url)
 	}
-	ch <- WeatherReport { "error leyendo xml ", city, 0.0, 0.0, 0.0, "" }
-}
-
-func seq_fetch(city string, api_key string) WeatherReport {
-	url := make_url(city, api_key)
-	resp, err := http.Get(url)
 	if err != nil {
-		return WeatherReport { "error descargando url ", city, 0.0, 0.0, 0.0, ""}
+		ch <- WeatherReport{"error leyendo xml ", city, 0.0, 0.0, 0.0, ""}
+		return
 	}
 
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return WeatherReport { "error leyendo xml ", city, 0.0, 0.0, 0.0, "" }
-	} 
+		return
+	}
+	if weather, success := ParseCurrentWeather(body); success {
+		ch <- WeatherReport{"", weather.City.Name,
+			weather.Temperature.Value,
+			weather.Temperature.Max, weather.Temperature.Min,
+			weather.Weather.Value}
+	}
+}
+
+func seqFetch(city string, api_key string) WeatherReport {
+	url := url(city, api_key)
+	resp, err := http.Get(url)
+	if err != nil {
+		return WeatherReport{"error descargando url ", city, 0.0, 0.0, 0.0, ""}
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return WeatherReport{"error leyendo xml ", city, 0.0, 0.0, 0.0, ""}
+	}
 
 	weather, success := ParseCurrentWeather(body)
 	if success {
-		return WeatherReport { "",  weather.City.Name, weather.Temperature.Value, 
-							  weather.Temperature.Max, weather.Temperature.Min,  weather.Weather.Value}
-	} else {
-		return WeatherReport { "error interpretando xml ", city, 0.0, 0.0, 0.0, ""}
+		return WeatherReport{"", weather.City.Name, weather.Temperature.Value,
+			weather.Temperature.Max, weather.Temperature.Min, weather.Weather.Value}
 	}
+	return WeatherReport{"error interpretando xml ", city, 0.0, 0.0, 0.0, ""}
 }
